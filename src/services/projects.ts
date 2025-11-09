@@ -53,7 +53,7 @@ export const projectsService = (currentLocale?: string): Project[] => {
 			id: 'el-chevere-web',
 			title: 'El Chévere - Official Web',
 			description: i18n.EL_CHEVERE_WEB_DESCRIPTION,
-			imgUrl: 'https://capelix.dev/images/page-presentation.avif',
+			imgUrl: 'https://capelix.dev/images/page-presentation.webp',
 			projectUrl: 'https://fotoestudioelchevere.com/',
 			tags: [TAGS.ASTRO, TAGS.TAILWIND],
 			gitCodeUrl: 'https://github.com/Capelix/el-chevere-web',
