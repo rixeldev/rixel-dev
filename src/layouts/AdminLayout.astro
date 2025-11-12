@@ -1,0 +1,23 @@
+---
+import SEO from '@/components/SEO.astro'
+
+interface Props {
+	title: string
+	description: string
+}
+
+const { title, description } = Astro.props as Props
+---
+
+<!doctype html>
+<html lang='en'>
+	<head>
+		<SEO title={title} description={description} />
+	</head>
+	<body class='min-h-screen bg-slate-100 text-slate-900 dark:bg-slate-950 dark:text-slate-50'>
+		<main class='min-h-screen w-full bg-gradient-to-br from-slate-100 via-slate-200 to-slate-100 py-16 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950'>
+			<slot />
+		</main>
+	</body>
+</html>
+

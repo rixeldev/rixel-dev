@@ -1,14 +1,15 @@
 ---
-import HomeArticleCard from '@/components/HomeArticleCard.astro'
-import MainTitle from '@/components/MainTitle.astro'
-import Book from '@/icons/Book.astro'
-import UpArrow from '@/icons/UpArrow.astro'
-import { getI18N } from '@/languages/index'
-import { articlesService } from '@/services/articles'
+import HomeArticleCard from "@/components/HomeArticleCard.astro"
+import MainTitle from "@/components/MainTitle.astro"
+import Book from "@/icons/Book.astro"
+import UpArrow from "@/icons/UpArrow.astro"
+import { getActiveLocale, getI18N, resolveLocalizedHref } from "@/languages/index"
+import { articlesService } from "@/services/articles"
 
-const { currentLocale } = Astro
-const i18n = getI18N({ currentLocale })
+const locale = getActiveLocale(Astro)
+const i18n = getI18N({ currentLocale: locale })
 const articles = articlesService()
+const articlesHref = resolveLocalizedHref('/articles', locale)
 ---
 
 <div class='flex w-full max-w-4xl flex-col sm:w-11/12 md:w-8/12'>
@@ -22,7 +23,7 @@ const articles = articlesService()
 	</div>
 
 	<a
-		href='/articles'
+		href={articlesHref}
 		class='mt-6 flex size-4 w-fit select-none gap-2 text-secondary transition-all active:text-primary sm:cursor-pointer sm:hover:gap-1 sm:hover:text-primary'
 	>
 		<span>{i18n.VIEW_ALL_ARTICLES}</span>

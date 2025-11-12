@@ -1,11 +1,18 @@
 ---
-import { getI18N } from '@/languages/index'
+import { getActiveLocale, getI18N, resolveLocalizedPath } from '@/languages/index'
 import { footerLinks } from '@/libs/consts'
 import Divider from './Divider.astro'
 
-const { currentLocale } = Astro
-const i18n = getI18N({ currentLocale })
+interface Props {
+	locale?: string
+}
+
+const { locale: forcedLocale } = Astro.props as Props
+const locale = forcedLocale ?? getActiveLocale(Astro)
+const i18n = getI18N({ currentLocale: locale })
 const links = footerLinks()
+const privacyHref = new URL(resolveLocalizedPath('/privacy/'), 'https://capelix.dev').toString()
+const termsHref = new URL(resolveLocalizedPath('/terms/'), 'https://capelix.dev').toString()
 ---
 
 <footer
@@ -44,29 +51,29 @@ const links = footerLinks()
 					href='https://capelix.dev'
 					class='font-bold text-accent transition-all duration-300 active:text-accent/80 active:underline sm:hover:text-accent/80 sm:hover:underline'
 					>Capelix</a
-				>
-				(Rikelvi Capellán García) {i18n.FOOTER_TXT_2}
-				<a
-					rel='noopener noreferrer'
-					href='https://astro.build'
-					target='_blank'
-					class='font-bold text-accent transition-all duration-300 active:text-accent/80 active:underline sm:hover:text-accent/80 sm:hover:underline'
-					>Astro</a
-				>, <a
-					rel='noopener noreferrer'
-					href='https://tailwindcss.com'
-					target='_blank'
-					class='font-bold text-accent transition-all duration-300 active:text-accent/80 active:underline sm:hover:text-accent/80 sm:hover:underline'
-					>Tailwind CSS</a
-				>
-				{i18n.FOOTER_TXT_3}
-				<a
-					rel='noopener noreferrer'
-					href='https://vercel.com'
-					target='_blank'
-					class='font-bold text-accent transition-all duration-300 active:text-accent/80 active:underline sm:hover:text-accent/80 sm:hover:underline'
-					>Vercel</a
-				>.
+					>
+					(Rikelvi Capellán García) {i18n.FOOTER_TXT_2}
+					<a
+						rel='noopener noreferrer'
+						href='https://astro.build'
+						target='_blank'
+						class='font-bold text-accent transition-all duration-300 active:text-accent/80 active:underline sm:hover:text-accent/80 sm:hover:underline'
+						>Astro</a
+						>, <a
+						rel='noopener noreferrer'
+						href='https://tailwindcss.com'
+						target='_blank'
+						class='font-bold text-accent transition-all duration-300 active:text-accent/80 active:underline sm:hover:text-accent/80 sm:hover:underline'
+						>Tailwind CSS</a
+						>
+					{i18n.FOOTER_TXT_3}
+					<a
+						rel='noopener noreferrer'
+						href='https://vercel.com'
+						target='_blank'
+						class='font-bold text-accent transition-all duration-300 active:text-accent/80 active:underline sm:hover:text-accent/80 sm:hover:underline'
+						>Vercel</a
+						>.
 			</p>
 
 			<ul class='flex flex-row items-center gap-x-4'>
@@ -93,7 +100,7 @@ const links = footerLinks()
 			<ul class='flex w-full flex-row items-center justify-center gap-x-4'>
 				<li>
 					<a
-						href='https://capelix.dev/privacy/'
+						href={privacyHref}
 						rel='noopener noreferrer'
 						target='_blank'
 						class='rounded-lg px-3 py-1.5 text-sm text-secondary/70 transition-all duration-300 hover:bg-primary/10 hover:text-accent hover:shadow-sm'
@@ -103,7 +110,7 @@ const links = footerLinks()
 				<li class='text-sm text-secondary/40'>|</li>
 				<li>
 					<a
-						href='https://capelix.dev/terms/'
+						href={termsHref}
 						rel='noopener noreferrer'
 						target='_blank'
 						class='rounded-lg px-3 py-1.5 text-sm text-secondary/70 transition-all duration-300 hover:bg-primary/10 hover:text-accent hover:shadow-sm'

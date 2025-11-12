@@ -1,19 +1,19 @@
 ---
-import SectionContainer from '@/components/SectionContainer.astro'
-import type { Preload } from '@/interfaces/preload'
-import { getI18N } from '@/languages/index'
-import Layout from '@/layouts/Layout.astro'
-import { articlesService } from '@/services/articles'
+import SectionContainer from "@/components/SectionContainer.astro"
+import type { Preload } from "@/interfaces/preload"
+import { getActiveLocale, getI18N, resolveLocalizedPath } from "@/languages/index"
+import Layout from "@/layouts/Layout.astro"
+import { articlesService } from "@/services/articles"
 
 const { id } = Astro.params
-const { currentLocale } = Astro
-const i18n = getI18N({ currentLocale })
+const locale = getActiveLocale(Astro)
+const i18n = getI18N({ currentLocale: locale })
 
 const stories = articlesService()
 const article = stories.find((article) => article.pageTitle === id)
 
 if (!article || article === undefined) {
-	return Astro.redirect('/404')
+	return Astro.redirect(resolveLocalizedPath("/404"))
 }
 
 const preloadImages: Preload[] = [
@@ -27,15 +27,18 @@ const preloadImages: Preload[] = [
 ---
 
 <Layout
-	title=`${article?.title} - Capelix' articles`
-	description=`${article?.description} | Author: ${article?.author} | Tags: ${article?.tags.join(' ')}`
-	canonical=`https://capelix.dev/articles/${article?.pageTitle}/`
+	title={`${article?.title} - Capelix' articles`}
+	description={`${article?.description} | ${i18n.AUTHOR}: ${article?.author} | ${i18n.LANGUAGE}: ${article?.lang}`}
+	canonical={new URL(
+		resolveLocalizedPath(`/articles/${article?.pageTitle}/`, locale),
+		'https://capelix.dev',
+	).toString()}
 	preload={preloadImages}
 >
 	<img
 		class='parallax absolute top-0 w-full translate-y-0 bg-cover bg-fixed bg-center opacity-5'
 		src={article?.cover}
-		alt=`Capelix' article ${article?.title}`
+		alt={`Capelix' article ${article?.title}`}
 		style='mask-image: linear-gradient(black 20%, transparent 80%);'
 	/>
 
@@ -44,7 +47,7 @@ const preloadImages: Preload[] = [
 			<header>
 				<h2
 					class='text-xl font-extrabold text-accent sm:text-3xl'
-					transition:name=`article-${article?.pageTitle}-title`
+					transition:name={`article-${article?.pageTitle}-title`}
 				>
 					{article?.title}
 				</h2>
@@ -52,7 +55,7 @@ const preloadImages: Preload[] = [
 
 			<div
 				class='mt-8 flex w-full flex-col gap-8'
-				transition:name=`article-${article?.pageTitle}-content`
+				transition:name={`article-${article?.pageTitle}-content`}
 			>
 				{
 					article?.content.map((section) => (

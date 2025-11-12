@@ -1,14 +1,19 @@
 ---
-import MainTitle from '@/components/MainTitle.astro'
-import { SendForm } from '@/components/SendForm'
-import Chat from '@/icons/Chat.astro'
-import Check from '@/icons/Check.astro'
-import Copy from '@/icons/Copy.astro'
-import { getI18N } from '@/languages/index.ts'
+import MainTitle from "@/components/MainTitle.astro"
+import { SendForm } from "@/components/SendForm"
+import Chat from "@/icons/Chat.astro"
+import Check from "@/icons/Check.astro"
+import Copy from "@/icons/Copy.astro"
+import { getActiveLocale, getI18N } from "@/languages/index.ts"
 
 const email: string = 'rikelvicapellan15@gmail.com'
-const { currentLocale } = Astro
-const i18n = getI18N({ currentLocale })
+interface Props {
+	locale?: string
+}
+
+const { locale: forcedLocale } = Astro.props as Props
+const locale = forcedLocale ?? getActiveLocale(Astro)
+const i18n = getI18N({ currentLocale: locale })
 ---
 
 <div class='flex w-full max-w-4xl flex-col sm:w-11/12 md:w-8/12'>
@@ -61,7 +66,7 @@ const i18n = getI18N({ currentLocale })
 			</div>
 		</div>
 
-		<SendForm client:visible />
+		<SendForm client:visible locale={locale} />
 	</div>
 </div>
 
@@ -72,8 +77,8 @@ const i18n = getI18N({ currentLocale })
 	document.addEventListener('astro:page-load', () => {
 		const copyEmailIcon = $('#copyEmailIcon')
 		const copiedEmailIcon = $('#copiedEmailIcon')
-		const currentLocale = navigator.language.split('-')[0]
-		const i18n = getI18N({ currentLocale })
+		const documentLocale = document.documentElement.lang || 'en'
+		const i18n = getI18N({ currentLocale: documentLocale })
 
 		copyEmailIcon?.addEventListener('click', () => {
 			copyEmailIcon?.classList.remove('inline-block')

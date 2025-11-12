@@ -1,33 +1,142 @@
 ---
-import { getI18N } from '@/languages/index.ts'
-import { navItems } from '@/libs/consts'
+import Close from "@/icons/Close.astro"
+import World from "@/icons/World.astro"
+import { LANG, getActiveLocale, getI18N } from "@/languages/index.ts"
+import { navItems } from "@/libs/consts"
 
-const { currentLocale } = Astro
-const i18n = getI18N({ currentLocale })
+interface Props {
+	locale?: string
+}
+
+const { locale: forcedLocale } = Astro.props as Props
+const locale = forcedLocale ?? getActiveLocale(Astro)
+const i18n = getI18N({ currentLocale: locale })
+const navigationItems = navItems(locale)
+
+const languages = [
+	{ code: LANG.ENGLISH, label: i18n.ENGLISH },
+	{ code: LANG.SPANISH, label: i18n.SPANISH },
+]
+
+const languageOptions = languages.map((language) => ({
+	...language,
+	isActive: language.code === locale,
+}))
+const activeLanguage = languageOptions.find((language) => language.isActive) ?? languageOptions[0]
 ---
 
-<header class='fixed z-50 flex w-full justify-center'>
+<header class="fixed z-50 flex w-full justify-center">
 	<div
-		id='header'
-		class='flex h-auto w-full items-center justify-center overflow-hidden border border-transparent py-3 transition-transform'
+		id="header"
+		class="relative flex h-auto w-full max-w-5xl items-center justify-end gap-3 border border-transparent px-4 py-3 transition-transform md:justify-center md:px-6"
 	>
 		<nav
-			class='flex flex-row items-center justify-center gap-2 text-center font-semibold text-primary md:gap-4'
+			id="main-navigation"
+			data-menu
+			class="absolute right-4 top-full z-40 mt-3 hidden w-64 flex-col gap-1 rounded-2xl border border-secondary/20 bg-black/90 p-3 text-left font-semibold text-primary shadow-2xl md:static md:flex md:w-auto md:flex-row md:items-center md:justify-center md:gap-4 md:rounded-3xl md:border-transparent md:bg-transparent md:p-0 md:text-center md:shadow-none"
 		>
 			{
-				navItems(currentLocale).map((item) => (
+				navigationItems.map((item) => (
 					<a
 						href={item.url}
 						aria-label={item.label}
-						class='inline-flex h-full select-none items-center justify-center gap-2 rounded-3xl border border-transparent p-2 text-center transition-colors hover:bg-secondary/5 md:p-4 md:hover:border-secondary/10'
-						{...(item.url === '/photography' && { 'data-astro-reload': true })}
+						class="inline-flex w-full select-none items-center justify-start gap-3 rounded-2xl border border-transparent px-3 py-2 text-left transition-colors hover:bg-secondary/10 md:w-auto md:justify-center md:rounded-3xl md:px-4 md:py-3 md:hover:border-secondary/10"
+						{...(item.basePath === "/photography" && { "data-astro-reload": true })}
 					>
-						<item.icon class='hidden size-6 md:block' />
-						{item.title}
+						<item.icon class="hidden size-6 md:block" />
+						<span class="text-sm md:text-base">{item.title}</span>
 					</a>
 				))
 			}
+			<div
+				class="mt-2 flex w-full items-center justify-start border-t border-secondary/20 pt-2 md:ml-3 md:mt-0 md:w-auto md:border-l md:border-t-0 md:border-secondary/20 md:pl-3"
+				data-locale-root
+			>
+				<button
+					type="button"
+					data-locale-toggle
+					class="inline-flex w-full items-center justify-between gap-3 rounded-2xl border border-transparent bg-gradient-to-r from-secondary/15 via-primary/10 to-secondary/10 px-4 py-2 text-sm font-semibold text-primary shadow-lg shadow-black/40 backdrop-blur transition-colors hover:border-secondary/30 hover:from-secondary/20 hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/60 md:w-auto md:rounded-3xl"
+					aria-haspopup="true"
+					aria-expanded="false"
+				>
+					<span class="inline-flex items-center gap-2">
+						<World class="size-5 text-secondary transition-transform duration-300" />
+						<span>{activeLanguage.label}</span>
+					</span>
+					<svg
+						class="size-4 text-secondary transition-transform duration-200"
+						viewBox="0 0 20 20"
+						fill="currentColor"
+						aria-hidden="true"
+					>
+						<path
+							fill-rule="evenodd"
+							d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.08 0L5.21 8.27a.75.75 0 01.02-1.06z"
+							clip-rule="evenodd"></path>
+					</svg>
+				</button>
+
+				<div data-locale-menu class="language-menu" role="menu" aria-label={i18n.LANGUAGE}>
+					<ul class="flex flex-col gap-1">
+						{
+							languageOptions.map((option) => (
+								<li>
+									<button
+										type="button"
+										data-locale-option
+										data-locale-code={option.code}
+										class={`inline-flex w-full items-center justify-between gap-3 rounded-xl px-4 py-2 text-sm font-medium transition-all duration-200 ${
+											option.isActive
+												? "bg-accent/90 text-white shadow-md shadow-accent/40"
+												: "bg-black/40 text-secondary hover:bg-secondary/20 hover:text-primary"
+										}`}
+										role="menuitemradio"
+										aria-checked={option.isActive ? "true" : "false"}
+									>
+										<span>{option.label}</span>
+										{option.isActive ? (
+											<span class="inline-flex size-2 rounded-full bg-white" aria-hidden="true" />
+										) : null}
+									</button>
+								</li>
+							))
+						}
+					</ul>
+					<div
+						class="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-white/5 via-transparent to-white/10"
+					>
+					</div>
+				</div>
+			</div>
 		</nav>
+		<button
+			type="button"
+			class="inline-flex items-center gap-2 rounded-3xl border border-secondary/20 bg-black/40 px-4 py-2 text-sm font-semibold text-primary shadow-lg backdrop-blur-lg transition-colors hover:bg-secondary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/60 md:hidden"
+			aria-expanded="false"
+			aria-controls="main-navigation"
+			data-menu-toggle
+			data-open-label={i18n.MENU ?? "Menu"}
+			data-close-label={i18n.CLOSE ?? "Close"}
+		>
+			<svg
+				data-menu-icon="open"
+				class="size-5 transition-transform"
+				width="24"
+				height="24"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+			>
+				<path d="M4 6h16"></path>
+				<path d="M4 12h16"></path>
+				<path d="M4 18h16"></path>
+			</svg>
+			<Close data-menu-icon="close" class="hidden size-5" />
+			<span data-menu-text>{i18n.MENU ?? "Menu"}</span>
+		</button>
 	</div>
 </header>
 
@@ -43,45 +152,209 @@ const i18n = getI18N({ currentLocale })
 			@apply border-b-main/30 bg-black/30 py-1 shadow-xl shadow-main/5 backdrop-blur-lg;
 		}
 	}
+
+	[data-locale-root] {
+		position: relative;
+	}
+
+	[data-locale-root][data-open="true"] [data-locale-toggle] svg {
+		transform: rotate(180deg);
+	}
+
+	.language-menu {
+		@apply invisible absolute right-0 top-[calc(100%+0.75rem)] z-50 min-w-[12rem] rounded-2xl border border-secondary/30 bg-slate-900/95 p-2 opacity-0 shadow-2xl shadow-black/40 backdrop-blur-xl transition-all duration-200 ease-out;
+	}
+
+	[data-locale-root][data-open="true"] .language-menu {
+		@apply visible opacity-100;
+	}
 </style>
 
 <script>
-	document.addEventListener('astro:page-load', () => {
-		const sections = document.querySelectorAll('section')
-		const navItems = document.querySelectorAll('header nav a')
+	const setupLocaleSelector = () => {
+		const localeRoot = document.querySelector<HTMLElement>("[data-locale-root]")
+		if (!localeRoot || localeRoot.dataset.localeReady === "true") return
 
-		const callback = (entries: any[]) => {
-			entries.forEach((entry) => {
-				if (entry.isIntersecting) {
-					navItems.forEach((item) => {
-						if (item.getAttribute('aria-label') == entry.target.id) {
-							item.classList.add('text-accent')
-						} else {
-							item.classList.remove('text-accent')
-						}
-					})
-				}
-			})
+		const toggleButton = localeRoot.querySelector<HTMLButtonElement>("[data-locale-toggle]")
+		const menu = localeRoot.querySelector<HTMLElement>("[data-locale-menu]")
+		const options = menu?.querySelectorAll<HTMLButtonElement>("[data-locale-option]")
+
+		if (!toggleButton || !menu || !options?.length) return
+
+		localeRoot.dataset.localeReady = "true"
+
+		let isOpen = false
+
+		const setOpenState = (open: boolean) => {
+			isOpen = open
+			localeRoot.dataset.open = open ? "true" : "false"
+			toggleButton.setAttribute("aria-expanded", open ? "true" : "false")
 		}
 
-		const observer = new IntersectionObserver(callback, {
-			root: null,
-			rootMargin: '0px',
-			threshold: 0.2,
-		})
-
-		sections.forEach((section) => {
-			observer.observe(section)
-		})
-
-		document.onvisibilitychange = () => {
-			if (document.visibilityState === 'hidden') {
-				observer.disconnect()
-			} else {
-				sections.forEach((section) => {
-					observer.observe(section)
-				})
+		const closeOnOutsideClick = (event: MouseEvent) => {
+			if (!isOpen) return
+			if (event.target instanceof Node && !localeRoot.contains(event.target)) {
+				setOpenState(false)
 			}
 		}
+
+		toggleButton.addEventListener("click", (event) => {
+			event.stopPropagation()
+			setOpenState(!isOpen)
+		})
+
+		document.addEventListener("click", closeOnOutsideClick)
+
+		setOpenState(false)
+
+		options.forEach((option) => {
+			option.addEventListener("click", () => {
+				const code = option.dataset.localeCode
+				if (!code) return
+				const expires = new Date()
+				expires.setFullYear(expires.getFullYear() + 1)
+				document.cookie = `lang=${code}; path=/; expires=${expires.toUTCString()}`
+				document.documentElement.setAttribute("lang", code)
+				setOpenState(false)
+				window.location.reload()
+			})
+		})
+
+		window.addEventListener("keydown", (event) => {
+			if (event.key === "Escape" && isOpen) {
+				setOpenState(false)
+			}
+		})
+	}
+
+	const setupHeaderMenu = () => {
+		const menuButton = document.querySelector<HTMLButtonElement>("[data-menu-toggle]")
+		if (!menuButton || menuButton.dataset.menuReady === "true") return
+
+		const menu = document.querySelector<HTMLElement>("[data-menu]")
+		if (!menu) return
+
+		menuButton.dataset.menuReady = "true"
+
+		const openIcon = menuButton.querySelector<SVGElement>('[data-menu-icon="open"]')
+		const closeIcon = menuButton.querySelector<HTMLElement>('[data-menu-icon="close"]')
+		const menuText = menuButton.querySelector<HTMLElement>("[data-menu-text]")
+		const openLabel = menuButton.dataset.openLabel ?? "Menu"
+		const closeLabel = menuButton.dataset.closeLabel ?? "Close"
+		let isMenuOpen = false
+
+		const setMenuState = (open: boolean) => {
+			isMenuOpen = open
+			menuButton.setAttribute("aria-expanded", open ? "true" : "false")
+
+			if (open) {
+				menu.classList.remove("hidden")
+				menu.classList.add("flex")
+				openIcon?.classList.add("hidden")
+				closeIcon?.classList.remove("hidden")
+				if (menuText) menuText.textContent = closeLabel
+			} else {
+				menu.classList.add("hidden")
+				menu.classList.remove("flex")
+				openIcon?.classList.remove("hidden")
+				closeIcon?.classList.add("hidden")
+				if (menuText) menuText.textContent = openLabel
+			}
+		}
+
+		const syncMenuWithViewport = () => {
+			if (window.innerWidth >= 768) {
+				menu.classList.remove("hidden")
+				menu.classList.add("flex")
+				if (isMenuOpen) {
+					menuButton.setAttribute("aria-expanded", "false")
+					openIcon?.classList.remove("hidden")
+					closeIcon?.classList.add("hidden")
+					if (menuText) menuText.textContent = openLabel
+					isMenuOpen = false
+				}
+			} else if (!isMenuOpen) {
+				menu.classList.add("hidden")
+				menu.classList.remove("flex")
+			}
+		}
+
+		syncMenuWithViewport()
+		window.addEventListener("resize", syncMenuWithViewport)
+
+		menuButton.addEventListener("click", (event) => {
+			event.stopPropagation()
+			setMenuState(!isMenuOpen)
+		})
+
+		document.addEventListener("click", (event) => {
+			if (
+				isMenuOpen &&
+				!menu.contains(event.target as Node) &&
+				!menuButton.contains(event.target as Node)
+			) {
+				setMenuState(false)
+			}
+		})
+
+		menu.querySelectorAll("a").forEach((link) => {
+			link.addEventListener("click", () => setMenuState(false))
+		})
+	}
+
+	if (document.readyState === "loading") {
+		document.addEventListener(
+			"DOMContentLoaded",
+			() => {
+				setupHeaderMenu()
+				setupLocaleSelector()
+			},
+			{ once: true }
+		)
+	} else {
+		setupHeaderMenu()
+		setupLocaleSelector()
+	}
+
+	document.addEventListener("astro:page-load", () => {
+		setupHeaderMenu()
+		setupLocaleSelector()
 	})
+
+	const sections = document.querySelectorAll("section")
+	const navItems = document.querySelectorAll("header nav a")
+
+	const callback = (entries: any[]) => {
+		entries.forEach((entry) => {
+			if (entry.isIntersecting) {
+				navItems.forEach((item) => {
+					if (item.getAttribute("aria-label") == entry.target.id) {
+						item.classList.add("text-accent")
+					} else {
+						item.classList.remove("text-accent")
+					}
+				})
+			}
+		})
+	}
+
+	const observer = new IntersectionObserver(callback, {
+		root: null,
+		rootMargin: "0px",
+		threshold: 0.2,
+	})
+
+	sections.forEach((section) => {
+		observer.observe(section)
+	})
+
+	document.onvisibilitychange = () => {
+		if (document.visibilityState === "hidden") {
+			observer.disconnect()
+		} else {
+			sections.forEach((section) => {
+				observer.observe(section)
+			})
+		}
+	}
 </script>

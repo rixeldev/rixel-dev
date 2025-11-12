@@ -1,23 +1,23 @@
 ---
-import LazyImage from '@/components/LazyImage.astro'
-import MainTitle from '@/components/MainTitle.astro'
-import SectionContainer from '@/components/SectionContainer.astro'
-import Loading from '@/icons/Loading.astro'
-import PhotographyIcon from '@/icons/Photography.astro'
-import { getI18N } from '@/languages/index'
-import { getImages } from '@/services/images'
-import 'photoswipe/style.css'
-import Layout from '../layouts/Layout.astro'
+import LazyImage from "@/components/LazyImage.astro"
+import MainTitle from "@/components/MainTitle.astro"
+import SectionContainer from "@/components/SectionContainer.astro"
+import Loading from "@/icons/Loading.astro"
+import PhotographyIcon from "@/icons/Photography.astro"
+import { getActiveLocale, getI18N, resolveLocalizedPath } from "@/languages/index"
+import { getImages } from "@/services/images"
+import "photoswipe/style.css"
+import Layout from "../layouts/Layout.astro"
 
-const { currentLocale } = Astro
-const i18n = getI18N({ currentLocale })
+const locale = getActiveLocale(Astro)
+const i18n = getI18N({ currentLocale: locale })
 const images = getImages()
 ---
 
 <Layout
-	title=`${i18n.PHOTOGRAPHY} - Capelix`
-	description="The Capelix' Website. This is my photography portfolio, where I show some of my best works as a professional photographer and photo editor."
-	canonical='https://capelix.dev/photography/'
+	title={`${i18n.PHOTOGRAPHY} - Capelix`}
+	description={i18n.PHOTOGRAPHY_PAGE_DESCRIPTION}
+	canonical={new URL(resolveLocalizedPath('/photography/', locale), 'https://capelix.dev').toString()}
 >
 	<SectionContainer>
 		<div class='flex w-full max-w-5xl flex-col md:w-11/12 lg:w-8/12'>
@@ -46,7 +46,7 @@ const images = getImages()
 								>
 									<LazyImage
 										src={`https://www.capelix.dev/${image.src}`}
-										alt={`Image ${index + 1}`}
+										alt={`${i18n.PHOTOGRAPHY_IMAGE_ALT_PREFIX} ${index + 1}`}
 										width={image.width}
 										height={image.height}
 										className='w-full group-active:scale-105 md:group-hover:scale-110 duration-[.4s] transition-all opacity-0 ease-in-out md:group-hover:brightness-110'

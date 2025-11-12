@@ -1,0 +1,11 @@
+---
+import AdminDashboard from '@/components/admin/AdminDashboard'
+import AdminLayout from '@/layouts/AdminLayout.astro'
+---
+
+<AdminLayout title='Admin Dashboard' description='Manage client galleries, upload photos, and review selections.'>
+	<section class='px-4 sm:px-6 lg:px-8'>
+		<AdminDashboard client:load />
+	</section>
+</AdminLayout>
+

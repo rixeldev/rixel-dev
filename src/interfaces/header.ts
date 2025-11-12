@@ -3,4 +3,5 @@ export interface Header {
 	label: string
 	url: string
 	icon: any
+	basePath?: string
 }

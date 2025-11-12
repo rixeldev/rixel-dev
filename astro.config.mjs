@@ -26,6 +26,18 @@ export default defineConfig({
 	vite: {
 		define: {
 			'import.meta.env.RESEND_API_KEY': JSON.stringify(process.env.RESEND_API_KEY),
+			'import.meta.env.SUPABASE_URL': JSON.stringify(process.env.SUPABASE_URL),
+			'import.meta.env.SUPABASE_ANON_KEY': JSON.stringify(process.env.SUPABASE_ANON_KEY),
+			'import.meta.env.SUPABASE_SERVICE_ROLE_KEY': JSON.stringify(
+				process.env.SUPABASE_SERVICE_ROLE_KEY
+			),
+			'import.meta.env.SUPABASE_STORAGE_BUCKET': JSON.stringify(
+				process.env.SUPABASE_STORAGE_BUCKET
+			),
+			'import.meta.env.ADMIN_USERNAME': JSON.stringify(process.env.ADMIN_USERNAME),
+			'import.meta.env.ADMIN_PASSWORD': JSON.stringify(process.env.ADMIN_PASSWORD),
+			'import.meta.env.ADMIN_SESSION_SECRET': JSON.stringify(process.env.ADMIN_SESSION_SECRET),
+			'import.meta.env.PIN_HASH_SECRET': JSON.stringify(process.env.PIN_HASH_SECRET),
 		},
 	},
 })

@@ -7,6 +7,7 @@ interface Props {
 	preload?: Array<Preload>
 	canonical?: string
 	image?: string
+	locale?: string
 }
 
 const {
@@ -15,7 +16,10 @@ const {
 	preload,
 	canonical = 'https://capelix.dev/',
 	image = 'https://capelix.dev/images/embedded-img.avif',
+	locale = 'en',
 } = Astro.props as Props
+
+const ogLocale = locale === 'es' ? 'es_ES' : 'en_US'
 ---
 
 <title>{title}</title>
@@ -53,7 +57,7 @@ const {
 <meta property='og:url' content={Astro.url} />
 <meta property='og:site_name' content='Web - Capelix' />
 <meta property='og:type' content='website' />
-<meta name='og:locale' content='en_EN' />
+<meta property='og:locale' content={ogLocale} />
 
 <meta name='robots' content='index, follow' />
 <meta name='googlebot' content='index, follow' />

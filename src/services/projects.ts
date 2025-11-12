@@ -57,7 +57,7 @@ export const projectsService = (currentLocale?: string): Project[] => {
 			projectUrl: 'https://fotoestudioelchevere.com/',
 			tags: [TAGS.ASTRO, TAGS.TAILWIND],
 			gitCodeUrl: 'https://github.com/Capelix/el-chevere-web',
-			alt: 'Easy Short Url shortener Website',
+			alt: i18n.PROJECT_EL_CHEVERE_ALT,
 		},
 		{
 			id: 'fire-reservations',
@@ -67,7 +67,7 @@ export const projectsService = (currentLocale?: string): Project[] => {
 			projectUrl: 'https://firereservations.vercel.app/',
 			tags: [TAGS.ASTRO, TAGS.TAILWIND],
 			gitCodeUrl: 'https://github.com/Capelix/firereservations-official',
-			alt: 'Fire Reservations website image',
+			alt: i18n.PROJECT_FIRE_RESERVATIONS_ALT,
 		},
 		{
 			id: 'stop-trivia',
@@ -78,7 +78,7 @@ export const projectsService = (currentLocale?: string): Project[] => {
 				'https://play.google.com/store/apps/details?id=com.rilisentertainment.stoptriviaonline',
 			tags: [TAGS.KOTLIN, TAGS.FIREBASE, TAGS.ANDROID],
 			gitCodeUrl: 'https://github.com/Capelix/stop-trivia',
-			alt: 'Stop Trivia Android Game',
+			alt: i18n.PROJECT_STOP_TRIVIA_ALT,
 		},
 		{
 			id: 'anjocc-oficial',
@@ -88,7 +88,7 @@ export const projectsService = (currentLocale?: string): Project[] => {
 			projectUrl: 'https://anjocc.com',
 			tags: [TAGS.ASTRO, TAGS.TAILWIND],
 			gitCodeUrl: 'https://github.com/Capelix/anjocc-oficial',
-			alt: 'ANJOCC Oficial Web Page',
+			alt: i18n.PROJECT_ANJOCC_ALT,
 		},
 		{
 			id: 'gdn-style',
@@ -98,7 +98,7 @@ export const projectsService = (currentLocale?: string): Project[] => {
 			projectUrl: 'https://gdnstyle.com',
 			tags: [TAGS.ASTRO, TAGS.TAILWIND],
 			gitCodeUrl: 'https://github.com/Capelix',
-			alt: 'GDN Style Oficial Web Page',
+			alt: i18n.PROJECT_GDN_STYLE_ALT,
 		},
 	]
 }

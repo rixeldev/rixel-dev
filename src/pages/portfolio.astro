@@ -1,14 +1,14 @@
 ---
-import About from '@/components/portfolio/About.astro'
-import Experience from '@/components/portfolio/Experience.astro'
-import Projects from '@/components/portfolio/Projects.astro'
-import SectionContainer from '@/components/SectionContainer.astro'
-import type { Preload } from '@/interfaces/preload'
-import { getI18N } from '@/languages/index'
-import Layout from '../layouts/Layout.astro'
+import About from "@/components/portfolio/About.astro"
+import Experience from "@/components/portfolio/Experience.astro"
+import Projects from "@/components/portfolio/Projects.astro"
+import SectionContainer from "@/components/SectionContainer.astro"
+import type { Preload } from "@/interfaces/preload"
+import { getActiveLocale, getI18N, resolveLocalizedPath } from "@/languages/index"
+import Layout from "../layouts/Layout.astro"
 
-const { currentLocale } = Astro
-const i18n = getI18N({ currentLocale })
+const locale = getActiveLocale(Astro)
+const i18n = getI18N({ currentLocale: locale })
 const preloadImages: Preload[] = [
 	{
 		as: 'image',
@@ -38,9 +38,9 @@ const preloadImages: Preload[] = [
 ---
 
 <Layout
-	title=`${i18n.ABOUT_TEXT_1} - Rikelvi Capellán`
-	description='I build easy-to-use websites and Android apps, with fast technologies and UX/UI standards to improve user experience.'
-	canonical='https://capelix.dev/portfolio/'
+	title={`${i18n.ABOUT_TEXT_1} - Rikelvi Capellán`}
+	description={i18n.PORTFOLIO_PAGE_DESCRIPTION}
+	canonical={new URL(resolveLocalizedPath('/portfolio/', locale), 'https://capelix.dev').toString()}
 	preload={preloadImages}
 >
 	<SectionContainer id='about'>

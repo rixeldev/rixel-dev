@@ -1,17 +1,20 @@
-import { getI18N } from '@/languages/index'
+import { getI18N, normalizeLocale } from '@/languages/index'
 import { useEmail } from '@/hooks/useEmail'
-import { useEffect, useRef, useState } from 'react'
+import { useMemo, useRef } from 'react'
 import { Loading } from '@/icons/Loading'
 
-export const SendForm = () => {
+interface SendFormProps {
+	locale?: string
+}
+
+export const SendForm = ({ locale = 'en' }: SendFormProps) => {
 	const { sending, sendEmail } = useEmail()
 	const formRef = useRef<HTMLFormElement | null>(null)
-	const [locale, setlocale] = useState('en')
-	const i18n = getI18N({ currentLocale: locale })
-
-	useEffect(() => {
-		setlocale(window.navigator.language.split('-')[0])
-	}, [])
+	const normalizedLocale = normalizeLocale(locale)
+	const i18n = useMemo(
+		() => getI18N({ currentLocale: normalizedLocale }),
+		[normalizedLocale]
+	)
 
 	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault()
@@ -28,7 +31,7 @@ export const SendForm = () => {
 				user_email: userEmailInput.value,
 				message: messageInput.value,
 			},
-			locale,
+			normalizedLocale,
 			() => {
 				if (formRef.current) {
 					formRef.current.reset()
@@ -56,7 +59,7 @@ export const SendForm = () => {
 						className='h-11 rounded-xl bg-white/50 px-4 py-2 text-primary outline-none transition-all duration-300 placeholder:text-secondary/60 focus:bg-white/80 focus:shadow-md focus:shadow-accent/10 dark:bg-slate-800/50 dark:focus:bg-slate-800/80'
 						type='text'
 						name='user_name'
-						placeholder='Jane Doe'
+						placeholder={i18n.CONTACT_NAME_PLACEHOLDER ?? 'Jane Doe'}
 					/>
 				</label>
 
@@ -68,7 +71,7 @@ export const SendForm = () => {
 						className='h-11 rounded-xl bg-white/50 px-4 py-2 text-primary outline-none transition-all duration-300 placeholder:text-secondary/60 focus:bg-white/80 focus:shadow-md focus:shadow-accent/10 dark:bg-slate-800/50 dark:focus:bg-slate-800/80'
 						type='email'
 						name='user_email'
-						placeholder='your@email.com'
+						placeholder={i18n.CONTACT_EMAIL_PLACEHOLDER ?? 'your@email.com'}
 					/>
 				</label>
 

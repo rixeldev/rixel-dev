@@ -1,15 +1,15 @@
 ---
-import { getI18N } from '@/languages/index'
-import Layout from '@/layouts/Layout.astro'
+import { getActiveLocale, getI18N, resolveLocalizedPath } from "@/languages/index"
+import Layout from "@/layouts/Layout.astro"
 
-const { currentLocale } = Astro
-const i18n = getI18N({ currentLocale })
+const locale = getActiveLocale(Astro)
+const i18n = getI18N({ currentLocale: locale })
 ---
 
 <Layout
-	title=`${i18n.PRIVACY} - Capelix`
-	description='This is the privacy policy for all the projects made by Capelix.'
-	canonical='https://capelix.dev/projects/privacy/'
+	title={`${i18n.PRIVACY} - Capelix`}
+	description={i18n.PRIVACY_PAGE_DESCRIPTION}
+	canonical={new URL(resolveLocalizedPath('/privacy/', locale), 'https://capelix.dev').toString()}
 >
 	<article class='flex w-full flex-col items-center py-20'>
 		<div class='flex w-full flex-col items-center sm:w-11/12 md:w-8/12'>

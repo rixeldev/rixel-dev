@@ -7,22 +7,22 @@ export const experiencesService = (currentLocale?: string): Experience[] => {
 	return [
 		{
 			title: i18n.EXPERIENCE_TITLE_3,
-			date: 'Actually',
+			date: i18n.EXPERIENCE_DATE_CURRENT,
 			description: i18n.EXPERIENCE_DESC_3,
 		},
 		{
 			title: i18n.EXPERIENCE_TITLE_4,
-			date: 'Aug 2024',
+			date: i18n.EXPERIENCE_DATE_2024_08,
 			description: i18n.EXPERIENCE_DESC_4,
 		},
 		{
 			title: i18n.EXPERIENCE_TITLE_2,
-			date: 'May 2023',
+			date: i18n.EXPERIENCE_DATE_2023_05,
 			description: i18n.EXPERIENCE_DESC_2,
 		},
 		{
 			title: i18n.EXPERIENCE_TITLE_1,
-			date: 'Feb 2019',
+			date: i18n.EXPERIENCE_DATE_2019_02,
 			description: i18n.EXPERIENCE_DESC_1,
 		},
 	]

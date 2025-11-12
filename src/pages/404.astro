@@ -1,16 +1,16 @@
 ---
-import SectionContainer from '@/components/SectionContainer.astro'
-import { getI18N } from '@/languages/index'
-import Layout from '../layouts/Layout.astro'
+import SectionContainer from "@/components/SectionContainer.astro"
+import { getActiveLocale, getI18N, resolveLocalizedPath } from "@/languages/index"
+import Layout from "../layouts/Layout.astro"
 
-const { currentLocale } = Astro
-const i18n = getI18N({ currentLocale })
+const locale = getActiveLocale(Astro)
+const i18n = getI18N({ currentLocale: locale })
 ---
 
 <Layout
-	title='404 - Capelix'
-	description='Error 404. Page not found!'
-	canonical='https://capelix.dev/404/'
+	title={i18n.ERROR_404_TITLE}
+	description={i18n.ERROR_404_DESCRIPTION}
+	canonical={new URL(resolveLocalizedPath('/404/', locale), 'https://capelix.dev').toString()}
 >
 	<SectionContainer>
 		<div

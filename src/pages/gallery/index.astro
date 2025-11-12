@@ -1,0 +1,22 @@
+---
+import GalleryAccess from "@/components/gallery/GalleryAccess"
+import { getActiveLocale, getI18N, resolveLocalizedPath } from "@/languages/index"
+import Layout from "@/layouts/Layout.astro"
+
+const locale = getActiveLocale(Astro)
+const i18n = getI18N({ currentLocale: locale })
+---
+
+<Layout
+	title={i18n.GALLERY_PAGE_TITLE}
+	description={i18n.GALLERY_PAGE_DESCRIPTION}
+	canonical={new URL(resolveLocalizedPath('/gallery/', locale), 'https://capelix.dev').toString()}
+>
+	<section
+		class='section relative flex min-h-[60vh] w-full items-center justify-center px-4 py-24 sm:px-6 lg:px-8'
+	>
+		<div class='w-full'>
+			<GalleryAccess client:load locale={locale} />
+		</div>
+	</section>
+</Layout>

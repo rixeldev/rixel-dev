@@ -1,6 +1,6 @@
 ---
-import RightArrow from '@/icons/RightArrow.astro'
-import { getI18N } from '@/languages/index'
+import RightArrow from "@/icons/RightArrow.astro"
+import { getActiveLocale, getI18N, resolveLocalizedHref } from "@/languages/index"
 
 interface Props {
 	author: string
@@ -11,28 +11,29 @@ interface Props {
 	title: string
 }
 
-const { currentLocale } = Astro
-const i18n = getI18N({ currentLocale })
+const locale = getActiveLocale(Astro)
+const i18n = getI18N({ currentLocale: locale })
 const { author, description, lang, pageTitle, timestamp, title } = Astro.props
+const articleHref = resolveLocalizedHref(`/articles/${pageTitle}`, locale)
 ---
 
 <a
-	href=`/articles/${pageTitle}`
+	href={articleHref}
 	data-story-id={pageTitle}
-	title=`${i18n.READ} → ${title}`
+	title={`${i18n.READ} → ${title}`}
 	class='group relative flex w-full items-center justify-between gap-4 overflow-hidden rounded-2xl bg-gradient-to-br from-primary/5 to-primary/10 px-5 py-4 shadow-sm backdrop-blur-sm transition-all duration-300 ease-in-out active:scale-[0.98] active:shadow-lg sm:cursor-pointer sm:hover:scale-[0.98] sm:hover:border-accent/20 sm:hover:bg-gradient-to-br sm:hover:from-accent/10 sm:hover:to-primary/15 sm:hover:shadow-lg sm:hover:shadow-accent/5 dark:border-primary/20 dark:bg-gradient-to-br dark:from-primary/10 dark:to-primary/5 dark:sm:hover:border-accent/30 dark:sm:hover:from-accent/15 dark:sm:hover:to-primary/20'
 >
 	<div class='flex-1 overflow-hidden'>
 		<h1
 			class='text-base font-bold text-accent transition-colors duration-300 sm:text-lg sm:group-hover:text-accent/90'
-			transition:name=`article-${pageTitle}-title`
+			transition:name={`article-${pageTitle}-title`}
 		>
 			{title}
 		</h1>
 
 		<h2
 			class='mt-1 overflow-hidden text-ellipsis whitespace-nowrap text-nowrap text-xs text-primary transition-colors duration-300 sm:text-sm sm:group-hover:text-primary/90'
-			transition:name=`article-${pageTitle}-content`
+			transition:name={`article-${pageTitle}-content`}
 		>
 			{description}
 		</h2>
