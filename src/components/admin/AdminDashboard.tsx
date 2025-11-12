@@ -73,7 +73,9 @@ export default function AdminDashboard() {
 	const loadSession = async () => {
 		try {
 			setIsCheckingSession(true)
-			const response = await fetch("/api/admin/session")
+			const response = await fetch("/api/admin/session", {
+				credentials: "include",
+			})
 			if (!response.ok) {
 				setSession(null)
 				return
@@ -91,7 +93,9 @@ export default function AdminDashboard() {
 	const loadGalleries = async (): Promise<GalleryOverview[]> => {
 		try {
 			setIsLoadingGalleries(true)
-			const response = await fetch("/api/admin/galleries")
+			const response = await fetch("/api/admin/galleries", {
+				credentials: "include",
+			})
 			if (!response.ok) {
 				const payload = await response.json().catch(() => ({}))
 				setGalleryError(payload.message ?? "Unable to load galleries.")
@@ -143,6 +147,7 @@ export default function AdminDashboard() {
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify(loginForm),
+				credentials: "include",
 			})
 
 			if (!response.ok) {
@@ -165,7 +170,10 @@ export default function AdminDashboard() {
 
 	const handleLogout = async () => {
 		try {
-			await fetch("/api/admin/logout", { method: "POST" })
+			await fetch("/api/admin/logout", {
+				method: "POST",
+				credentials: "include",
+			})
 		} catch (error) {
 			console.error("Logout failed:", error)
 		} finally {
@@ -193,6 +201,7 @@ export default function AdminDashboard() {
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify(createGalleryForm),
+				credentials: "include",
 			})
 
 			if (!response.ok) {
@@ -236,6 +245,7 @@ export default function AdminDashboard() {
 			const response = await fetch(`/api/admin/galleries/${uploadForm.galleryId}/photos`, {
 				method: "POST",
 				body: formData,
+				credentials: "include",
 			})
 
 			if (!response.ok) {
@@ -273,6 +283,7 @@ export default function AdminDashboard() {
 			setDeletingPhotoId(photoId)
 			const response = await fetch(`/api/admin/galleries/${galleryId}/photos/${photoId}`, {
 				method: "DELETE",
+				credentials: "include",
 			})
 
 			if (!response.ok) {

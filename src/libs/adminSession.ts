@@ -25,7 +25,7 @@ export function createAdminSessionCookie(username: string) {
 		httpOnly: true,
 		path: '/',
 		maxAge: SESSION_DURATION_SECONDS,
-		secure: true,
+		secure: import.meta.env.PROD,
 		sameSite: 'lax',
 	})
 }
@@ -35,7 +35,7 @@ export function clearAdminSessionCookie() {
 		httpOnly: true,
 		path: '/',
 		maxAge: 0,
-		secure: true,
+		secure: import.meta.env.PROD,
 		sameSite: 'lax',
 	})
 }
