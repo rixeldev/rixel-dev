@@ -11,8 +11,8 @@ const { locale: forcedLocale } = Astro.props as Props
 const locale = forcedLocale ?? getActiveLocale(Astro)
 const i18n = getI18N({ currentLocale: locale })
 const links = footerLinks()
-const privacyHref = new URL(resolveLocalizedPath("/privacy/"), "https://capelix.dev").toString()
-const termsHref = new URL(resolveLocalizedPath("/terms/"), "https://capelix.dev").toString()
+const privacyHref = new URL(resolveLocalizedPath("/privacy/"), "https://rixel.dev").toString()
+const termsHref = new URL(resolveLocalizedPath("/terms/"), "https://rixel.dev").toString()
 ---
 
 <footer
@@ -31,24 +31,24 @@ const termsHref = new URL(resolveLocalizedPath("/terms/"), "https://capelix.dev"
 			class="flex w-full flex-col-reverse items-center gap-6 md:justify-between md:gap-4 lg:flex-row lg:items-center"
 		>
 			<a
-				href="https://capelix.dev/"
+				href="https://rixel.dev/"
 				class="order-1 flex max-w-16 items-center justify-center transition-all duration-300 hover:scale-110 lg:order-none"
 			>
 				<img
 					src="/brand-svg.svg"
 					class="w-full drop-shadow-lg"
-					alt="Logo Capelix"
+					alt="Logo Rixel"
 					loading="lazy"
 					decoding="async"
 				/>
 			</a>
 			<p class="max-w-md text-pretty text-center text-sm text-primary/90 lg:text-start">
-				&#169; 2025 Capelix. {i18n.FOOTER_TXT_1}
+				&#169; 2025 Rixel. {i18n.FOOTER_TXT_1}
 				<a
 					rel="noopener noreferrer"
-					href="https://capelix.dev"
+					href="https://rixel.dev"
 					class="font-bold text-accent transition-all duration-300 active:text-accent/80 active:underline sm:hover:text-accent/80 sm:hover:underline"
-					>Capelix</a
+					>Rixel</a
 				>
 				(Rikelvi Capellán García) {i18n.FOOTER_TXT_2}
 				<a

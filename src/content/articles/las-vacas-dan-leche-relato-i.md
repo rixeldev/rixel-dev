@@ -1,7 +1,7 @@
 ---
 author: Rikelvi Capellán
 category: Short story
-cover: https://www.capelix.dev/articles/las-vacas-dan-leche-relato-i.webp
+cover: https://www.rixel.dev/articles/las-vacas-dan-leche-relato-i.webp
 description: Si alguna vez te han hecho esa pregunta y con total obviedad contestas que sí, puede ser que te equivoques. Si buscas una respuesta a tal pregunta, acompáñame en este relato.
 lang: es
 pageTitle: las-vacas-dan-leche-relato-i

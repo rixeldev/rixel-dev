@@ -29,17 +29,17 @@ if (!article || article === undefined) {
 ---
 
 <Layout
-	title={`${title} - Capelix' articles`}
+	title={`${title} - Rixel's articles`}
 	description={`${description} | ${i18n.AUTHOR}: ${author} | ${i18n.LANGUAGE}: ${lang}`}
 	canonical={new URL(
 		resolveLocalizedPath(`/articles/${pageTitle}/`, locale),
-		"https://capelix.dev"
+		"https://rixel.dev"
 	).toString()}
 >
 	<img
 		class="parallax absolute top-0 w-full translate-y-0 bg-cover bg-fixed bg-center opacity-5"
 		src={cover}
-		alt={`Capelix' article ${title}`}
+		alt={`Rixel's article ${title}`}
 		style="mask-image: linear-gradient(black 20%, transparent 80%);"
 	/>
 

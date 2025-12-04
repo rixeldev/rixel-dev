@@ -11,11 +11,11 @@ interface Props {
 }
 
 const {
-	title = "Web - Capelix",
-	description = "The Capelix' Website. Read stories, articles and comments about all you want to know. I build easy-to-use websites and Android apps, with fast technologies and UX/UI standards to improve user experience.",
+	title = "Web - Rixel",
+	description = "The Rixel's Website. Read stories, articles and comments about all you want to know. I build easy-to-use websites and Android apps, with fast technologies and UX/UI standards to improve user experience.",
 	preload,
-	canonical = "https://capelix.dev/",
-	image = "https://capelix.dev/images/embedded-img.avif",
+	canonical = "https://rixel.dev/",
+	image = "https://rixel.dev/images/embedded-img.avif",
 	locale = "en",
 } = Astro.props as Props
 
@@ -31,7 +31,7 @@ const ogLocale = locale === "es" ? "es_ES" : "en_US"
 <meta name="theme-color" content="#020617" />
 
 <link rel="canonical" href={canonical} />
-<link rel="author" href="https://www.linkedin.com/in/Capelix" />
+<link rel="author" href="https://www.linkedin.com/in/rixeldev" />
 
 {
 	preload?.map(({ href, as, type, rel = "preload", crossorigin }) => (
@@ -41,12 +41,12 @@ const ogLocale = locale === "es" ? "es_ES" : "en_US"
 
 <meta
 	name="keywords"
-	content="astro, html, javascript, js, css, Capelix, portfolio, angular, rikelvi capellan, republica dominicana, dominican republic, developer, desarrollador web, web developer, blog, Capelix blog, projects, Capelix projects, rikelvi capellan projects, ts, typescript, components, anciano, corta, fama, historia, joven, leche, moraleja, relato, riquezas, sueños, vaca, short story"
+	content="astro, html, javascript, js, css, Rixel, portfolio, angular, rikelvi capellan, republica dominicana, dominican republic, developer, desarrollador web, web developer, blog, Rixel's blog, projects, Rixel's projects, rikelvi capellan projects, ts, typescript, components, anciano, corta, fama, historia, joven, leche, moraleja, relato, riquezas, sueños, vaca, short story"
 />
 
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:site" content="@Capelixxx" />
-<meta name="twitter:creator" content="@Capelixxx" />
+<meta name="twitter:site" content="@rixel_dev" />
+<meta name="twitter:creator" content="@rixel_dev" />
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={new URL(image, Astro.url)} />
@@ -55,7 +55,7 @@ const ogLocale = locale === "es" ? "es_ES" : "en_US"
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:url" content={Astro.url} />
-<meta property="og:site_name" content="Web - Capelix" />
+<meta property="og:site_name" content="Web - Rixel" />
 <meta property="og:type" content="website" />
 <meta property="og:locale" content={ogLocale} />
 

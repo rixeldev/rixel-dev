@@ -1,22 +1,22 @@
-# → Capelix' Web | Blog | Portfolio ←
+# → Rixel's Web | Blog | Portfolio ←
 
-<a href="https://github.com/Capelix/capelix-dev">
-  <img src="https://capelix.dev/images/embedded-img.avif" />
+<a href="https://github.com/rixeldev/rixel-dev">
+  <img src="https://rixel.dev/images/embedded-img.avif" />
 </a>
 
-[Visit it →](https://capelix.dev)
+[Visit it →](https://rixel.dev)
 
 ## 📃 Description →
 
-This repository have the Capelix' web, blog and portfolio made with [Astro](https://astro.build/), [Tailwind CSS](https://tailwindcss.com/), and deployed in [Vercel](https://vercel.com/).
+This repository have the Rixel's web, blog and portfolio made with [Astro](https://astro.build/), [Tailwind CSS](https://tailwindcss.com/), and deployed in [Vercel](https://vercel.com/).
 
 ## 🤝 You can use this repository by following the next steps →
 
 1. Clone the repository:
-   `git clone https://github.com/Capelix/capelix-dev.git`
+   `git clone https://github.com/rixeldev/rixel-dev.git`
 
 2. Go to the folder project:
-   `cd capelix-dev`
+   `cd rixel-dev`
 
 3. Install the dependencies:
    `pnpm install`

@@ -14,11 +14,11 @@ import { getI18N, normalizeLocale } from "@/locales/index"
 export const footerLinks = (): FooterLink[] => {
 	return [
 		{
-			href: "https://github.com/Capelix",
+			href: "https://github.com/rixeldev",
 			icon: GitHub,
 		},
 		{
-			href: "https://instagram.com/capelixx",
+			href: "https://instagram.com/rixel.dev",
 			icon: Instagram,
 		},
 		{

@@ -11,12 +11,12 @@ import Layout from "../layouts/Layout.astro"
 
 const locale = getActiveLocale(Astro)
 const i18n = getI18N({ currentLocale: locale })
-const canonical = new URL(resolveLocalizedPath("/", locale), "https://capelix.dev").toString()
+const canonical = new URL(resolveLocalizedPath("/", locale), "https://rixel.dev").toString()
 
 const preloadImages: Preload[] = [
 	{
 		as: "image",
-		href: `https://capelix.dev/images/about-image.webp`,
+		href: `https://rixel.dev/images/about-image.webp`,
 		type: "image/webp",
 		rel: "preload",
 	},

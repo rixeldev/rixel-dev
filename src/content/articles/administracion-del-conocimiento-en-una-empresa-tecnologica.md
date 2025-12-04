@@ -1,7 +1,7 @@
 ---
 author: Rikelvi Capellán
 category: Administración
-cover: https://www.capelix.dev/articles/administracion-del-conocimiento-en-una-empresa-tecnologica.webp
+cover: https://www.rixel.dev/articles/administracion-del-conocimiento-en-una-empresa-tecnologica.webp
 description: En el entorno competitivo de las empresas tecnológicas, la información no es suficiente, lo que realmente marca la diferencia es cómo se transforma en conocimiento útil. Aquí entra en juego la administración del conocimiento, un proceso estratégico que puede ser potenciado mediante los "Sistemas de Información Gerencial" (SIG). Estos sistemas no solo gestionan datos, sino que ayudan a capturar, organizar y distribuir el conocimiento dentro de la organización.
 lang: es
 pageTitle: administracion-del-conocimiento-en-una-empresa-tecnologica

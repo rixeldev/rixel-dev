@@ -15,11 +15,11 @@ const images = getImages()
 ---
 
 <Layout
-	title={`${i18n.PHOTOGRAPHY} - Capelix`}
+	title={`${i18n.PHOTOGRAPHY} - Rixel`}
 	description={i18n.PHOTOGRAPHY_PAGE_DESCRIPTION}
 	canonical={new URL(
 		resolveLocalizedPath("/photography/", locale),
-		"https://capelix.dev"
+		"https://rixel.dev"
 	).toString()}
 >
 	<SectionContainer>
@@ -41,14 +41,14 @@ const images = getImages()
 							.sort(() => Math.random() - 0.5)
 							.map((image, index) => (
 								<a
-									href={`https://www.capelix.dev/${image.src}`}
+									href={`https://www.rixel.dev/${image.src}`}
 									data-pswp-width={image.width}
 									data-pswp-height={image.height}
 									target="_blank"
 									class={`hoverZoomLink group relative mb-4 block cursor-zoom-in break-inside-avoid overflow-hidden rounded-lg transition-all duration-300 ease-in-out md:hover:scale-[1.02] md:hover:shadow-lg md:hover:shadow-accent/20`}
 								>
 									<LazyImage
-										src={`https://www.capelix.dev/${image.src}`}
+										src={`https://www.rixel.dev/${image.src}`}
 										alt={`${i18n.PHOTOGRAPHY_IMAGE_ALT_PREFIX} ${index + 1}`}
 										width={image.width}
 										height={image.height}

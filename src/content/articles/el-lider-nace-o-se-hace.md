@@ -1,7 +1,7 @@
 ---
 author: Rikelvi Capellán
 category: Liderazgo
-cover: https://www.capelix.dev/articles/el-lider-nace-o-se-hace.webp
+cover: https://www.rixel.dev/articles/el-lider-nace-o-se-hace.webp
 description: Esa es una pregunta muy polémica en el mundo que vivimos. Podríamos decir tanto que un líder nace, como que se hace. Para contestar a la cuestión debemos de mirarla desde diferentes perspectivas, ya que de esta manera nos daremos cuenta si el líder nace o se hace en un área específica, no de manera global.
 lang: es
 pageTitle: el-lider-nace-o-se-hace
