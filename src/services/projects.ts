@@ -75,7 +75,7 @@ export const projectsService = (currentLocale?: string): Project[] => {
 			title: "El Chévere - Official Web",
 			description: i18n.EL_CHEVERE_WEB_DESCRIPTION,
 			imgUrl: "https://rixel.dev/projects/el-chevere.webp",
-			projectUrl: "https://fotoestudioelchevere.com/",
+			projectUrl: "https://fotoestudioelchevere.com",
 			tags: [TAGS.ASTRO, TAGS.TAILWIND, TAGS.SUPABASE],
 			gitCodeUrl: "https://github.com/rixeldev/el-chevere-web",
 			alt: i18n.PROJECT_EL_CHEVERE_ALT,
@@ -85,7 +85,7 @@ export const projectsService = (currentLocale?: string): Project[] => {
 			title: "ANJOCC",
 			description: i18n.ANJOCC_OFICIAL_DESCRIPTION,
 			imgUrl: "https://rixel.dev/projects/anjocc.webp",
-			projectUrl: "https://anjocc.com",
+			projectUrl: "https://anjocc-web.vercel.app",
 			tags: [TAGS.ASTRO, TAGS.TAILWIND, TAGS.SUPABASE],
 			gitCodeUrl: "https://github.com/rixeldev/anjocc-web",
 			alt: i18n.PROJECT_ANJOCC_ALT,
@@ -108,7 +108,7 @@ export const projectsService = (currentLocale?: string): Project[] => {
 			projectUrl:
 				"https://play.google.com/store/apps/details?id=com.rilisentertainment.stoptriviaonline",
 			tags: [TAGS.REACT_NATIVE, TAGS.FIREBASE, TAGS.ANDROID],
-			gitCodeUrl: "https://github.com/rixeldev/stop-trivia",
+			gitCodeUrl: "https://github.com/rixeldev/stop-trivia-react",
 			alt: i18n.PROJECT_STOP_TRIVIA_ALT,
 		},
 		{
