@@ -14,7 +14,7 @@ const articles = sortArticlesByDate(await getCollection("articles")).slice(0, 4)
 ---
 
 <div class="flex w-full min-w-0 flex-col">
-	<MainTitle>
+	<MainTitle eyebrow={i18n.ARTICLES_EYEBROW}>
 		<Book class="size-7 text-accent" />
 		{i18n.ARTICLES}
 	</MainTitle>

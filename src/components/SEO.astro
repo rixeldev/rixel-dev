@@ -1,5 +1,6 @@
 ---
 import type { Preload } from "@/interfaces/preload"
+import { buildProfileJsonLd } from "@/libs/structuredData"
 
 interface Props {
 	title: string
@@ -10,6 +11,12 @@ interface Props {
 	locale?: string
 	keywords?: string
 	jsonLd?: Record<string, unknown> | Record<string, unknown>[]
+	type?: "website" | "article" | "profile"
+	noindex?: boolean
+	publishedTime?: string
+	modifiedTime?: string
+	author?: string
+	includeProfile?: boolean
 }
 
 const {
@@ -21,9 +28,20 @@ const {
 	locale = "en",
 	keywords,
 	jsonLd,
+	type = "website",
+	noindex = false,
+	publishedTime,
+	modifiedTime,
+	author = "Rikelvi Capellán",
+	includeProfile = true,
 } = Astro.props as Props
 
 const ogLocale = locale === "es" ? "es_ES" : "en_US"
+const absoluteImage = new URL(image, Astro.url).toString()
+const robotsContent = noindex
+	? "noindex, nofollow"
+	: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+const profileJsonLd = includeProfile ? buildProfileJsonLd() : null
 ---
 
 <title>{title}</title>
@@ -31,52 +49,64 @@ const ogLocale = locale === "es" ? "es_ES" : "en_US"
 <meta charset="UTF-8" />
 <meta name="description" content={description} />
 <meta name="generator" content={Astro.generator} />
-<meta name="viewport" content="width=device-width" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="color-scheme" content="dark" />
 <meta name="theme-color" content="#020617" />
 
 <link rel="canonical" href={canonical} />
 <link rel="author" href="https://www.linkedin.com/in/rixeldev" />
+<link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+<link rel="alternate" type="application/rss+xml" title="Rixel · Articles" href="/rss.xml" />
 
 {
-	preload?.map(({ href, as, type, rel = "preload", crossorigin }) => (
-		<link {rel} {href} {as} {type} {crossorigin} />
+	preload?.map(({ href, as, type: preloadType, rel = "preload", crossorigin }) => (
+		<link {rel} {href} {as} type={preloadType} {crossorigin} />
 	))
 }
 
 <meta
 	name="keywords"
 	content={keywords ??
-		"astro, html, javascript, js, css, Rixel, portfolio, angular, rikelvi capellan, republica dominicana, dominican republic, developer, desarrollador web, web developer, blog, Rixel's blog, projects, Rixel's projects, rikelvi capellan projects, ts, typescript, components, anciano, corta, fama, historia, joven, leche, moraleja, relato, riquezas, sueños, vaca, short story"}
+		"astro, html, javascript, js, css, Rixel, portfolio, angular, rikelvi capellan, republica dominicana, dominican republic, developer, desarrollador web, web developer, blog, Rixel's blog, projects, Rixel's projects, rikelvi capellan projects, ts, typescript, components, short story"}
 />
+
+<meta name="robots" content={robotsContent} />
+<meta name="googlebot" content={robotsContent} />
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:site" content="@rixel_dev" />
 <meta name="twitter:creator" content="@rixel_dev" />
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
-<meta name="twitter:image" content={new URL(image, Astro.url)} />
+<meta name="twitter:image" content={absoluteImage} />
 
-<meta property="og:image" content={new URL(image, Astro.url)} />
+<meta property="og:image" content={absoluteImage} />
+<meta property="og:image:alt" content={title} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:url" content={Astro.url} />
-<meta property="og:site_name" content="Web - Rixel" />
-<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Rixel" />
+<meta property="og:type" content={type} />
 <meta property="og:locale" content={ogLocale} />
 
-<meta name="robots" content="index, follow" />
-<meta name="googlebot" content="index, follow" />
+{
+	type === "article" ? (
+		<>
+			<meta property="article:author" content={author} />
+			{publishedTime ? <meta property="article:published_time" content={publishedTime} /> : null}
+			{modifiedTime ? <meta property="article:modified_time" content={modifiedTime} /> : null}
+		</>
+	) : null
+}
 
 <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
 <link rel="apple-touch-icon" href="/favicon.ico" />
-
-<link rel="icon" type="image/svg+xml" href="/favicon.ico" />
-<meta name="msapplication-config" content="/browserconfig.xml" />
-
 <link rel="manifest" href="/manifest.webmanifest" />
 
 {
-	jsonLd ? (
-		<script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
-	) : null
+	[profileJsonLd, jsonLd].map((schema) =>
+		schema ? (
+			<script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
+		) : null
+	)
 }

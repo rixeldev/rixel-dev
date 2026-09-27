@@ -23,9 +23,27 @@ interface Props {
 	image?: string
 	keywords?: string
 	jsonLd?: Record<string, unknown> | Record<string, unknown>[]
+	type?: "website" | "article" | "profile"
+	noindex?: boolean
+	publishedTime?: string
+	modifiedTime?: string
+	author?: string
 }
 
-const { title, description, preload, canonical, image, keywords, jsonLd } = Astro.props
+const {
+	title,
+	description,
+	preload,
+	canonical,
+	image,
+	keywords,
+	jsonLd,
+	type,
+	noindex,
+	publishedTime,
+	modifiedTime,
+	author,
+} = Astro.props
 const locale = getActiveLocale(Astro)
 ---
 
@@ -41,13 +59,30 @@ const locale = getActiveLocale(Astro)
 			keywords={keywords}
 			preload={preload}
 			title={title}
+			type={type}
+			noindex={noindex}
+			publishedTime={publishedTime}
+			modifiedTime={modifiedTime}
+			author={author}
 		/>
 		<ClientRouter />
 	</head>
 	<body class="relative w-full overflow-x-hidden">
+		<a
+			href="#main"
+			class="skip-link sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-xl focus:border focus:border-accent/40 focus:bg-slate-900 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-accent focus:shadow-xl"
+		>
+			Skip to content
+		</a>
+
 		<SpeedInsights />
 
 		<BackgroundGradient />
+		<div
+			class="noise-overlay pointer-events-none fixed inset-0 z-[-1] opacity-[0.035]"
+			aria-hidden="true"
+		>
+		</div>
 
 		<WhatsAppButton />
 		<GoToTop />
@@ -55,7 +90,7 @@ const locale = getActiveLocale(Astro)
 
 		<Header locale={locale} />
 
-		<main class="w-full min-w-0 overflow-x-hidden">
+		<main id="main" class="w-full min-w-0 overflow-x-hidden">
 			<slot />
 
 			<SectionContainer
@@ -74,9 +109,56 @@ const locale = getActiveLocale(Astro)
 		font-family: "Onest Variable", "Ubuntu", system-ui, sans-serif;
 		background-color: #020617;
 		scroll-behavior: smooth;
+		scroll-padding-top: 6rem;
 		overflow-x: hidden;
 		max-width: 100%;
 		scrollbar-gutter: auto;
+		-webkit-tap-highlight-color: transparent;
+	}
+
+	::selection {
+		background-color: rgba(8, 145, 178, 0.35);
+		color: #f8fafc;
+	}
+
+	:where(a, button, input, textarea, select, summary):focus-visible {
+		outline: 2px solid rgba(8, 145, 178, 0.9);
+		outline-offset: 2px;
+		border-radius: 0.5rem;
+	}
+
+	* {
+		scrollbar-width: thin;
+		scrollbar-color: rgba(100, 116, 139, 0.5) transparent;
+	}
+
+	*::-webkit-scrollbar {
+		width: 10px;
+		height: 10px;
+	}
+
+	*::-webkit-scrollbar-thumb {
+		background-color: rgba(100, 116, 139, 0.45);
+		border-radius: 9999px;
+		border: 3px solid transparent;
+		background-clip: content-box;
+	}
+
+	*::-webkit-scrollbar-thumb:hover {
+		background-color: rgba(8, 145, 178, 0.6);
+	}
+
+	.noise-overlay {
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+		background-repeat: repeat;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.fade-up-anim,
+		.fade-left-anim,
+		.fade-right-anim {
+			animation: none !important;
+		}
 	}
 
 	@media (min-width: 1024px) {

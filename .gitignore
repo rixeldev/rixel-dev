@@ -5,6 +5,7 @@ dist/
 .astro/
 .vercel/
 .vscode/
+.agents
 
 # dependencies
 node_modules/

@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
 
+Disallow: /admin/
+Disallow: /api/
+
 Sitemap: https://rixel.dev/sitemap.xml

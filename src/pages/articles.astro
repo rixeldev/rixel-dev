@@ -1,9 +1,9 @@
 ---
-import ArticleCard from "@/components/ArticleCard.astro"
+import ArticleTile from "@/components/ArticleTile.astro"
 import MainTitle from "@/components/MainTitle.astro"
 import SectionContainer from "@/components/SectionContainer.astro"
 import Book from "@/icons/Book.astro"
-import { buildArticlesIndexJsonLd, sortArticlesByDate } from "@/libs/articlesSeo"
+import { buildArticlesIndexJsonLd, estimateReadingTime, sortArticlesByDate } from "@/libs/articlesSeo"
 import {
 	getActiveLocale,
 	getI18N,
@@ -16,6 +16,9 @@ import Layout from "../layouts/Layout.astro"
 const locale = getActiveLocale(Astro)
 const i18n = getI18N({ currentLocale: locale })
 const articles = sortArticlesByDate(await getCollection("articles"))
+const orderedArticles = [...articles].sort(
+	(a, b) => Number(Boolean(b.data.featured)) - Number(Boolean(a.data.featured))
+)
 const canonical = new URL(
 	resolveLocalizedPath("/articles/", locale),
 	"https://rixel.dev"
@@ -30,6 +33,17 @@ const jsonLd = buildArticlesIndexJsonLd({
 	description: pageDescription,
 	canonical,
 })
+
+const tagFrequency = new Map<string, number>()
+articles.forEach((article) => {
+	article.data.tags.forEach((tag) => {
+		tagFrequency.set(tag, (tagFrequency.get(tag) ?? 0) + 1)
+	})
+})
+const topTags = [...tagFrequency.entries()]
+	.sort((a, b) => b[1] - a[1])
+	.slice(0, 8)
+	.map(([tag]) => tag)
 ---
 
 <Layout
@@ -41,7 +55,7 @@ const jsonLd = buildArticlesIndexJsonLd({
 	jsonLd={jsonLd}
 >
 	<SectionContainer>
-		<div class="flex w-full max-w-4xl flex-col gap-4 sm:w-11/12 md:w-8/12">
+		<div class="flex w-full max-w-5xl flex-col gap-4 sm:w-11/12">
 			<nav aria-label="Breadcrumb">
 				<ol class="flex flex-wrap items-center gap-2 text-sm text-secondary">
 					<li>
@@ -57,39 +71,161 @@ const jsonLd = buildArticlesIndexJsonLd({
 			</nav>
 
 			<header>
-				<MainTitle>
+				<MainTitle eyebrow={i18n.ARTICLES_EYEBROW}>
 					<Book class="size-8" />
 					{i18n.ARTICLES}
 				</MainTitle>
 
-				<p
-					class="-mt-4 mb-6 max-w-3xl text-pretty text-base leading-relaxed text-primary sm:text-lg"
-				>
+				<p class="-mt-4 mb-6 max-w-3xl text-pretty text-base leading-relaxed text-primary sm:text-lg">
 					{pageDescription}
 				</p>
 			</header>
 		</div>
 
+		<div class="sticky top-20 z-20 mb-8 flex w-full max-w-5xl flex-col gap-4 rounded-2xl border border-white/10 bg-slate-950/80 p-4 backdrop-blur-lg sm:w-11/12 sm:p-5">
+			<div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+				<label class="relative w-full sm:max-w-sm">
+					<span class="sr-only">{i18n.ARTICLES_SEARCH_LABEL}</span>
+					<input
+						type="search"
+						data-article-search
+						placeholder={i18n.ARTICLES_SEARCH_PLACEHOLDER}
+						class="h-11 w-full rounded-xl border border-white/10 bg-slate-900/70 px-4 text-sm text-primary outline-none transition-colors placeholder:text-secondary/60 focus:border-accent/50"
+					/>
+				</label>
+
+				<p class="text-sm text-secondary" aria-live="polite">
+					<span data-article-count>{articles.length}</span> {i18n.ARTICLES_RESULTS}
+				</p>
+			</div>
+
+			<div
+				class="flex flex-wrap gap-2"
+				role="group"
+				aria-label={i18n.ARTICLES_FILTER_LABEL}
+			>
+				<button type="button" class="filter-chip" data-tag-filter data-tag="all" data-active="true">
+					{i18n.ARTICLES_FILTER_ALL}
+				</button>
+				{
+					topTags.map((tag) => (
+						<button type="button" class="filter-chip" data-tag-filter data-tag={tag}>
+							{tag}
+						</button>
+					))
+				}
+			</div>
+		</div>
+
 		<section
-			class="flex w-full max-w-4xl flex-col gap-14 sm:w-11/12 md:w-8/12"
+			class="grid w-full max-w-5xl grid-cols-1 gap-5 sm:w-11/12 sm:grid-cols-2 lg:grid-cols-3"
 			aria-label={i18n.ARTICLES}
 		>
 			{
-				articles.map((article) => {
-					const { data } = article
-					const { cover, description, pageTitle, tags, title } = data
+				orderedArticles.map((article) => {
+					const { category, cover, description, lang, pageTitle, tags, timestamp, title } =
+						article.data
 
 					return (
-						<ArticleCard
+						<ArticleTile
+							category={category}
 							cover={cover}
 							description={description}
+							lang={lang}
 							pageTitle={pageTitle}
+							readingMinutes={estimateReadingTime(article.body)}
 							tags={tags}
+							timestamp={timestamp}
 							title={title}
 						/>
 					)
 				})
 			}
 		</section>
+
+		<p data-article-empty hidden class="mt-6 text-center text-primary">
+			{i18n.ARTICLES_NO_RESULTS}
+		</p>
 	</SectionContainer>
 </Layout>
+
+<style>
+	.filter-chip {
+		border-radius: 9999px;
+		border: 1px solid rgba(100, 116, 139, 0.3);
+		background-color: rgba(255, 255, 255, 0.04);
+		padding: 0.35rem 0.85rem;
+		font-size: 0.75rem;
+		font-weight: 600;
+		color: rgb(169 179 193);
+		transition: all 0.2s ease;
+	}
+
+	.filter-chip:hover {
+		border-color: rgba(8, 145, 178, 0.4);
+		color: rgb(8, 145, 178);
+	}
+
+	.filter-chip[data-active="true"] {
+		border-color: rgba(8, 145, 178, 0.5);
+		background-color: rgba(8, 145, 178, 0.15);
+		color: rgb(8, 145, 178);
+	}
+</style>
+
+<script>
+	const setupArticleFilters = () => {
+		const input = document.querySelector<HTMLInputElement>("[data-article-search]")
+		const tiles = Array.from(document.querySelectorAll<HTMLElement>("[data-article]"))
+		const chips = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-tag-filter]"))
+		const count = document.querySelector<HTMLElement>("[data-article-count]")
+		const empty = document.querySelector<HTMLElement>("[data-article-empty]")
+
+		if (!input || tiles.length === 0) return
+		if (input.dataset.filterReady === "true") return
+		input.dataset.filterReady = "true"
+
+		let activeTag = "all"
+		let query = ""
+
+		const applyFilters = () => {
+			let visible = 0
+
+			tiles.forEach((tile) => {
+				const search = (tile.dataset.search ?? "").toLowerCase()
+				const tags = (tile.dataset.tags ?? "").split("|")
+				const matchesQuery = query.length === 0 || search.includes(query)
+				const matchesTag = activeTag === "all" || tags.includes(activeTag)
+				const show = matchesQuery && matchesTag
+				tile.hidden = !show
+				if (show) visible += 1
+			})
+
+			if (count) count.textContent = String(visible)
+			if (empty) empty.hidden = visible !== 0
+		}
+
+		input.addEventListener("input", () => {
+			query = input.value.trim().toLowerCase()
+			applyFilters()
+		})
+
+		chips.forEach((chip) => {
+			chip.addEventListener("click", () => {
+				activeTag = chip.dataset.tag ?? "all"
+				chips.forEach((other) => {
+					other.dataset.active = other === chip ? "true" : "false"
+				})
+				applyFilters()
+			})
+		})
+	}
+
+	if (document.readyState === "loading") {
+		document.addEventListener("DOMContentLoaded", setupArticleFilters, { once: true })
+	} else {
+		setupArticleFilters()
+	}
+
+	document.addEventListener("astro:page-load", setupArticleFilters)
+</script>

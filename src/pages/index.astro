@@ -4,7 +4,9 @@ import PhotographyCard from "@/components/PhotographyCard.astro"
 import SectionContainer from "@/components/SectionContainer.astro"
 import AboutMe from "@/components/web/AboutMe.astro"
 import Articles from "@/components/web/Articles.astro"
+import FeaturedProjects from "@/components/web/FeaturedProjects.astro"
 import HomeHero from "@/components/web/HomeHero.astro"
+import Services from "@/components/web/Services.astro"
 import Photography from "@/icons/Photography.astro"
 import type { Preload } from "@/interfaces/preload"
 import { getActiveLocale, getI18N, resolveLocalizedPath } from "@/locales/index"
@@ -40,6 +42,14 @@ const preloadImages: Preload[] = [
 		<HomeHero />
 	</SectionContainer>
 
+	<SectionContainer id="services" class="!py-16">
+		<Services />
+	</SectionContainer>
+
+	<SectionContainer id="featured" class="!py-16">
+		<FeaturedProjects />
+	</SectionContainer>
+
 	<SectionContainer class="!py-16">
 		<div class="grid w-full min-w-0 max-w-6xl gap-10 sm:w-11/12 lg:grid-cols-5 lg:gap-8">
 			<div class="fade-up-anim min-w-0 lg:col-span-3">
@@ -47,7 +57,7 @@ const preloadImages: Preload[] = [
 			</div>
 
 			<div class="fade-up-anim flex min-w-0 flex-col lg:col-span-2">
-				<MainTitle>
+				<MainTitle eyebrow={i18n.PHOTOGRAPHY}>
 					<Photography class="size-7 text-accent" />
 					{i18n.PHOTOGRAPHY}
 				</MainTitle>
@@ -57,7 +67,7 @@ const preloadImages: Preload[] = [
 		</div>
 	</SectionContainer>
 
-	<SectionContainer class="!py-16">
+	<SectionContainer id="about" class="!py-16">
 		<AboutMe />
 	</SectionContainer>
 </Layout>

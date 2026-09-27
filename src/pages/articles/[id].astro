@@ -1,7 +1,21 @@
 ---
+import Badge from "@/components/Badge.astro"
+import HomeArticleCard from "@/components/HomeArticleCard.astro"
+import MainTitle from "@/components/MainTitle.astro"
 import SectionContainer from "@/components/SectionContainer.astro"
+import Book from "@/icons/Book.astro"
+import RightArrow from "@/icons/RightArrow.astro"
+import {
+	buildArticleJsonLd,
+	buildBreadcrumbJsonLd,
+	estimateReadingTime,
+	findTranslation,
+	formatArticleIsoDate,
+	getRelatedArticles,
+	sortArticlesByDate,
+} from "@/libs/articlesSeo"
+import { getActiveLocale, getI18N, resolveLocalizedHref, resolveLocalizedPath } from "@/locales/index"
 import Layout from "@/layouts/Layout.astro"
-import { getActiveLocale, getI18N, resolveLocalizedPath } from "@/locales/index"
 import { getCollection, render } from "astro:content"
 
 export const prerender = true
@@ -17,24 +31,41 @@ export async function getStaticPaths() {
 
 const { article } = Astro.props
 const { data } = article
-const { author, cover, description, lang, pageTitle, timestamp, title } = data
+const { author, category, cover, description, lang, pageTitle, tags, timestamp, title } = data
 const { Content } = await render(article)
 
 const locale = getActiveLocale(Astro)
 const i18n = getI18N({ currentLocale: locale })
+const collection = sortArticlesByDate(await getCollection("articles"))
+const readingMinutes = estimateReadingTime(article.body)
+const relatedArticles = getRelatedArticles(collection, article)
+const translation = findTranslation(collection, article)
 
-if (!article || article === undefined) {
-	return Astro.redirect(resolveLocalizedPath("/404"))
-}
+const canonical = new URL(
+	resolveLocalizedPath(`/articles/${pageTitle}/`, locale),
+	"https://rixel.dev"
+).toString()
+
+const jsonLd = [
+	buildArticleJsonLd({ article, canonical, readingMinutes }),
+	buildBreadcrumbJsonLd([
+		{ name: i18n.HOME, item: "https://rixel.dev" },
+		{ name: i18n.ARTICLES, item: "https://rixel.dev/articles/" },
+		{ name: title, item: canonical },
+	]),
+]
 ---
 
 <Layout
 	title={`${title} - Rixel's articles`}
 	description={`${description} | ${i18n.AUTHOR}: ${author} | ${i18n.LANGUAGE}: ${lang}`}
-	canonical={new URL(
-		resolveLocalizedPath(`/articles/${pageTitle}/`, locale),
-		"https://rixel.dev"
-	).toString()}
+	canonical={canonical}
+	image={cover}
+	type="article"
+	publishedTime={formatArticleIsoDate(timestamp)}
+	modifiedTime={formatArticleIsoDate(timestamp)}
+	author={author}
+	jsonLd={jsonLd}
 >
 	<img
 		class="parallax absolute top-0 w-full translate-y-0 bg-cover bg-fixed bg-center opacity-5"
@@ -44,34 +75,176 @@ if (!article || article === undefined) {
 	/>
 
 	<SectionContainer>
-		<div class="flex w-full max-w-4xl flex-col sm:w-11/12 md:w-8/12">
-			<header>
+		<div class="flex w-full max-w-3xl flex-col sm:w-11/12">
+			<nav aria-label="Breadcrumb" class="mb-6">
+				<ol class="flex flex-wrap items-center gap-2 text-sm text-secondary">
+					<li>
+						<a href={resolveLocalizedHref("/", locale)} class="transition-colors hover:text-accent">
+							{i18n.HOME}
+						</a>
+					</li>
+					<li aria-hidden="true" class="text-secondary/50">/</li>
+					<li>
+						<a
+							href={resolveLocalizedHref("/articles", locale)}
+							class="transition-colors hover:text-accent"
+						>
+							{i18n.ARTICLES}
+						</a>
+					</li>
+					<li aria-hidden="true" class="text-secondary/50">/</li>
+					<li>
+						<span class="line-clamp-1 text-primary" aria-current="page">{title}</span>
+					</li>
+				</ol>
+			</nav>
+
+			<header class="flex flex-col gap-4">
+				<div class="flex flex-wrap items-center gap-3 text-xs font-semibold uppercase tracking-wider text-secondary">
+					<span class="rounded-full border border-accent/20 bg-accent/10 px-3 py-1 text-accent">
+						{category}
+					</span>
+					<time datetime={formatArticleIsoDate(timestamp)}>{timestamp}</time>
+					<span aria-hidden="true">·</span>
+					<span>{i18n.ARTICLE_READING_TIME.replace("{minutes}", String(readingMinutes))}</span>
+				</div>
+
 				<h1
-					class="text-xl font-extrabold text-accent sm:text-3xl"
+					class="text-balance text-3xl font-extrabold leading-tight text-accent sm:text-4xl md:text-5xl"
 					transition:name={`article-${pageTitle}-title`}
 				>
 					{title}
 				</h1>
+
+				<p class="text-pretty text-base leading-relaxed text-primary sm:text-lg">
+					{description}
+				</p>
 			</header>
 
-			<div class="prose prose-invert mt-8 w-full" transition:name={`article-${pageTitle}-content`}>
+			<div
+				class="prose prose-invert mt-10 w-full max-w-none"
+				transition:name={`article-${pageTitle}-content`}
+			>
 				<Content />
 			</div>
 
-			<footer
-				class="mt-8 flex w-full flex-col items-end justify-center text-xs italic text-secondary"
-			>
-				<span>
-					{timestamp}
-				</span>
+			<footer class="mt-12 flex flex-col gap-6 border-t border-white/10 pt-8">
+				<div class="flex flex-wrap items-center gap-2">
+					<span class="mr-1 text-sm font-semibold text-secondary">{i18n.ARTICLE_TAGS}:</span>
+					{
+						tags.map((tag: string) => (
+							<Badge>
+								<span class="text-xs">{tag}</span>
+							</Badge>
+						))
+					}
+				</div>
 
-				<span>
-					{i18n.AUTHOR}: {author} | {i18n.LANGUAGE}: {lang}
-				</span>
+				<div class="flex flex-wrap items-center justify-between gap-4">
+					<p class="text-sm italic text-secondary">
+						{i18n.AUTHOR}: <span class="font-semibold text-primary">{author}</span> · {i18n.LANGUAGE}:
+						<span class="font-semibold text-primary">{lang}</span>
+					</p>
+
+					<div class="flex flex-wrap items-center gap-3">
+						{
+							translation ? (
+								<a
+									href={resolveLocalizedHref(`/articles/${translation.data.pageTitle}`, locale)}
+									class="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-4 py-2 text-sm font-semibold text-accent transition-all hover:bg-accent/20"
+								>
+									{translation.data.lang === "es"
+										? i18n.ARTICLE_READ_IN_SPANISH
+										: i18n.ARTICLE_READ_IN_ENGLISH}
+								</a>
+							) : null
+						}
+
+						<button
+							type="button"
+							data-share-button
+							data-share-title={title}
+							data-copied-label={i18n.ARTICLE_LINK_COPIED}
+							class="inline-flex items-center gap-2 rounded-full border border-secondary/30 bg-white/5 px-4 py-2 text-sm font-semibold text-primary transition-all hover:border-accent/30 hover:text-accent"
+						>
+							{i18n.ARTICLE_SHARE}
+						</button>
+
+						<a
+							href={resolveLocalizedHref("/articles", locale)}
+							class="inline-flex items-center gap-2 text-sm font-medium text-secondary transition-colors hover:text-accent"
+						>
+							{i18n.ARTICLE_BACK}
+						</a>
+					</div>
+				</div>
 			</footer>
 		</div>
+
+		{
+			relatedArticles.length > 0 ? (
+				<div class="fade-up-anim mt-20 flex w-full max-w-5xl flex-col sm:w-11/12">
+					<MainTitle eyebrow={i18n.ARTICLES_EYEBROW}>
+						<Book class="size-7 text-accent" />
+						{i18n.ARTICLE_RELATED}
+					</MainTitle>
+
+					<div class="grid w-full gap-3 sm:grid-cols-2 lg:grid-cols-3">
+						{relatedArticles.map((related) => (
+							<HomeArticleCard
+								author={related.data.author}
+								description={related.data.description}
+								lang={related.data.lang}
+								pageTitle={related.data.pageTitle}
+								timestamp={related.data.timestamp}
+								title={related.data.title}
+							/>
+						))}
+					</div>
+
+					<a
+						href={resolveLocalizedHref("/articles", locale)}
+						class="group mt-6 inline-flex w-fit items-center gap-2 rounded-full border border-secondary/20 bg-secondary/5 px-5 py-2.5 text-sm font-medium text-secondary transition-all hover:border-accent/30 hover:bg-accent/10 hover:text-accent"
+					>
+						{i18n.ARTICLE_BACK}
+						<RightArrow class="size-4 transition-transform group-hover:translate-x-0.5" />
+					</a>
+				</div>
+			) : null
+		}
 	</SectionContainer>
 </Layout>
+
+<script>
+	document.addEventListener("astro:page-load", () => {
+		const shareButton = document.querySelector<HTMLButtonElement>("[data-share-button]")
+		if (!shareButton || shareButton.dataset.shareReady === "true") return
+		shareButton.dataset.shareReady = "true"
+
+		shareButton.addEventListener("click", async () => {
+			const title = shareButton.dataset.shareTitle ?? document.title
+			const url = window.location.href
+
+			try {
+				if (navigator.share) {
+					await navigator.share({ title, url })
+					return
+				}
+
+				await navigator.clipboard.writeText(url)
+				window.toast({
+					dismissible: true,
+					icon: true,
+					location: "bottom-center",
+					title: shareButton.dataset.copiedLabel ?? "Link copied!",
+					type: "success",
+				})
+			} catch {
+				/* user cancelled or clipboard unavailable */
+			}
+		})
+	})
+</script>
 
 <script>
 	import { $ } from "@/libs/dom-selector"

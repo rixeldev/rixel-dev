@@ -2,6 +2,7 @@
 import About from "@/components/portfolio/About.astro"
 import Experience from "@/components/portfolio/Experience.astro"
 import Projects from "@/components/portfolio/Projects.astro"
+import Skills from "@/components/portfolio/Skills.astro"
 import SectionContainer from "@/components/SectionContainer.astro"
 import type { Preload } from "@/interfaces/preload"
 import { getActiveLocale, getI18N, resolveLocalizedPath } from "@/locales/index"
@@ -10,6 +11,12 @@ import Layout from "../layouts/Layout.astro"
 const locale = getActiveLocale(Astro)
 const i18n = getI18N({ currentLocale: locale })
 const preloadImages: Preload[] = [
+	{
+		as: "image",
+		href: `https://rixel.dev/projects/blackjack.webp`,
+		type: "image/webp",
+		rel: "preload",
+	},
 	{
 		as: "image",
 		href: `https://rixel.dev/projects/el-chevere.webp`,
@@ -28,12 +35,6 @@ const preloadImages: Preload[] = [
 		type: "image/webp",
 		rel: "preload",
 	},
-	{
-		as: "image",
-		href: `https://rixel.dev/projects/stop-trivia.webp`,
-		type: "image/webp",
-		rel: "preload",
-	},
 ]
 ---
 
@@ -45,6 +46,10 @@ const preloadImages: Preload[] = [
 >
 	<SectionContainer id="about">
 		<About />
+	</SectionContainer>
+
+	<SectionContainer id="skills">
+		<Skills />
 	</SectionContainer>
 
 	<SectionContainer id="experience">

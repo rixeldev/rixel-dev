@@ -9,6 +9,9 @@ import { getI18N } from "@/locales/index"
 import NextJS from "@/icons/NextJS.astro"
 import Supabase from "@/icons/Supabase.astro"
 import ReactNative from "@/icons/ReactNative.astro"
+import HTML from "@/icons/HTML.astro"
+import CSS from "@/icons/CSS.astro"
+import JS from "@/icons/JS.astro"
 
 const TAGS = {
 	ASTRO: {
@@ -65,17 +68,45 @@ const TAGS = {
 		iconColor: "text-cyan-600",
 		icon: ReactNative,
 	},
+	HTML: {
+		name: "HTML5",
+		class: "bg-orange-950 text-slate-200",
+		iconColor: "text-orange-500",
+		icon: HTML,
+	},
+	CSS: {
+		name: "CSS3",
+		class: "bg-blue-950 text-slate-200",
+		iconColor: "text-blue-500",
+		icon: CSS,
+	},
+	JS: {
+		name: "JavaScript",
+		class: "bg-yellow-950 text-slate-200",
+		iconColor: "text-yellow-500",
+		icon: JS,
+	},
 }
 
 export const projectsService = (currentLocale?: string): Project[] => {
 	const i18n = getI18N({ currentLocale })
 	return [
 		{
+			id: "blackjack",
+			title: "Blackjack 21",
+			description: i18n.BLACKJACK_DESCRIPTION,
+			imgUrl: "https://rixel.dev/projects/blackjack.webp",
+			projectUrl: "https://blackjack-gray-tau.vercel.app",
+			tags: [TAGS.HTML, TAGS.CSS, TAGS.JS],
+			gitCodeUrl: "https://github.com/rixeldev/blackjack",
+			alt: i18n.PROJECT_BLACKJACK_ALT,
+		},
+		{
 			id: "el-chevere",
 			title: "El Chévere - Official Web",
 			description: i18n.EL_CHEVERE_WEB_DESCRIPTION,
 			imgUrl: "https://rixel.dev/projects/el-chevere.webp",
-			projectUrl: "https://fotoestudioelchevere.com",
+			projectUrl: "https://fotoestudioelchevere.vercel.app",
 			tags: [TAGS.ASTRO, TAGS.TAILWIND, TAGS.SUPABASE],
 			gitCodeUrl: "https://github.com/rixeldev/el-chevere-web",
 			alt: i18n.PROJECT_EL_CHEVERE_ALT,

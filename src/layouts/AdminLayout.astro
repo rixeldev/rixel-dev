@@ -12,7 +12,7 @@ const { title, description } = Astro.props as Props
 <!doctype html>
 <html lang="en">
 	<head>
-		<SEO title={title} description={description} />
+		<SEO title={title} description={description} noindex includeProfile={false} />
 	</head>
 	<body class="min-h-screen bg-slate-950 text-slate-50">
 		<main

@@ -1,0 +1,89 @@
+---
+import MainTitle from "@/components/MainTitle.astro"
+import Code from "@/icons/Code.astro"
+import RightArrow from "@/icons/RightArrow.astro"
+import { getActiveLocale, getI18N, resolveLocalizedHref } from "@/locales/index"
+import { projectsService } from "@/services/projects"
+
+const locale = getActiveLocale(Astro)
+const i18n = getI18N({ currentLocale: locale })
+const featured = projectsService(locale).slice(0, 5)
+const portfolioHref = resolveLocalizedHref("/portfolio#projects", locale)
+---
+
+<div class="fade-up-anim flex w-full min-w-0 max-w-6xl flex-col sm:w-11/12">
+	<div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+		<MainTitle eyebrow={i18n.FEATURED_EYEBROW}>
+			<Code class="size-7 text-accent" />
+			{i18n.FEATURED_TITLE}
+		</MainTitle>
+
+		<a
+			href={portfolioHref}
+			class="group mb-8 hidden items-center gap-2 text-sm font-semibold text-secondary transition-colors hover:text-accent sm:inline-flex"
+		>
+			{i18n.HOME_VIEW_ALL_PROJECTS}
+			<RightArrow class="size-4 transition-transform group-hover:translate-x-0.5" />
+		</a>
+	</div>
+
+	<ul class="grid w-full grid-cols-1 gap-5 md:grid-cols-3">
+		{
+			featured.map((project, index) => (
+				<li class={index === 0 ? "md:col-span-2" : ""}>
+					<a
+						href={project.projectUrl}
+						target="_blank"
+						rel="noopener noreferrer"
+						class="group relative flex h-full min-h-[16rem] flex-col justify-end overflow-hidden rounded-3xl border border-white/10 bg-slate-900/60 p-6 shadow-xl shadow-black/30 transition-all duration-500 sm:hover:-translate-y-1 sm:hover:border-accent/30 sm:hover:shadow-2xl sm:hover:shadow-accent/10"
+					>
+						<img
+							src={project.imgUrl}
+							alt={project.alt}
+							width="1280"
+							height="720"
+							decoding="async"
+							loading="lazy"
+							class="absolute inset-0 size-full object-cover object-top opacity-40 transition-all duration-700 sm:group-hover:scale-105 sm:group-hover:opacity-55"
+						/>
+						<div
+							class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-950/10"
+							aria-hidden="true"
+						/>
+
+						<div class="relative flex flex-col gap-3">
+							<ul class="flex flex-wrap gap-2">
+								{project.tags.slice(0, 3).map((tag) => (
+									<li class="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] font-semibold text-primary backdrop-blur-sm">
+										{tag.name}
+									</li>
+								))}
+							</ul>
+
+							<h3 class="text-xl font-bold text-slate-100 transition-colors duration-300 group-hover:text-accent">
+								{project.title}
+							</h3>
+
+							<p class="line-clamp-2 text-sm leading-relaxed text-primary/90">
+								{project.description}
+							</p>
+
+							<span class="mt-1 inline-flex items-center gap-2 text-sm font-semibold text-accent">
+								{i18n.SQUINT}
+								<RightArrow class="size-4 transition-transform duration-300 group-hover:translate-x-1" />
+							</span>
+						</div>
+					</a>
+				</li>
+			))
+		}
+	</ul>
+
+	<a
+		href={portfolioHref}
+		class="group mt-6 inline-flex w-fit items-center gap-2 self-center rounded-full border border-secondary/20 bg-secondary/5 px-5 py-2.5 text-sm font-medium text-secondary transition-all hover:border-accent/30 hover:bg-accent/10 hover:text-accent sm:hidden"
+	>
+		{i18n.HOME_VIEW_ALL_PROJECTS}
+		<RightArrow class="size-4 transition-transform group-hover:translate-x-0.5" />
+	</a>
+</div>

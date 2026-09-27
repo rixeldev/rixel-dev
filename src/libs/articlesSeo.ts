@@ -42,6 +42,117 @@ export const sortArticlesByDate = (articles: CollectionEntry<"articles">[]) => {
 	)
 }
 
+export const estimateReadingTime = (body: string | undefined, wordsPerMinute = 200) => {
+	if (!body) return 1
+	const wordCount = body
+		.replace(/```[\s\S]*?```/g, " ")
+		.replace(/`[^`]*`/g, " ")
+		.replace(/!?\[[^\]]*\]\([^)]*\)/g, " ")
+		.replace(/[#>*_~-]/g, " ")
+		.trim()
+		.split(/\s+/)
+		.filter(Boolean).length
+
+	return Math.max(1, Math.round(wordCount / wordsPerMinute))
+}
+
+export const getArticleExcerpt = (body: string | undefined, maxLength = 160) => {
+	if (!body) return ""
+	const plain = body
+		.replace(/```[\s\S]*?```/g, " ")
+		.replace(/[#*_>`~-]/g, " ")
+		.replace(/!?\[([^\]]*)\]\([^)]*\)/g, "$1")
+		.replace(/\s+/g, " ")
+		.trim()
+	return plain.length > maxLength ? `${plain.slice(0, maxLength).trim()}…` : plain
+}
+
+export const getRelatedArticles = (
+	articles: CollectionEntry<"articles">[],
+	current: CollectionEntry<"articles">,
+	limit = 3
+) => {
+	const currentTags = new Set(current.data.tags)
+
+	return articles
+		.filter((article) => article.slug !== current.slug)
+		.map((article) => {
+			const sharedTags = article.data.tags.filter((tag) => currentTags.has(tag)).length
+			const sameCategory = article.data.category === current.data.category ? 1 : 0
+			return { article, score: sharedTags * 2 + sameCategory }
+		})
+		.sort((a, b) => b.score - a.score)
+		.slice(0, limit)
+		.map((entry) => entry.article)
+}
+
+export const findTranslation = (
+	articles: CollectionEntry<"articles">[],
+	current: CollectionEntry<"articles">
+) => {
+	const key = current.data.translationKey
+	if (!key) return undefined
+
+	return articles.find(
+		(article) => article.data.translationKey === key && article.data.lang !== current.data.lang
+	)
+}
+
+export const buildArticleJsonLd = ({
+	article,
+	canonical,
+	readingMinutes,
+}: {
+	article: CollectionEntry<"articles">
+	canonical: string
+	readingMinutes: number
+}) => {
+	const { author, cover, description, lang, tags, timestamp, title } = article.data
+
+	return {
+		"@context": "https://schema.org",
+		"@type": "BlogPosting",
+		"@id": `${canonical}#article`,
+		headline: title,
+		description,
+		image: cover,
+		url: canonical,
+		mainEntityOfPage: canonical,
+		inLanguage: lang,
+		keywords: tags.join(", "),
+		wordCount: readingMinutes * 200,
+		timeRequired: `PT${readingMinutes}M`,
+		datePublished: formatArticleIsoDate(timestamp),
+		dateModified: formatArticleIsoDate(timestamp),
+		author: {
+			"@type": "Person",
+			name: author,
+			url: SITE_URL,
+			sameAs: [
+				"https://github.com/rixeldev",
+				"https://www.linkedin.com/in/rixeldev",
+				"https://x.com/rixel_dev",
+			],
+		},
+		publisher: {
+			"@type": "Organization",
+			name: "RixelDev",
+			url: SITE_URL,
+		},
+	}
+}
+
+export const buildBreadcrumbJsonLd = (items: { name: string; item: string }[]) => ({
+	"@context": "https://schema.org",
+	"@type": "BreadcrumbList",
+	itemListElement: items.map((entry, index) => ({
+		"@type": "ListItem",
+		position: index + 1,
+		name: entry.name,
+		item: entry.item,
+	})),
+})
+
 export const buildArticlesIndexJsonLd = ({
 	articles,
 	locale,

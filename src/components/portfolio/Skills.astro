@@ -1,0 +1,99 @@
+---
+import MainTitle from "@/components/MainTitle.astro"
+import Android from "@/icons/Android.astro"
+import Angular from "@/icons/Angular.astro"
+import AstroBrand from "@/icons/AstroBrand.astro"
+import Bootstrap from "@/icons/Bootstrap.astro"
+import CodePlus from "@/icons/CodePlus.astro"
+import CSS from "@/icons/CSS.astro"
+import Firebase from "@/icons/Firebase.astro"
+import Git from "@/icons/Git.astro"
+import GitHub from "@/icons/GitHub.astro"
+import HTML from "@/icons/HTML.astro"
+import JS from "@/icons/JS.astro"
+import Kotlin from "@/icons/Kotlin.astro"
+import NodeJS from "@/icons/NodeJS.astro"
+import React from "@/icons/React.astro"
+import ReactNative from "@/icons/ReactNative.astro"
+import SQL from "@/icons/SQL.astro"
+import Supabase from "@/icons/Supabase.astro"
+import Tailwind from "@/icons/Tailwind.astro"
+import TS from "@/icons/TS.astro"
+import { getActiveLocale, getI18N } from "@/locales/index"
+
+const locale = getActiveLocale(Astro)
+const i18n = getI18N({ currentLocale: locale })
+
+const skillGroups = [
+	{
+		title: i18n.SKILLS_GROUP_FRONTEND,
+		skills: [
+			{ name: "HTML", icon: HTML },
+			{ name: "CSS", icon: CSS },
+			{ name: "JavaScript", icon: JS },
+			{ name: "TypeScript", icon: TS },
+			{ name: "Astro", icon: AstroBrand },
+			{ name: "React", icon: React },
+			{ name: "Angular", icon: Angular },
+			{ name: "Tailwind CSS", icon: Tailwind },
+			{ name: "Bootstrap", icon: Bootstrap },
+		],
+	},
+	{
+		title: i18n.SKILLS_GROUP_BACKEND,
+		skills: [
+			{ name: "Node.js", icon: NodeJS },
+			{ name: "SQL", icon: SQL },
+			{ name: "Supabase", icon: Supabase },
+			{ name: "Firebase", icon: Firebase },
+		],
+	},
+	{
+		title: i18n.SKILLS_GROUP_MOBILE,
+		skills: [
+			{ name: "Kotlin", icon: Kotlin },
+			{ name: "React Native", icon: ReactNative },
+			{ name: "Android", icon: Android },
+		],
+	},
+	{
+		title: i18n.SKILLS_GROUP_TOOLS,
+		skills: [
+			{ name: "Git", icon: Git },
+			{ name: "GitHub", icon: GitHub },
+		],
+	},
+]
+---
+
+<div class="flex w-full max-w-4xl flex-col sm:w-11/12 md:w-8/12">
+	<MainTitle eyebrow={i18n.SKILLS_EYEBROW}>
+		<CodePlus class="size-8 text-accent" />
+		{i18n.SKILLS_TITLE}
+	</MainTitle>
+
+	<p class="-mt-4 mb-6 max-w-2xl text-pretty text-base leading-relaxed text-primary sm:text-lg">
+		{i18n.SKILLS_SUBTITLE}
+	</p>
+
+	<div class="grid w-full grid-cols-1 gap-4 sm:grid-cols-2">
+		{
+			skillGroups.map((group) => (
+				<div class="flex h-full flex-col gap-4 rounded-2xl border border-white/10 bg-gradient-to-br from-slate-800/30 via-slate-900/40 to-slate-950/60 p-5 shadow-lg shadow-black/20 backdrop-blur-md">
+					<h3 class="text-sm font-semibold uppercase tracking-wider text-accent">
+						{group.title}
+					</h3>
+
+					<ul class="flex flex-wrap gap-2">
+						{group.skills.map((skill) => (
+							<li class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-sm font-medium text-primary transition-colors duration-300 hover:border-accent/30 hover:text-accent">
+								<skill.icon class="size-4" />
+								{skill.name}
+							</li>
+						))}
+					</ul>
+				</div>
+			))
+		}
+	</div>
+</div>

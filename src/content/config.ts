@@ -11,6 +11,8 @@ const articles = defineCollection({
 		tags: z.array(z.string()),
 		timestamp: z.string(),
 		title: z.string(),
+		translationKey: z.string().optional(),
+		featured: z.boolean().optional(),
 	}),
 })
 

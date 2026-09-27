@@ -8,4 +8,6 @@ export interface Article {
 	tags: string[]
 	timestamp: string
 	title: string
+	translationKey?: string
+	featured?: boolean
 }
