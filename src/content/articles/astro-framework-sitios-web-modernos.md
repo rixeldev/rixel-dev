@@ -1,7 +1,7 @@
 ---
 author: Rikelvi Capellán
 category: Desarrollo Web
-cover: https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1280&h=720&fit=crop&q=80
+cover: /articles/covers/astro-framework-sitios-web-modernos.png
 description: Astro es un framework moderno para construir sitios web rápidos, enfocados en contenido y optimizados para SEO. En este artículo repaso por qué lo uso en proyectos reales y qué ventajas ofrece frente a otras opciones del ecosistema frontend.
 lang: es
 pageTitle: astro-framework-sitios-web-modernos

@@ -1,7 +1,7 @@
 ---
 author: Rikelvi Capellán
 category: Ingeniería
-cover: https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1280&h=720&fit=crop&q=80
+cover: /articles/covers/desarrollo-asistido-por-ia.png
 description: Cómo uso asistentes de IA para programar sin sacrificar la calidad del código, la arquitectura ni mi propio entendimiento de los sistemas que construyo.
 lang: es
 pageTitle: desarrollo-asistido-por-ia

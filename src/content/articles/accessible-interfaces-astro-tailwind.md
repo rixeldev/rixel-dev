@@ -1,7 +1,7 @@
 ---
 author: Rikelvi Capellán
 category: Accessibility
-cover: https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1280&h=720&fit=crop&q=80
+cover: /articles/covers/accessible-interfaces-astro-tailwind.png
 description: Practical habits for building accessible interfaces with Astro and Tailwind CSS, without treating accessibility as an afterthought or a checklist to game.
 lang: en
 pageTitle: accessible-interfaces-astro-tailwind

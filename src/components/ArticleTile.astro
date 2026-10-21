@@ -1,5 +1,4 @@
 ---
-import Badge from "@/components/Badge.astro"
 import RightArrow from "@/icons/RightArrow.astro"
 import { getActiveLocale, getI18N, getLanguageLabel, resolveLocalizedHref } from "@/locales/index"
 
@@ -29,10 +28,10 @@ const searchIndex = `${title} ${description} ${category} ${tags.join(" ")}`.toLo
 	data-article
 	data-search={searchIndex}
 	data-tags={tags.join("|")}
-	class="group relative flex h-full min-w-0 flex-col overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-slate-800/30 via-slate-900/50 to-slate-950/70 shadow-lg shadow-black/20 backdrop-blur-md transition-all duration-300 ease-out hover:-translate-y-1 hover:border-accent/30 hover:shadow-xl hover:shadow-accent/10"
+	class="group flex h-full min-w-0 flex-col"
 >
-	<a href={articleHref} class="flex h-full flex-col" title={`${i18n.READ} → ${title}`}>
-		<div class="relative aspect-[16/9] w-full overflow-hidden">
+	<a href={articleHref} class="flex h-full flex-col gap-5" title={`${i18n.READ} → ${title}`}>
+		<div class="relative overflow-hidden rounded-3xl border border-line bg-ink-panel">
 			<img
 				src={cover}
 				alt={`Rixel article ${title}`}
@@ -40,54 +39,42 @@ const searchIndex = `${title} ${description} ${category} ${tags.join(" ")}`.toLo
 				height="720"
 				loading="lazy"
 				decoding="async"
-				class="size-full object-cover object-top opacity-80 transition-transform duration-700 group-hover:scale-105"
+				class="aspect-video w-full object-cover object-top opacity-85 transition-all duration-700 group-hover:scale-105 group-hover:opacity-100"
 			/>
-			<div
-				class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent"
-				aria-hidden="true"
-			/>
+
 			<span
-				class="absolute left-4 top-4 rounded-full border border-accent/30 bg-slate-950/70 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-accent backdrop-blur-sm"
+				class="absolute left-4 top-4 rounded-full border border-line bg-ink/75 px-3 py-1 font-mono text-xs uppercase tracking-wider text-accent backdrop-blur-md"
 			>
 				{category}
 			</span>
 		</div>
 
-		<div class="flex flex-1 flex-col gap-3 p-5">
+		<div class="flex flex-1 flex-col gap-3">
+			<div
+				class="flex flex-wrap items-center gap-2 font-mono text-xs uppercase tracking-wider text-secondary"
+			>
+				<time datetime={timestamp}>{timestamp}</time>
+				<span aria-hidden="true">·</span>
+				<span>{i18n.ARTICLE_READING_TIME.replace("{minutes}", String(readingMinutes))}</span>
+				<span aria-hidden="true">·</span>
+				<span>{languageLabel}</span>
+			</div>
+
 			<h3
-				class="line-clamp-2 text-lg font-bold leading-snug text-slate-100 transition-colors duration-300 group-hover:text-accent"
+				class="line-clamp-2 font-display text-2xl leading-snug text-bone transition-colors duration-300 group-hover:text-accent"
 				transition:name={`article-${pageTitle}-title`}
 			>
 				{title}
 			</h3>
 
-			<p class="line-clamp-3 text-sm leading-relaxed text-primary/85">{description}</p>
+			<p class="line-clamp-2 text-sm leading-relaxed text-primary">{description}</p>
 
-			<ul class="mt-auto flex flex-wrap gap-2 pt-2">
-				{tags.slice(0, 3).map((tag) => (
-					<li>
-						<Badge>
-							<span class="text-[11px]">{tag}</span>
-						</Badge>
-					</li>
-				))}
-			</ul>
-
-			<div
-				class="mt-2 flex items-center justify-between gap-3 border-t border-white/5 pt-4 text-xs text-secondary"
+			<span
+				class="mt-auto inline-flex items-center gap-2 pt-2 font-mono text-xs uppercase tracking-widest text-secondary transition-colors group-hover:text-accent"
 			>
-				<span class="flex flex-wrap items-center gap-x-2">
-					<time datetime={timestamp}>{timestamp}</time>
-					<span aria-hidden="true">·</span>
-					<span>{i18n.ARTICLE_READING_TIME.replace("{minutes}", String(readingMinutes))}</span>
-					<span aria-hidden="true">·</span>
-					<span>{languageLabel}</span>
-				</span>
-
-				<RightArrow
-					class="size-4 shrink-0 text-primary transition-all duration-300 group-hover:translate-x-0.5 group-hover:text-accent"
-				/>
-			</div>
+				{i18n.READ}
+				<RightArrow class="size-3.5 transition-transform group-hover:translate-x-1" />
+			</span>
 		</div>
 	</a>
 </article>

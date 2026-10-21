@@ -1,7 +1,7 @@
 ---
 author: Rikelvi Capellán
 category: Performance
-cover: https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1280&h=720&fit=crop&q=80
+cover: /articles/covers/core-web-vitals-2026.png
 description: A practical, up-to-date checklist for improving Core Web Vitals, from measuring the right things to the fixes that actually move LCP, INP, and CLS.
 lang: en
 pageTitle: core-web-vitals-2026

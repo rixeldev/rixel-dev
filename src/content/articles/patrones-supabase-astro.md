@@ -1,7 +1,7 @@
 ---
 author: Rikelvi Capellán
 category: Desarrollo
-cover: https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=1280&h=720&fit=crop&q=80
+cover: /articles/covers/patrones-supabase-astro.png
 description: Patrones pragmáticos de Astro y Supabase para productos pequeños, desde mantener los secretos solo en el servidor hasta estructurar el acceso a datos y el almacenamiento.
 lang: es
 pageTitle: patrones-supabase-astro

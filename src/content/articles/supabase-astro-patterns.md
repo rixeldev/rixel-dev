@@ -1,7 +1,7 @@
 ---
 author: Rikelvi Capellán
 category: Development
-cover: https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=1280&h=720&fit=crop&q=80
+cover: /articles/covers/supabase-astro-patterns.png
 description: Pragmatic Astro and Supabase patterns for small products, from keeping secrets server-only to structuring data access and storage.
 lang: en
 pageTitle: supabase-astro-patterns

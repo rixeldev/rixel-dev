@@ -1,10 +1,10 @@
 ---
+import ArticleTile from "@/components/ArticleTile.astro"
 import Badge from "@/components/Badge.astro"
-import HomeArticleCard from "@/components/HomeArticleCard.astro"
 import MainTitle from "@/components/MainTitle.astro"
 import SectionContainer from "@/components/SectionContainer.astro"
-import Book from "@/icons/Book.astro"
 import RightArrow from "@/icons/RightArrow.astro"
+import Layout from "@/layouts/Layout.astro"
 import {
 	buildArticleJsonLd,
 	buildBreadcrumbJsonLd,
@@ -12,10 +12,15 @@ import {
 	findTranslation,
 	formatArticleIsoDate,
 	getRelatedArticles,
+	resolveCoverUrl,
 	sortArticlesByDate,
 } from "@/libs/articlesSeo"
-import { getActiveLocale, getI18N, resolveLocalizedHref, resolveLocalizedPath } from "@/locales/index"
-import Layout from "@/layouts/Layout.astro"
+import {
+	getActiveLocale,
+	getI18N,
+	resolveLocalizedHref,
+	resolveLocalizedPath,
+} from "@/locales/index"
 import { getCollection, render } from "astro:content"
 
 export const prerender = true
@@ -46,6 +51,18 @@ const canonical = new URL(
 	"https://rixel.dev"
 ).toString()
 
+const alternates = translation
+	? [
+			{
+				lang: translation.data.lang,
+				href: new URL(
+					resolveLocalizedPath(`/articles/${translation.data.pageTitle}/`, locale),
+					"https://rixel.dev"
+				).toString(),
+			},
+		]
+	: []
+
 const jsonLd = [
 	buildArticleJsonLd({ article, canonical, readingMinutes }),
 	buildBreadcrumbJsonLd([
@@ -57,33 +74,34 @@ const jsonLd = [
 ---
 
 <Layout
-	title={`${title} - Rixel's articles`}
-	description={`${description} | ${i18n.AUTHOR}: ${author} | ${i18n.LANGUAGE}: ${lang}`}
+	title={`${title} — ${category} | Rixel`}
+	description={description}
 	canonical={canonical}
-	image={cover}
+	image={resolveCoverUrl(cover)}
+	imageWidth={1280}
+	imageHeight={720}
+	keywords={[...tags, category, author].join(", ")}
 	type="article"
 	publishedTime={formatArticleIsoDate(timestamp)}
 	modifiedTime={formatArticleIsoDate(timestamp)}
 	author={author}
+	section={category}
+	tags={tags}
+	alternates={alternates}
 	jsonLd={jsonLd}
 >
-	<img
-		class="parallax absolute top-0 w-full translate-y-0 bg-cover bg-fixed bg-center opacity-5"
-		src={cover}
-		alt={`Rixel's article ${title}`}
-		style="mask-image: linear-gradient(black 20%, transparent 80%);"
-	/>
-
-	<SectionContainer>
-		<div class="flex w-full max-w-3xl flex-col sm:w-11/12">
-			<nav aria-label="Breadcrumb" class="mb-6">
-				<ol class="flex flex-wrap items-center gap-2 text-sm text-secondary">
+	<SectionContainer class="pt-32 sm:pt-36">
+		<article class="flex w-full max-w-3xl flex-col">
+			<nav aria-label="Breadcrumb">
+				<ol
+					class="flex flex-wrap items-center gap-2 font-mono text-xs uppercase tracking-wider text-secondary"
+				>
 					<li>
 						<a href={resolveLocalizedHref("/", locale)} class="transition-colors hover:text-accent">
 							{i18n.HOME}
 						</a>
 					</li>
-					<li aria-hidden="true" class="text-secondary/50">/</li>
+					<li aria-hidden="true">/</li>
 					<li>
 						<a
 							href={resolveLocalizedHref("/articles", locale)}
@@ -92,25 +110,29 @@ const jsonLd = [
 							{i18n.ARTICLES}
 						</a>
 					</li>
-					<li aria-hidden="true" class="text-secondary/50">/</li>
-					<li>
-						<span class="line-clamp-1 text-primary" aria-current="page">{title}</span>
+					<li aria-hidden="true">/</li>
+					<li class="min-w-0">
+						<span class="line-clamp-1 text-bone" aria-current="page">{title}</span>
 					</li>
 				</ol>
 			</nav>
 
-			<header class="flex flex-col gap-4">
-				<div class="flex flex-wrap items-center gap-3 text-xs font-semibold uppercase tracking-wider text-secondary">
-					<span class="rounded-full border border-accent/20 bg-accent/10 px-3 py-1 text-accent">
+			<header class="mt-10 flex flex-col gap-6">
+				<div
+					class="flex flex-wrap items-center gap-3 font-mono text-xs uppercase tracking-wider text-secondary"
+				>
+					<span class="rounded-full border border-accent/35 bg-accent/10 px-3 py-1 text-accent">
 						{category}
 					</span>
 					<time datetime={formatArticleIsoDate(timestamp)}>{timestamp}</time>
 					<span aria-hidden="true">·</span>
 					<span>{i18n.ARTICLE_READING_TIME.replace("{minutes}", String(readingMinutes))}</span>
+					<span aria-hidden="true">·</span>
+					<span>{lang}</span>
 				</div>
 
 				<h1
-					class="text-balance text-3xl font-extrabold leading-tight text-accent sm:text-4xl md:text-5xl"
+					class="display-balance font-display text-4xl font-semibold leading-tight tracking-tight text-bone sm:text-5xl"
 					transition:name={`article-${pageTitle}-title`}
 				>
 					{title}
@@ -121,37 +143,43 @@ const jsonLd = [
 				</p>
 			</header>
 
-			<div
-				class="prose prose-invert mt-10 w-full max-w-none"
-				transition:name={`article-${pageTitle}-content`}
-			>
+			<img
+				src={cover}
+				alt={`Rixel's article ${title}`}
+				width="1280"
+				height="720"
+				class="mt-10 aspect-video w-full rounded-3xl border border-line object-cover"
+			/>
+
+			<div class="article-prose mt-12 w-full" transition:name={`article-${pageTitle}-content`}>
 				<Content />
 			</div>
 
-			<footer class="mt-12 flex flex-col gap-6 border-t border-white/10 pt-8">
+			<footer class="mt-14 flex flex-col gap-6 border-t border-line pt-8">
 				<div class="flex flex-wrap items-center gap-2">
-					<span class="mr-1 text-sm font-semibold text-secondary">{i18n.ARTICLE_TAGS}:</span>
+					<span class="mr-1 font-mono text-xs uppercase tracking-wider text-secondary"
+						>{i18n.ARTICLE_TAGS}:</span
+					>
 					{
 						tags.map((tag: string) => (
 							<Badge>
-								<span class="text-xs">{tag}</span>
+								<span class="font-mono text-xs">{tag}</span>
 							</Badge>
 						))
 					}
 				</div>
 
 				<div class="flex flex-wrap items-center justify-between gap-4">
-					<p class="text-sm italic text-secondary">
-						{i18n.AUTHOR}: <span class="font-semibold text-primary">{author}</span> · {i18n.LANGUAGE}:
-						<span class="font-semibold text-primary">{lang}</span>
+					<p class="font-mono text-xs uppercase tracking-wider text-secondary">
+						{i18n.AUTHOR}: <span class="text-primary">{author}</span>
 					</p>
 
-					<div class="flex flex-wrap items-center gap-3">
+					<div class="flex flex-wrap items-center gap-2">
 						{
 							translation ? (
 								<a
 									href={resolveLocalizedHref(`/articles/${translation.data.pageTitle}`, locale)}
-									class="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-4 py-2 text-sm font-semibold text-accent transition-all hover:bg-accent/20"
+									class="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-4 py-2 text-sm font-semibold text-accent transition-colors hover:bg-accent/20"
 								>
 									{translation.data.lang === "es"
 										? i18n.ARTICLE_READ_IN_SPANISH
@@ -165,51 +193,44 @@ const jsonLd = [
 							data-share-button
 							data-share-title={title}
 							data-copied-label={i18n.ARTICLE_LINK_COPIED}
-							class="inline-flex items-center gap-2 rounded-full border border-secondary/30 bg-white/5 px-4 py-2 text-sm font-semibold text-primary transition-all hover:border-accent/30 hover:text-accent"
+							class="inline-flex items-center gap-2 rounded-full border border-line bg-bone/5 px-4 py-2 text-sm font-semibold text-primary transition-colors hover:border-accent/30 hover:text-accent"
 						>
 							{i18n.ARTICLE_SHARE}
 						</button>
 
 						<a
 							href={resolveLocalizedHref("/articles", locale)}
-							class="inline-flex items-center gap-2 text-sm font-medium text-secondary transition-colors hover:text-accent"
+							class="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-secondary transition-colors hover:text-accent"
 						>
 							{i18n.ARTICLE_BACK}
+							<RightArrow class="size-3.5" />
 						</a>
 					</div>
 				</div>
 			</footer>
-		</div>
+		</article>
 
 		{
 			relatedArticles.length > 0 ? (
-				<div class="fade-up-anim mt-20 flex w-full max-w-5xl flex-col sm:w-11/12">
-					<MainTitle eyebrow={i18n.ARTICLES_EYEBROW}>
-						<Book class="size-7 text-accent" />
-						{i18n.ARTICLE_RELATED}
-					</MainTitle>
+				<section class="mt-24 flex w-full flex-col">
+					<MainTitle eyebrow={i18n.ARTICLES_EYEBROW} title={i18n.ARTICLE_RELATED} />
 
-					<div class="grid w-full gap-3 sm:grid-cols-2 lg:grid-cols-3">
+					<div class="mt-10 grid w-full gap-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-10">
 						{relatedArticles.map((related) => (
-							<HomeArticleCard
-								author={related.data.author}
+							<ArticleTile
+								category={related.data.category}
+								cover={related.data.cover}
 								description={related.data.description}
 								lang={related.data.lang}
 								pageTitle={related.data.pageTitle}
+								readingMinutes={estimateReadingTime(related.body)}
+								tags={related.data.tags}
 								timestamp={related.data.timestamp}
 								title={related.data.title}
 							/>
 						))}
 					</div>
-
-					<a
-						href={resolveLocalizedHref("/articles", locale)}
-						class="group mt-6 inline-flex w-fit items-center gap-2 rounded-full border border-secondary/20 bg-secondary/5 px-5 py-2.5 text-sm font-medium text-secondary transition-all hover:border-accent/30 hover:bg-accent/10 hover:text-accent"
-					>
-						{i18n.ARTICLE_BACK}
-						<RightArrow class="size-4 transition-transform group-hover:translate-x-0.5" />
-					</a>
-				</div>
+				</section>
 			) : null
 		}
 	</SectionContainer>
@@ -242,18 +263,6 @@ const jsonLd = [
 			} catch {
 				/* user cancelled or clipboard unavailable */
 			}
-		})
-	})
-</script>
-
-<script>
-	import { $ } from "@/libs/dom-selector"
-
-	document.addEventListener("DOMContentLoaded", () => {
-		window.addEventListener("scroll", () => {
-			const parallax = $(".parallax")
-			const offset = window.scrollY
-			if (parallax) parallax.style.transform = `translateY(${offset * 0.5}px)`
 		})
 	})
 </script>

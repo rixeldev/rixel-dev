@@ -2,8 +2,12 @@
 import ArticleTile from "@/components/ArticleTile.astro"
 import MainTitle from "@/components/MainTitle.astro"
 import SectionContainer from "@/components/SectionContainer.astro"
-import Book from "@/icons/Book.astro"
-import { buildArticlesIndexJsonLd, estimateReadingTime, sortArticlesByDate } from "@/libs/articlesSeo"
+import {
+	buildArticlesIndexJsonLd,
+	estimateReadingTime,
+	resolveCoverUrl,
+	sortArticlesByDate,
+} from "@/libs/articlesSeo"
 import {
 	getActiveLocale,
 	getI18N,
@@ -25,7 +29,9 @@ const canonical = new URL(
 ).toString()
 const pageTitle = i18n.ARTICLES_INDEX_TITLE
 const pageDescription = i18n.ARTICLES_INDEX_SEO_DESCRIPTION
-const featuredImage = articles[0]?.data.cover ?? "https://rixel.dev/images/embedded-img.avif"
+const featuredImage = articles[0]?.data.cover
+	? resolveCoverUrl(articles[0].data.cover)
+	: "https://rixel.dev/images/embedded-img.avif"
 const jsonLd = buildArticlesIndexJsonLd({
 	articles,
 	locale,
@@ -54,122 +60,124 @@ const topTags = [...tagFrequency.entries()]
 	keywords={i18n.ARTICLES_INDEX_KEYWORDS}
 	jsonLd={jsonLd}
 >
-	<SectionContainer>
-		<div class="flex w-full max-w-5xl flex-col gap-4 sm:w-11/12">
+	<SectionContainer class="pt-32 sm:pt-36">
+		<div class="flex w-full flex-col gap-10">
 			<nav aria-label="Breadcrumb">
-				<ol class="flex flex-wrap items-center gap-2 text-sm text-secondary">
+				<ol
+					class="flex flex-wrap items-center gap-2 font-mono text-xs uppercase tracking-wider text-secondary"
+				>
 					<li>
 						<a href={resolveLocalizedHref("/", locale)} class="transition-colors hover:text-accent">
 							{i18n.HOME}
 						</a>
 					</li>
-					<li aria-hidden="true" class="text-secondary/50">/</li>
+					<li aria-hidden="true">/</li>
 					<li>
-						<span class="text-primary" aria-current="page">{i18n.ARTICLES}</span>
+						<span class="text-bone" aria-current="page">{i18n.ARTICLES}</span>
 					</li>
 				</ol>
 			</nav>
 
-			<header>
-				<MainTitle eyebrow={i18n.ARTICLES_EYEBROW}>
-					<Book class="size-8" />
-					{i18n.ARTICLES}
-				</MainTitle>
+			<div class="grid items-end gap-8 lg:grid-cols-12">
+				<div class="flex flex-col gap-6 lg:col-span-8">
+					<MainTitle eyebrow={i18n.ARTICLES_EYEBROW} title={i18n.ARTICLES} />
 
-				<p class="-mt-4 mb-6 max-w-3xl text-pretty text-base leading-relaxed text-primary sm:text-lg">
-					{pageDescription}
-				</p>
-			</header>
-		</div>
+					<p class="max-w-2xl text-pretty text-base leading-relaxed text-primary sm:text-lg">
+						{pageDescription}
+					</p>
+				</div>
 
-		<div class="sticky top-20 z-20 mb-8 flex w-full max-w-5xl flex-col gap-4 rounded-2xl border border-white/10 bg-slate-950/80 p-4 backdrop-blur-lg sm:w-11/12 sm:p-5">
-			<div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-				<label class="relative w-full sm:max-w-sm">
-					<span class="sr-only">{i18n.ARTICLES_SEARCH_LABEL}</span>
-					<input
-						type="search"
-						data-article-search
-						placeholder={i18n.ARTICLES_SEARCH_PLACEHOLDER}
-						class="h-11 w-full rounded-xl border border-white/10 bg-slate-900/70 px-4 text-sm text-primary outline-none transition-colors placeholder:text-secondary/60 focus:border-accent/50"
-					/>
-				</label>
-
-				<p class="text-sm text-secondary" aria-live="polite">
-					<span data-article-count>{articles.length}</span> {i18n.ARTICLES_RESULTS}
+				<p
+					class="font-mono text-xs uppercase tracking-widest text-secondary lg:col-span-4 lg:text-right"
+				>
+					<span class="text-accent" data-article-count>{articles.length}</span>
+					{i18n.ARTICLES_RESULTS}
 				</p>
 			</div>
 
 			<div
-				class="flex flex-wrap gap-2"
-				role="group"
-				aria-label={i18n.ARTICLES_FILTER_LABEL}
+				class="flex w-full flex-col gap-4 rounded-3xl border border-line bg-ink-soft/70 p-4 backdrop-blur-lg sm:p-5"
 			>
-				<button type="button" class="filter-chip" data-tag-filter data-tag="all" data-active="true">
-					{i18n.ARTICLES_FILTER_ALL}
-				</button>
-				{
-					topTags.map((tag) => (
-						<button type="button" class="filter-chip" data-tag-filter data-tag={tag}>
-							{tag}
-						</button>
-					))
-				}
-			</div>
-		</div>
-
-		<section
-			class="grid w-full max-w-5xl grid-cols-1 gap-5 sm:w-11/12 sm:grid-cols-2 lg:grid-cols-3"
-			aria-label={i18n.ARTICLES}
-		>
-			{
-				orderedArticles.map((article) => {
-					const { category, cover, description, lang, pageTitle, tags, timestamp, title } =
-						article.data
-
-					return (
-						<ArticleTile
-							category={category}
-							cover={cover}
-							description={description}
-							lang={lang}
-							pageTitle={pageTitle}
-							readingMinutes={estimateReadingTime(article.body)}
-							tags={tags}
-							timestamp={timestamp}
-							title={title}
+				<div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+					<label class="relative w-full sm:max-w-sm">
+						<span class="sr-only">{i18n.ARTICLES_SEARCH_LABEL}</span>
+						<input
+							type="search"
+							data-article-search
+							placeholder={i18n.ARTICLES_SEARCH_PLACEHOLDER}
+							class="h-11 w-full rounded-full border border-line bg-ink/70 px-4 text-sm text-bone outline-none transition-colors placeholder:text-secondary/70 focus:border-accent/50"
 						/>
-					)
-				})
-			}
-		</section>
+					</label>
 
-		<p data-article-empty hidden class="mt-6 text-center text-primary">
-			{i18n.ARTICLES_NO_RESULTS}
-		</p>
+					<p class="font-mono text-xs uppercase tracking-wider text-secondary" aria-live="polite">
+						{i18n.ARTICLES_FILTER_LABEL}
+					</p>
+				</div>
+
+				<div class="flex flex-wrap gap-2" role="group" aria-label={i18n.ARTICLES_FILTER_LABEL}>
+					<button
+						type="button"
+						class="filter-chip"
+						data-tag-filter
+						data-tag="all"
+						data-active="true"
+					>
+						{i18n.ARTICLES_FILTER_ALL}
+					</button>
+					{
+						topTags.map((tag) => (
+							<button type="button" class="filter-chip" data-tag-filter data-tag={tag}>
+								{tag}
+							</button>
+						))
+					}
+				</div>
+			</div>
+
+			<section
+				class="grid w-full grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-10"
+				aria-label={i18n.ARTICLES}
+			>
+				{
+					orderedArticles.map((article) => {
+						const { category, cover, description, lang, pageTitle, tags, timestamp, title } =
+							article.data
+
+						return (
+							<ArticleTile
+								category={category}
+								cover={cover}
+								description={description}
+								lang={lang}
+								pageTitle={pageTitle}
+								readingMinutes={estimateReadingTime(article.body)}
+								tags={tags}
+								timestamp={timestamp}
+								title={title}
+							/>
+						)
+					})
+				}
+			</section>
+
+			<p data-article-empty hidden class="text-center text-primary">
+				{i18n.ARTICLES_NO_RESULTS}
+			</p>
+		</div>
 	</SectionContainer>
 </Layout>
 
 <style>
 	.filter-chip {
-		border-radius: 9999px;
-		border: 1px solid rgba(100, 116, 139, 0.3);
-		background-color: rgba(255, 255, 255, 0.04);
-		padding: 0.35rem 0.85rem;
-		font-size: 0.75rem;
-		font-weight: 600;
-		color: rgb(169 179 193);
-		transition: all 0.2s ease;
+		@apply rounded-full border border-line bg-bone/5 px-3 py-1.5 font-mono text-xs text-secondary transition-colors duration-200;
 	}
 
 	.filter-chip:hover {
-		border-color: rgba(8, 145, 178, 0.4);
-		color: rgb(8, 145, 178);
+		@apply border-accent/40 text-accent;
 	}
 
 	.filter-chip[data-active="true"] {
-		border-color: rgba(8, 145, 178, 0.5);
-		background-color: rgba(8, 145, 178, 0.15);
-		color: rgb(8, 145, 178);
+		@apply border-accent bg-accent text-accent-ink;
 	}
 </style>
 

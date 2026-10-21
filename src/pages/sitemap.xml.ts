@@ -5,7 +5,18 @@ import { getCollection } from "astro:content"
 
 const SITE_URL = "https://rixel.dev"
 
-const STATIC_PATHS = ["/", "/articles/", "/portfolio/", "/photography/", "/gallery/", "/privacy/", "/terms/"]
+const STATIC_PATHS = [
+	"/",
+	"/apps/",
+	"/apps/stop-trivia/",
+	"/apps/setuno/",
+	"/articles/",
+	"/portfolio/",
+	"/photography/",
+	"/gallery/",
+	"/privacy/",
+	"/terms/",
+]
 
 export const GET: APIRoute = async () => {
 	const articles = await getCollection("articles")

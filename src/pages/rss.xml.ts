@@ -1,4 +1,4 @@
-import { formatArticleIsoDate, sortArticlesByDate } from "@/libs/articlesSeo"
+import { formatArticleIsoDate, resolveCoverUrl, sortArticlesByDate } from "@/libs/articlesSeo"
 import { getCollection } from "astro:content"
 import type { APIRoute } from "astro"
 
@@ -24,6 +24,7 @@ export const GET: APIRoute = async () => {
 		.map((article) => {
 			const { category, description, lang, pageTitle, title } = article.data
 			const url = `${SITE_URL}/articles/${pageTitle}/`
+			const image = resolveCoverUrl(article.data.cover)
 
 			return `    <item>
       <title>${escapeXml(title)}</title>
@@ -33,6 +34,7 @@ export const GET: APIRoute = async () => {
       <pubDate>${new Date(formatArticleIsoDate(article.data.timestamp)).toUTCString()}</pubDate>
       <category>${escapeXml(category)}</category>
       <language>${escapeXml(lang)}</language>
+      <enclosure url="${image}" type="image/png" length="0" />
     </item>`
 		})
 		.join("\n")

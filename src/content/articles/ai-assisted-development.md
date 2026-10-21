@@ -1,7 +1,7 @@
 ---
 author: Rikelvi Capellán
 category: Engineering
-cover: https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1280&h=720&fit=crop&q=80
+cover: /articles/covers/ai-assisted-development.png
 description: How I use AI coding assistants to ship faster without sacrificing code quality, architecture, or my own understanding of the systems I build.
 lang: en
 pageTitle: ai-assisted-development

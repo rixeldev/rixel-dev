@@ -1,7 +1,7 @@
 ---
 author: Rikelvi Capellán
 category: Rendimiento
-cover: https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1280&h=720&fit=crop&q=80
+cover: /articles/covers/rendimiento-web-core-web-vitals.png
 description: Una checklist práctica y actualizada para mejorar las Core Web Vitals, desde medir lo correcto hasta los arreglos que de verdad mueven LCP, INP y CLS.
 lang: es
 pageTitle: rendimiento-web-core-web-vitals
