@@ -16,8 +16,8 @@ import {
 	sortArticlesByDate,
 } from "@/libs/articlesSeo"
 import {
-	getActiveLocale,
 	getI18N,
+	normalizeLocale,
 	resolveLocalizedHref,
 	resolveLocalizedPath,
 } from "@/locales/index"
@@ -39,7 +39,7 @@ const { data } = article
 const { author, category, cover, description, lang, pageTitle, tags, timestamp, title } = data
 const { Content } = await render(article)
 
-const locale = getActiveLocale(Astro)
+const locale = normalizeLocale(lang)
 const i18n = getI18N({ currentLocale: locale })
 const collection = sortArticlesByDate(await getCollection("articles"))
 const readingMinutes = estimateReadingTime(article.body)
@@ -56,7 +56,7 @@ const alternates = translation
 			{
 				lang: translation.data.lang,
 				href: new URL(
-					resolveLocalizedPath(`/articles/${translation.data.pageTitle}/`, locale),
+					resolveLocalizedPath(`/articles/${translation.data.pageTitle}/`, translation.data.lang),
 					"https://rixel.dev"
 				).toString(),
 			},
@@ -89,6 +89,7 @@ const jsonLd = [
 	tags={tags}
 	alternates={alternates}
 	jsonLd={jsonLd}
+	locale={locale}
 >
 	<SectionContainer class="pt-32 sm:pt-36">
 		<article class="flex w-full max-w-3xl flex-col">
@@ -227,6 +228,7 @@ const jsonLd = [
 								tags={related.data.tags}
 								timestamp={related.data.timestamp}
 								title={related.data.title}
+								locale={locale}
 							/>
 						))}
 					</div>

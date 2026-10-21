@@ -12,12 +12,24 @@ interface Props {
 	tags: string[]
 	timestamp: string
 	title: string
+	locale?: string
 }
 
-const locale = getActiveLocale(Astro)
+const {
+	category,
+	cover,
+	description,
+	lang,
+	pageTitle,
+	readingMinutes,
+	tags,
+	timestamp,
+	title,
+	locale: propLocale,
+} = Astro.props
+
+const locale = propLocale ?? getActiveLocale(Astro)
 const i18n = getI18N({ currentLocale: locale })
-const { category, cover, description, lang, pageTitle, readingMinutes, tags, timestamp, title } =
-	Astro.props
 
 const articleHref = resolveLocalizedHref(`/articles/${pageTitle}`, locale)
 const languageLabel = getLanguageLabel(lang, i18n)

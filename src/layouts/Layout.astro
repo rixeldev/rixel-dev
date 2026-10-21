@@ -9,7 +9,7 @@ import Header from "@/components/ui/Header.astro"
 import Toast from "@/components/ui/Toast.astro"
 import WhatsAppButton from "@/components/ui/WhatsAppButton.astro"
 import type { Preload } from "@/interfaces/preload"
-import { getActiveLocale } from "@/locales/index"
+import { getActiveLocale, type Locale } from "@/locales/index"
 import "@/styles/global.css"
 import "@fontsource-variable/azeret-mono"
 import "@fontsource-variable/bricolage-grotesque"
@@ -36,6 +36,7 @@ interface Props {
 	tags?: string[]
 	alternates?: { lang: string; href: string }[]
 	contact?: boolean
+	locale?: Locale
 }
 
 const {
@@ -57,8 +58,9 @@ const {
 	tags,
 	alternates,
 	contact = true,
+	locale: propLocale,
 } = Astro.props
-const locale = getActiveLocale(Astro)
+const locale = propLocale ?? getActiveLocale(Astro)
 ---
 
 <!doctype html>

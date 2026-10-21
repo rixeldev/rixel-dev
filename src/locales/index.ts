@@ -24,7 +24,10 @@ export const getI18N = ({ currentLocale }: { currentLocale?: string }) => {
 	return english
 }
 
-export const getLanguageLabel = (langCode: string | undefined, i18n: ReturnType<typeof getI18N>) => {
+export const getLanguageLabel = (
+	langCode: string | undefined,
+	i18n: ReturnType<typeof getI18N>
+) => {
 	const locale = normalizeLocale(langCode)
 	return locale === LANG.SPANISH ? i18n.SPANISH : i18n.ENGLISH
 }
@@ -39,6 +42,17 @@ type AstroLikeContext = {
 	currentLocale?: string
 	cookies?: AstroCookies
 	request?: Request
+	isPrerendered?: boolean
+}
+
+const isPrerenderedContext = (context: AstroLikeContext): boolean => {
+	if (context.isPrerendered) return true
+	if (!context.request) return true
+
+	const desc = Object.getOwnPropertyDescriptor(context.request, "headers")
+	if (desc && typeof desc.get === "function") return true
+
+	return false
 }
 
 const getPreferredLocaleFromHeader = (headerValue?: string): Locale | undefined => {
@@ -65,6 +79,10 @@ const getPreferredLocaleFromHeader = (headerValue?: string): Locale | undefined 
 }
 
 export const getActiveLocale = (context: AstroLikeContext): Locale => {
+	if (isPrerenderedContext(context)) {
+		return normalizeLocale(context.currentLocale)
+	}
+
 	const cookieLocale = context.cookies?.get?.("lang")?.value
 	if (cookieLocale) {
 		return normalizeLocale(cookieLocale)
