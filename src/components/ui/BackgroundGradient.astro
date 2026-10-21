@@ -1,18 +1,17 @@
-<div class="absolute bottom-0 top-0 z-[-2] min-h-screen w-full bg-slate-950">
+---
+// Full-page atmosphere: single acid aurora, soft brand glows and a vignette
+// that keeps the edges anchored to ink.
+---
+
+<div class="pointer-events-none fixed inset-0 z-0 overflow-hidden bg-ink" aria-hidden="true">
+	<div class="aurora-field absolute inset-0"></div>
+
 	<div
-		class="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(34,211,238,0.18),transparent)]"
+		class="absolute -top-52 left-1/2 size-96 -translate-x-1/2 rounded-full bg-accent/10 blur-3xl"
 	>
 	</div>
-	<div
-		class="absolute inset-0 bg-[radial-gradient(ellipse_50%_40%_at_80%_50%,rgba(21,94,117,0.12),transparent)]"
-	>
-	</div>
-	<div
-		class="absolute inset-0 bg-[radial-gradient(ellipse_40%_30%_at_10%_80%,rgba(8,145,178,0.08),transparent)]"
-	>
-	</div>
-	<div
-		class="absolute inset-0 opacity-[0.03] [background-image:radial-gradient(circle_at_1px_1px,white_1px,transparent_0)] [background-size:32px_32px]"
-	>
+	<div class="absolute -right-40 top-1/3 size-96 rounded-full bg-success/5 blur-3xl"></div>
+
+	<div class="absolute inset-x-0 bottom-0 h-72 bg-gradient-to-t from-ink via-ink/80 to-transparent">
 	</div>
 </div>

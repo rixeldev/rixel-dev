@@ -11,6 +11,12 @@ importers:
       '@astrojs/react':
         specifier: ^4.2.1
         version: 4.4.2(@types/node@25.0.9)(@types/react-dom@18.3.7(@types/react@18.3.27))(@types/react@18.3.27)(jiti@1.21.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yaml@2.8.2)
+      '@fontsource-variable/azeret-mono':
+        specifier: ^5.3.0
+        version: 5.3.0
+      '@fontsource-variable/bricolage-grotesque':
+        specifier: ^5.3.0
+        version: 5.3.0
       '@fontsource-variable/onest':
         specifier: ^5.0.4
         version: 5.2.11
@@ -464,6 +470,12 @@ packages:
   '@eslint/js@9.39.2':
     resolution: {integrity: sha512-q1mjIoW1VX4IvSocvM/vbTiveKC4k9eLrajNEuSsmjymSDEbpGddtpfOoN7YGAqBK3NG+uqo8ia4PDTt8buCYA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@fontsource-variable/azeret-mono@5.3.0':
+    resolution: {integrity: sha512-nX76TwGHW53SoMMJoqb415uFqEQ3qnthL/bEeOOI2DjC7MntyIUVItQ45sVLe5+wG4gT0H5B7auAMa77p8Qc3Q==}
+
+  '@fontsource-variable/bricolage-grotesque@5.3.0':
+    resolution: {integrity: sha512-TLi9Q4hJjS2UvoTMRSS2nHu6c4R56lAw60NR9QYtVRCHn0XtsFpiEhNffZ8Glsoxu6wEEwLKBP8lb94J52PNBA==}
 
   '@fontsource-variable/onest@5.2.11':
     resolution: {integrity: sha512-knJww1KxK4g66+qu90q3CPBvl4zhL5oDRi3/JMkYMmlhW3OgyRgT4MMfgd6jg2lvho7bLPAXfsYPh59h0yzwUA==}
@@ -1653,7 +1665,7 @@ packages:
 
   glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
-    deprecated: Glob versions prior to v9 are no longer supported
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   globals@13.24.0:
     resolution: {integrity: sha512-AhO5QUcj8llrbG09iWhPU2B204J1xnPeL8kQmVorSsy+Sjj1sk8gIyh6cUocGmH4L0UuhAJy+hJMRA4mgA4mFQ==}
@@ -3581,6 +3593,10 @@ snapshots:
   '@eslint/js@8.57.1': {}
 
   '@eslint/js@9.39.2': {}
+
+  '@fontsource-variable/azeret-mono@5.3.0': {}
+
+  '@fontsource-variable/bricolage-grotesque@5.3.0': {}
 
   '@fontsource-variable/onest@5.2.11': {}
 

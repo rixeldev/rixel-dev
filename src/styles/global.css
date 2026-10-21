@@ -1,0 +1,284 @@
+/* ---------------------------------------------------------------------------
+   Rixel design system · global layer
+   Custom properties and texture helpers live here so markup stays on the
+   Tailwind scale (no one-off arbitrary values in components).
+--------------------------------------------------------------------------- */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	html {
+		background-color: theme("colors.ink.DEFAULT");
+		color-scheme: dark;
+		scroll-behavior: smooth;
+		scroll-padding-top: 6rem;
+		overflow-x: hidden;
+		max-width: 100%;
+		-webkit-tap-highlight-color: transparent;
+	}
+
+	body {
+		@apply bg-ink font-sans text-primary antialiased;
+		text-rendering: optimizeLegibility;
+	}
+
+	::selection {
+		background-color: theme("colors.accent");
+		color: theme("colors.accent-ink");
+	}
+
+	:where(a, button, input, textarea, select, summary):focus-visible {
+		outline: 2px solid theme("colors.accent");
+		outline-offset: 3px;
+		border-radius: 0.5rem;
+	}
+
+	* {
+		scrollbar-width: thin;
+		scrollbar-color: rgba(147, 154, 165, 0.35) transparent;
+	}
+
+	*::-webkit-scrollbar {
+		width: 10px;
+		height: 10px;
+	}
+
+	*::-webkit-scrollbar-thumb {
+		background-color: rgba(147, 154, 165, 0.3);
+		border-radius: 9999px;
+		border: 3px solid transparent;
+		background-clip: content-box;
+	}
+
+	*::-webkit-scrollbar-thumb:hover {
+		background-color: rgba(94, 234, 212, 0.55);
+	}
+
+	code,
+	kbd,
+	samp,
+	pre {
+		font-family: theme("fontFamily.mono");
+	}
+}
+
+/* ---------------------------------- Texture ------------------------------- */
+
+.grain-overlay {
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+	background-repeat: repeat;
+}
+
+.aurora-field {
+	background:
+		radial-gradient(
+			65% 55% at 50% -15%,
+			rgba(94, 234, 212, 0.13),
+			transparent 70%
+		),
+		radial-gradient(45% 40% at 85% 15%, rgba(74, 222, 128, 0.07), transparent 75%),
+		radial-gradient(50% 45% at 8% 70%, rgba(14, 59, 54, 0.7), transparent 78%);
+}
+
+/* ------------------------------- Reveal animations ------------------------- */
+
+.reveal,
+.reveal-left,
+.reveal-right {
+	animation: reveal-up linear both;
+	animation-timeline: view();
+	animation-range: entry 5% cover 24%;
+}
+
+.reveal-left {
+	animation-name: reveal-left;
+}
+
+.reveal-right {
+	animation-name: reveal-right;
+}
+
+@keyframes reveal-up {
+	from {
+		opacity: 0;
+		translate: 0 42px;
+		filter: blur(6px);
+	}
+	to {
+		opacity: 1;
+		translate: 0 0;
+		filter: blur(0);
+	}
+}
+
+@keyframes reveal-left {
+	from {
+		opacity: 0;
+		translate: 40px 0;
+	}
+	to {
+		opacity: 1;
+		translate: 0 0;
+	}
+}
+
+@keyframes reveal-right {
+	from {
+		opacity: 0;
+		translate: -40px 0;
+	}
+	to {
+		opacity: 1;
+		translate: 0 0;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.reveal,
+	.reveal-left,
+	.reveal-right,
+	.animate-marquee,
+	.animate-float,
+	.animate-pulse-line {
+		animation: none !important;
+	}
+
+	html {
+		scroll-behavior: auto;
+	}
+}
+
+/* ---------------------------------- Marquee -------------------------------- */
+
+.marquee {
+	display: flex;
+	overflow: hidden;
+	-webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+	mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+
+.marquee-track {
+	display: flex;
+	width: max-content;
+	flex-shrink: 0;
+}
+
+.marquee:hover .marquee-track {
+	animation-play-state: paused;
+}
+
+/* -------------------------------- Phone frame ------------------------------ */
+
+.phone-frame {
+	aspect-ratio: 9 / 19.5;
+}
+
+.aspect-portrait {
+	aspect-ratio: 4 / 5;
+}
+
+.aspect-photo {
+	aspect-ratio: 4 / 3;
+}
+
+.aspect-tall {
+	aspect-ratio: 3 / 4;
+}
+
+.phone-glow {
+	box-shadow:
+		0 0 0 1px rgba(242, 239, 230, 0.12),
+		0 40px 120px -40px rgba(0, 0, 0, 0.9);
+}
+
+/* --------------------------------- Editorial ------------------------------- */
+
+.display-balance {
+	text-wrap: balance;
+}
+
+.text-gradient-bone {
+	background-image: linear-gradient(
+		110deg,
+		theme("colors.bone") 10%,
+		theme("colors.accent-soft") 55%,
+		theme("colors.secondary") 100%
+	);
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+}
+
+.link-underline {
+	background-image: linear-gradient(theme("colors.accent"), theme("colors.accent"));
+	background-position: 0 100%;
+	background-repeat: no-repeat;
+	background-size: 0 1px;
+	transition: background-size 300ms ease;
+}
+
+.link-underline:hover {
+	background-size: 100% 1px;
+}
+
+/* ------------------------------- App screens ------------------------------- */
+
+.screenshot-strip {
+	display: flex;
+	gap: 1rem;
+	overflow-x: auto;
+	padding-bottom: 0.75rem;
+	scroll-snap-type: none;
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+	overscroll-behavior-x: contain;
+	-webkit-overflow-scrolling: touch;
+	cursor: grab;
+}
+
+.screenshot-strip::-webkit-scrollbar {
+	display: none;
+}
+
+.screenshot-strip.is-dragging {
+	cursor: grabbing;
+	user-select: none;
+}
+
+.screenshot-strip:focus-visible {
+	outline: 2px solid theme("colors.accent");
+	outline-offset: 4px;
+	border-radius: 1rem;
+}
+
+.screenshot-strip > * {
+	flex: 0 0 auto;
+	width: min(76vw, 18rem);
+}
+
+.screenshot-strip > .shot-tall {
+	width: min(76vw, 18rem);
+}
+
+.screenshot-strip > .shot-wide {
+	width: min(88vw, 32rem);
+}
+
+/* ------------------------------ Prose (articles) --------------------------- */
+
+.article-prose {
+	@apply prose prose-invert max-w-none;
+	--tw-prose-body: theme("colors.primary");
+	--tw-prose-headings: theme("colors.bone");
+	--tw-prose-links: theme("colors.accent");
+	--tw-prose-bold: theme("colors.bone");
+	--tw-prose-quotes: theme("colors.bone");
+	--tw-prose-quote-borders: theme("colors.accent");
+	--tw-prose-bullets: theme("colors.accent");
+	--tw-prose-counters: theme("colors.secondary");
+	--tw-prose-hr: theme("colors.line");
+	--tw-prose-th-borders: theme("colors.line");
+	--tw-prose-td-borders: theme("colors.line");
+}

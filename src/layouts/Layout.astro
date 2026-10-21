@@ -10,8 +10,10 @@ import Toast from "@/components/ui/Toast.astro"
 import WhatsAppButton from "@/components/ui/WhatsAppButton.astro"
 import type { Preload } from "@/interfaces/preload"
 import { getActiveLocale } from "@/locales/index"
+import "@/styles/global.css"
+import "@fontsource-variable/azeret-mono"
+import "@fontsource-variable/bricolage-grotesque"
 import "@fontsource-variable/onest"
-import "@fontsource/ubuntu"
 import SpeedInsights from "@vercel/speed-insights/astro"
 import { ClientRouter } from "astro:transitions"
 
@@ -21,6 +23,8 @@ interface Props {
 	preload?: Array<Preload>
 	canonical?: string
 	image?: string
+	imageWidth?: number
+	imageHeight?: number
 	keywords?: string
 	jsonLd?: Record<string, unknown> | Record<string, unknown>[]
 	type?: "website" | "article" | "profile"
@@ -28,6 +32,10 @@ interface Props {
 	publishedTime?: string
 	modifiedTime?: string
 	author?: string
+	section?: string
+	tags?: string[]
+	alternates?: { lang: string; href: string }[]
+	contact?: boolean
 }
 
 const {
@@ -36,6 +44,8 @@ const {
 	preload,
 	canonical,
 	image,
+	imageWidth,
+	imageHeight,
 	keywords,
 	jsonLd,
 	type,
@@ -43,6 +53,10 @@ const {
 	publishedTime,
 	modifiedTime,
 	author,
+	section,
+	tags,
+	alternates,
+	contact = true,
 } = Astro.props
 const locale = getActiveLocale(Astro)
 ---
@@ -55,6 +69,8 @@ const locale = getActiveLocale(Astro)
 			canonical={canonical}
 			description={description}
 			image={image}
+			imageWidth={imageWidth}
+			imageHeight={imageHeight}
 			jsonLd={jsonLd}
 			keywords={keywords}
 			preload={preload}
@@ -64,13 +80,16 @@ const locale = getActiveLocale(Astro)
 			publishedTime={publishedTime}
 			modifiedTime={modifiedTime}
 			author={author}
+			section={section}
+			tags={tags}
+			alternates={alternates}
 		/>
 		<ClientRouter />
 	</head>
-	<body class="relative w-full overflow-x-hidden">
+	<body class="relative w-full overflow-x-hidden bg-ink">
 		<a
 			href="#main"
-			class="skip-link sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-xl focus:border focus:border-accent/40 focus:bg-slate-900 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-accent focus:shadow-xl"
+			class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-accent focus:px-5 focus:py-2.5 focus:text-sm focus:font-semibold focus:text-accent-ink"
 		>
 			Skip to content
 		</a>
@@ -78,10 +97,7 @@ const locale = getActiveLocale(Astro)
 		<SpeedInsights />
 
 		<BackgroundGradient />
-		<div
-			class="noise-overlay pointer-events-none fixed inset-0 z-[-1] opacity-[0.035]"
-			aria-hidden="true"
-		>
+		<div class="grain-overlay pointer-events-none fixed inset-0 z-0 opacity-5" aria-hidden="true">
 		</div>
 
 		<WhatsAppButton />
@@ -90,158 +106,18 @@ const locale = getActiveLocale(Astro)
 
 		<Header locale={locale} />
 
-		<main id="main" class="w-full min-w-0 overflow-x-hidden">
+		<main id="main" class="relative z-10 w-full min-w-0 overflow-x-hidden">
 			<slot />
 
-			<SectionContainer
-				id="contact"
-				class="section relative w-full px-4 py-20 pt-28 sm:px-6 lg:px-8"
-			>
-				<Contact locale={locale} />
-			</SectionContainer>
+			{
+				contact && (
+					<SectionContainer id="contact" class="pb-24 pt-10 sm:pt-16">
+						<Contact locale={locale} />
+					</SectionContainer>
+				)
+			}
 		</main>
 
 		<Footer locale={locale} />
 	</body>
 </html>
-<style is:global>
-	html {
-		font-family: "Onest Variable", "Ubuntu", system-ui, sans-serif;
-		background-color: #020617;
-		scroll-behavior: smooth;
-		scroll-padding-top: 6rem;
-		overflow-x: hidden;
-		max-width: 100%;
-		scrollbar-gutter: auto;
-		-webkit-tap-highlight-color: transparent;
-	}
-
-	::selection {
-		background-color: rgba(8, 145, 178, 0.35);
-		color: #f8fafc;
-	}
-
-	:where(a, button, input, textarea, select, summary):focus-visible {
-		outline: 2px solid rgba(8, 145, 178, 0.9);
-		outline-offset: 2px;
-		border-radius: 0.5rem;
-	}
-
-	* {
-		scrollbar-width: thin;
-		scrollbar-color: rgba(100, 116, 139, 0.5) transparent;
-	}
-
-	*::-webkit-scrollbar {
-		width: 10px;
-		height: 10px;
-	}
-
-	*::-webkit-scrollbar-thumb {
-		background-color: rgba(100, 116, 139, 0.45);
-		border-radius: 9999px;
-		border: 3px solid transparent;
-		background-clip: content-box;
-	}
-
-	*::-webkit-scrollbar-thumb:hover {
-		background-color: rgba(8, 145, 178, 0.6);
-	}
-
-	.noise-overlay {
-		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-		background-repeat: repeat;
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.fade-up-anim,
-		.fade-left-anim,
-		.fade-right-anim {
-			animation: none !important;
-		}
-	}
-
-	@media (min-width: 1024px) {
-		html {
-			scrollbar-gutter: stable;
-		}
-	}
-
-	code {
-		font-family:
-			Menlo,
-			Monaco,
-			Lucida Console,
-			Liberation Mono,
-			DejaVu Sans Mono,
-			Bitstream Vera Sans Mono,
-			Courier New,
-			monospace;
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		html {
-			scroll-behavior: auto;
-		}
-	}
-
-	.fade-up-anim {
-		animation: fade-up-animation linear both;
-		animation-timeline: view();
-		animation-range: entry 10% cover 20%;
-	}
-
-	@keyframes fade-up-animation {
-		0% {
-			opacity: 0;
-			translate: 0 50px;
-			scale: 0.7;
-		}
-
-		100% {
-			opacity: 1;
-			translate: 0 0;
-			scale: 1;
-		}
-	}
-
-	.fade-left-anim {
-		animation: fade-left-animation linear both;
-		animation-timeline: view();
-		animation-range: entry 10% cover 20%;
-	}
-
-	@keyframes fade-left-animation {
-		0% {
-			opacity: 0;
-			translate: 50px 0;
-			scale: 0.7;
-		}
-
-		100% {
-			opacity: 1;
-			translate: 0 0;
-			scale: 1;
-		}
-	}
-
-	.fade-right-anim {
-		animation: fade-right-animation linear both;
-		animation-timeline: view();
-		animation-range: entry 10% cover 20%;
-	}
-
-	@keyframes fade-right-animation {
-		0% {
-			opacity: 0;
-			translate: -50px 0;
-			scale: 0.7;
-		}
-
-		100% {
-			opacity: 1;
-			translate: 0 0;
-			scale: 1;
-		}
-	}
-</style>

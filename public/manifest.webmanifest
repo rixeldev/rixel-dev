@@ -1,8 +1,8 @@
 {
-	"name": "Web | Capelix",
-	"short_name": "Web | Capelix",
-	"theme_color": "#020617",
-	"background_color": "#020617",
+	"name": "Rixel — Web & Android apps",
+	"short_name": "Rixel",
+	"theme_color": "#060709",
+	"background_color": "#060709",
 	"display": "fullScreen",
 	"icons": [
 		{
