@@ -1,7 +1,13 @@
+---
+const { class: className, ...rest } = Astro.props
+---
+
 <a
-	{...Astro.props}
-	class="fade-up-anim group flex cursor-pointer items-center justify-center gap-2 rounded-full border-2 border-slate-800/50 bg-gradient-to-br from-primary/10 via-accent/10 to-primary/5 px-4 py-2 font-semibold text-primary shadow-sm backdrop-blur-sm transition-all duration-300 active:scale-95 active:border-accent/50 active:bg-gradient-to-br active:from-accent/20 active:via-primary/20 active:to-accent/20 active:text-accent active:shadow-md active:shadow-accent/20 sm:hover:scale-105 sm:hover:border-accent/50 sm:hover:bg-gradient-to-br sm:hover:from-accent/20 sm:hover:via-primary/20 sm:hover:to-accent/20 sm:hover:text-accent sm:hover:shadow-lg sm:hover:shadow-accent/20"
-	rel="noopener noreferrer"
+	{...rest}
+	class:list={[
+		"group inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border border-line bg-bone/5 px-4 py-2 text-sm font-medium text-primary transition-colors duration-300 hover:border-accent/40 hover:text-accent active:scale-95",
+		className,
+	]}
 >
 	<slot />
 </a>

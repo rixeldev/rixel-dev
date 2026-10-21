@@ -13,25 +13,13 @@ const i18n = getI18N({ currentLocale: locale })
 const preloadImages: Preload[] = [
 	{
 		as: "image",
-		href: `https://rixel.dev/projects/blackjack.webp`,
+		href: "/images/main-pic.webp",
 		type: "image/webp",
 		rel: "preload",
 	},
 	{
 		as: "image",
-		href: `https://rixel.dev/projects/el-chevere.webp`,
-		type: "image/webp",
-		rel: "preload",
-	},
-	{
-		as: "image",
-		href: `https://rixel.dev/projects/anjocc.webp`,
-		type: "image/webp",
-		rel: "preload",
-	},
-	{
-		as: "image",
-		href: `https://rixel.dev/projects/gdn-pro.webp`,
+		href: "/projects/blackjack.webp",
 		type: "image/webp",
 		rel: "preload",
 	},
@@ -44,19 +32,19 @@ const preloadImages: Preload[] = [
 	canonical={new URL(resolveLocalizedPath("/portfolio/", locale), "https://rixel.dev").toString()}
 	preload={preloadImages}
 >
-	<SectionContainer id="about">
+	<SectionContainer id="about" class="pt-32 sm:pt-40">
 		<About />
 	</SectionContainer>
 
-	<SectionContainer id="skills">
-		<Skills />
-	</SectionContainer>
-
-	<SectionContainer id="experience">
+	<SectionContainer id="experience" class="border-t border-line">
 		<Experience />
 	</SectionContainer>
 
-	<SectionContainer id="projects">
+	<SectionContainer id="projects" class="border-t border-line">
 		<Projects />
+	</SectionContainer>
+
+	<SectionContainer id="skills" class="border-t border-line">
+		<Skills />
 	</SectionContainer>
 </Layout>

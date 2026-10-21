@@ -13,7 +13,7 @@ const i18n = getI18N({ currentLocale: locale })
 	canonical={new URL(resolveLocalizedPath("/gallery/", locale), "https://rixel.dev").toString()}
 >
 	<section
-		class="section relative flex min-h-[60vh] w-full items-center justify-center px-4 py-24 sm:px-6 lg:px-8"
+		class="section relative flex min-h-svh w-full items-center justify-center px-4 py-24 sm:px-6 lg:px-8"
 	>
 		<div class="w-full">
 			<GalleryAccess client:load locale={locale} />

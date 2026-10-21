@@ -1,26 +1,31 @@
 ---
 import ExperienceItem from "@/components/ExperienceItem.astro"
-import Timeline from "@/icons/Timeline.astro"
+import MainTitle from "@/components/MainTitle.astro"
 import { getActiveLocale, getI18N } from "@/locales/index.ts"
 import { experiencesService } from "@/services/experiences"
-import MainTitle from "../MainTitle.astro"
 
 const locale = getActiveLocale(Astro)
 const i18n = getI18N({ currentLocale: locale })
 const EXPERIENCE = experiencesService(locale)
 ---
 
-<div class="flex w-full max-w-4xl flex-col sm:w-11/12 md:w-8/12">
-	<MainTitle eyebrow={i18n.EXPERIENCE}>
-		<Timeline class="size-8" />
-		{i18n.WORK_EXPERIENCE}
-	</MainTitle>
+<div class="flex w-full flex-col gap-10">
+	<MainTitle eyebrow={i18n.EXPERIENCE} title={i18n.WORK_EXPERIENCE} />
 
-	<ol class="relative ml-3 w-11/12 border-s-2 border-accent/20">
+	<ol class="flex w-full flex-col">
 		{
 			EXPERIENCE.map((experience) => (
-				<li class="group mb-10 ms-6">
-					<ExperienceItem {...experience} />
+				<li class="group grid gap-4 border-t border-line py-8 sm:grid-cols-12 sm:gap-8">
+					<div class="flex items-center justify-between gap-4 sm:col-span-4 sm:flex-col sm:items-start">
+						<span class="size-2 rounded-full bg-accent/60 transition-colors duration-300 group-hover:bg-accent" />
+						<time class="font-mono text-xs uppercase tracking-wider text-secondary">
+							{experience.date}
+						</time>
+					</div>
+
+					<div class="sm:col-span-8">
+						<ExperienceItem {...experience} />
+					</div>
 				</li>
 			))
 		}

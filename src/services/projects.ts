@@ -5,7 +5,7 @@ import Tailwind from "@/icons/Tailwind.astro"
 import Kotlin from "@/icons/Kotlin.astro"
 import Firebase from "@/icons/Firebase.astro"
 import Android from "@/icons/Android.astro"
-import { getI18N } from "@/locales/index"
+import { getI18N, normalizeLocale } from "@/locales/index"
 import NextJS from "@/icons/NextJS.astro"
 import Supabase from "@/icons/Supabase.astro"
 import ReactNative from "@/icons/ReactNative.astro"
@@ -90,12 +90,40 @@ const TAGS = {
 
 export const projectsService = (currentLocale?: string): Project[] => {
 	const i18n = getI18N({ currentLocale })
+	const locale = normalizeLocale(currentLocale)
+	const cover = (imgUrl: string, imgUrlEs?: string) =>
+		locale === "es" && imgUrlEs ? imgUrlEs : imgUrl
+
 	return [
+		{
+			id: "stop-trivia",
+			title: "Stop Trivia",
+			description: i18n.STOPT_TRIVIA_DESCRIPTION,
+			imgUrl: cover("/apps/stop-trivia/en/banner.png", "/apps/stop-trivia/es/banner-es.png"),
+			projectUrl:
+				"https://play.google.com/store/apps/details?id=com.rilisentertainment.stoptriviaonline",
+			tags: [TAGS.REACT_NATIVE, TAGS.FIREBASE, TAGS.ANDROID],
+			gitCodeUrl: "https://github.com/rixeldev/stop-trivia-react",
+			alt: i18n.PROJECT_STOP_TRIVIA_ALT,
+		},
+		{
+			id: "setuno",
+			title: "Setuno",
+			description: i18n.SETUNO_DESCRIPTION,
+			imgUrl: cover(
+				"/apps/setuno/en/feature-graphic-1024x500.png",
+				"/apps/setuno/es/feature-graphic-1024x500.png"
+			),
+			projectUrl: "https://play.google.com/store/apps/details?id=com.rixeldev.setuno",
+			tags: [TAGS.REACT_NATIVE, TAGS.FIREBASE, TAGS.ANDROID],
+			gitCodeUrl: "https://github.com/rixeldev",
+			alt: i18n.PROJECT_SETUNO_ALT,
+		},
 		{
 			id: "blackjack",
 			title: "Blackjack 21",
 			description: i18n.BLACKJACK_DESCRIPTION,
-			imgUrl: "https://rixel.dev/projects/blackjack.webp",
+			imgUrl: "/projects/blackjack.webp",
 			projectUrl: "https://blackjack-gray-tau.vercel.app",
 			tags: [TAGS.HTML, TAGS.CSS, TAGS.JS],
 			gitCodeUrl: "https://github.com/rixeldev/blackjack",
@@ -105,7 +133,7 @@ export const projectsService = (currentLocale?: string): Project[] => {
 			id: "el-chevere",
 			title: "El Chévere - Official Web",
 			description: i18n.EL_CHEVERE_WEB_DESCRIPTION,
-			imgUrl: "https://rixel.dev/projects/el-chevere.webp",
+			imgUrl: "/projects/el-chevere.webp",
 			projectUrl: "https://fotoestudioelchevere.vercel.app",
 			tags: [TAGS.ASTRO, TAGS.TAILWIND, TAGS.SUPABASE],
 			gitCodeUrl: "https://github.com/rixeldev/el-chevere-web",
@@ -115,7 +143,7 @@ export const projectsService = (currentLocale?: string): Project[] => {
 			id: "anjocc",
 			title: "ANJOCC",
 			description: i18n.ANJOCC_OFICIAL_DESCRIPTION,
-			imgUrl: "https://rixel.dev/projects/anjocc.webp",
+			imgUrl: "/projects/anjocc.webp",
 			projectUrl: "https://anjocc-web.vercel.app",
 			tags: [TAGS.ASTRO, TAGS.TAILWIND, TAGS.SUPABASE],
 			gitCodeUrl: "https://github.com/rixeldev/anjocc-web",
@@ -125,28 +153,17 @@ export const projectsService = (currentLocale?: string): Project[] => {
 			id: "gdn-pro",
 			title: "GDN Pro",
 			description: i18n.GDN_PRO_DESCRIPTION,
-			imgUrl: "https://rixel.dev/projects/gdn-pro.webp",
+			imgUrl: "/projects/gdn-pro.webp",
 			projectUrl: "https://gdnpro.com",
 			tags: [TAGS.NEXTJS, TAGS.TAILWIND, TAGS.SUPABASE],
 			gitCodeUrl: "https://github.com/gdnpro/gdnpro-nextjs",
 			alt: i18n.PROJECT_GDN_PRO_ALT,
 		},
 		{
-			id: "stop-trivia",
-			title: "Stop Trivia",
-			description: i18n.STOPT_TRIVIA_DESCRIPTION,
-			imgUrl: "https://rixel.dev/projects/stop-trivia.webp",
-			projectUrl:
-				"https://play.google.com/store/apps/details?id=com.rilisentertainment.stoptriviaonline",
-			tags: [TAGS.REACT_NATIVE, TAGS.FIREBASE, TAGS.ANDROID],
-			gitCodeUrl: "https://github.com/rixeldev/stop-trivia-react",
-			alt: i18n.PROJECT_STOP_TRIVIA_ALT,
-		},
-		{
 			id: "gdn-style",
 			title: "GDN Style",
 			description: i18n.GDN_STYLE_DESCRIPTION,
-			imgUrl: "https://rixel.dev/images/gdn-style.webp",
+			imgUrl: "/projects/gdn-style.webp",
 			projectUrl: "https://gdnstyle.com",
 			tags: [TAGS.NEXTJS, TAGS.TAILWIND],
 			gitCodeUrl: "https://github.com/rixeldev",
@@ -156,7 +173,7 @@ export const projectsService = (currentLocale?: string): Project[] => {
 			id: "fire-reservations",
 			title: "Fire Reservations",
 			description: i18n.FIRE_RESERVATIONS_DESCRIPTION,
-			imgUrl: "https://rixel.dev/projects/fire-reservations.webp",
+			imgUrl: "/projects/fire-reservations.webp",
 			projectUrl: "https://firereservations.vercel.app/",
 			tags: [TAGS.ASTRO, TAGS.TAILWIND],
 			gitCodeUrl: "https://github.com/rixeldev/firereservations-official",

@@ -1,7 +1,6 @@
 ---
 import MainTitle from "@/components/MainTitle.astro"
 import { SendForm } from "@/components/SendForm"
-import Chat from "@/icons/Chat.astro"
 import Check from "@/icons/Check.astro"
 import Copy from "@/icons/Copy.astro"
 import { getActiveLocale, getI18N } from "@/locales/index.ts"
@@ -16,56 +15,50 @@ const locale = forcedLocale ?? getActiveLocale(Astro)
 const i18n = getI18N({ currentLocale: locale })
 ---
 
-<div class="flex w-full max-w-4xl flex-col sm:w-11/12 md:w-8/12">
-	<MainTitle>
-		<Chat class="size-8" />
-		{i18n.CONTACT}
-	</MainTitle>
+<div class="grid w-full min-w-0 gap-12 lg:grid-cols-12 lg:gap-16">
+	<div class="flex flex-col gap-7 lg:col-span-6">
+		<MainTitle eyebrow={i18n.CONTACT} title={i18n.CONTACT_TITLE} />
 
-	<div class="mt-6 flex w-full flex-col gap-6 sm:flex-row sm:justify-between lg:gap-8">
-		<div
-			class="flex-1 rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 p-6 shadow-sm backdrop-blur-sm transition-all duration-300 sm:p-8"
-		>
-			<p class="mb-6 text-pretty text-primary transition-colors duration-300">
-				<strong class="font-semibold text-accent">{i18n.CONTACT_TXT_1}</strong>
-				{i18n.CONTACT_TXT_2}
-				<a
-					rel="noopener noreferrer"
-					href="https://instagram.com/rixelshoot"
-					target="_blank"
-					class="font-bold text-accent transition-all duration-300 active:text-accent/80 active:underline sm:hover:text-accent/80 sm:hover:underline"
-					>Instagram</a
-				>
-				{i18n.OR}
-				<a
-					rel="noopener noreferrer"
-					href="https://x.com/rixel_dev"
-					target="_blank"
-					class="font-bold text-accent transition-all duration-300 active:text-accent/80 active:underline sm:hover:text-accent/80 sm:hover:underline"
-					>X</a
-				>.
-			</p>
-
-			<p class="mb-6 text-pretty text-primary transition-colors duration-300">
-				{i18n.CONTACT_TXT_3}
-				<strong class="font-semibold text-accent">{i18n.CONTACT_TXT_4}</strong>
-				{i18n.CONTACT_TXT_5}
-			</p>
-
-			<div
-				class="flex h-fit w-fit flex-row items-center justify-center gap-3 rounded-xl bg-gradient-to-r from-accent/10 to-accent/30 px-4 py-2 shadow-sm transition-all duration-300 hover:shadow-md hover:shadow-accent/5"
+		<p class="max-w-lg text-pretty text-base leading-relaxed text-primary">
+			{i18n.CONTACT_TXT_2}
+			<a
+				rel="noopener noreferrer"
+				href="https://instagram.com/rixelshoot"
+				target="_blank"
+				class="text-bone underline decoration-accent decoration-2 underline-offset-4 transition-colors hover:text-accent"
+				>Instagram</a
 			>
-				<h5 id="email" class="font-bold text-accent">{email}</h5>
+			{i18n.OR}
+			<a
+				rel="noopener noreferrer"
+				href="https://x.com/rixel_dev"
+				target="_blank"
+				class="text-bone underline decoration-accent decoration-2 underline-offset-4 transition-colors hover:text-accent"
+				>X</a
+			>.
+		</p>
 
-				<Copy
-					id="copyEmailIcon"
-					class="inline-block size-5 cursor-pointer text-accent transition-all duration-300 hover:scale-110 hover:text-accent/80 active:scale-95"
-				/>
+		<p class="max-w-lg text-pretty text-base leading-relaxed text-primary">
+			{i18n.CONTACT_TXT_3}
+			<strong class="font-semibold text-accent">{i18n.CONTACT_TXT_4}</strong>
+			{i18n.CONTACT_TXT_5}
+		</p>
 
-				<Check id="copiedEmailIcon" class="hidden size-5 text-accent" />
-			</div>
+		<div
+			class="flex w-fit flex-row items-center gap-3 rounded-full border border-line bg-ink-panel px-5 py-3"
+		>
+			<h4 id="email" class="font-mono text-sm text-bone">{email}</h4>
+
+			<Copy
+				id="copyEmailIcon"
+				class="inline-block size-4 cursor-pointer text-secondary transition-colors hover:text-accent"
+			/>
+
+			<Check id="copiedEmailIcon" class="hidden size-4 text-accent" />
 		</div>
+	</div>
 
+	<div class="lg:col-span-6">
 		<SendForm client:visible locale={locale} />
 	</div>
 </div>
@@ -77,12 +70,15 @@ const i18n = getI18N({ currentLocale: locale })
 	document.addEventListener("astro:page-load", () => {
 		const copyEmailIcon = $("#copyEmailIcon")
 		const copiedEmailIcon = $("#copiedEmailIcon")
+		if (!copyEmailIcon || copyEmailIcon.dataset.copyReady === "true") return
+		copyEmailIcon.dataset.copyReady = "true"
+
 		const documentLocale = document.documentElement.lang || "en"
 		const i18n = getI18N({ currentLocale: documentLocale })
 
-		copyEmailIcon?.addEventListener("click", () => {
-			copyEmailIcon?.classList.remove("inline-block")
-			copyEmailIcon?.classList.add("hidden")
+		copyEmailIcon.addEventListener("click", () => {
+			copyEmailIcon.classList.remove("inline-block")
+			copyEmailIcon.classList.add("hidden")
 			copiedEmailIcon?.classList.add("inline-block")
 			copiedEmailIcon?.classList.remove("hidden")
 
@@ -97,8 +93,8 @@ const i18n = getI18N({ currentLocale: locale })
 			})
 
 			setTimeout(() => {
-				copyEmailIcon?.classList.add("inline-block")
-				copyEmailIcon?.classList.remove("hidden")
+				copyEmailIcon.classList.add("inline-block")
+				copyEmailIcon.classList.remove("hidden")
 				copiedEmailIcon?.classList.remove("inline-block")
 				copiedEmailIcon?.classList.add("hidden")
 			}, 3000)

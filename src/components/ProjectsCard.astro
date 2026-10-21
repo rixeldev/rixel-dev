@@ -1,8 +1,7 @@
 ---
 import GitHub from "@/icons/GitHub.astro"
-import Send from "@/icons/Send.astro"
+import RightArrow from "@/icons/RightArrow.astro"
 import { getActiveLocale, getI18N } from "@/locales/index.ts"
-import LinkButton from "./LinkButton.astro"
 
 interface Props {
 	title: string
@@ -25,66 +24,77 @@ const i18n = getI18N({ currentLocale: locale })
 ---
 
 <article
-	class="fade-up-anim group flex flex-col space-x-0 space-y-8 lg:flex-row lg:space-x-8 lg:space-y-0"
+	class="group flex h-full min-w-0 flex-col overflow-hidden rounded-3xl border border-line bg-ink-panel"
 >
-	<div class="md:1/2 w-full">
-		<div
-			class="relative col-span-6 row-span-5 flex transform flex-col items-center gap-8 overflow-clip rounded-xl border-2 border-slate-800/50 bg-gradient-to-br from-primary/10 via-accent/10 to-primary/5 shadow-lg shadow-accent/5 backdrop-blur-sm transition-all duration-500 ease-in-out sm:hover:border-accent/40 sm:hover:bg-gradient-to-br sm:hover:from-accent/10 sm:hover:via-primary/10 sm:hover:to-accent/10 sm:group-hover:-translate-y-2 sm:group-hover:translate-x-1 sm:group-hover:shadow-2xl sm:group-hover:shadow-accent/20"
-		>
-			<img
-				src={imgUrl}
-				alt={alt}
-				width="1280"
-				height="720"
-				decoding="async"
-				loading="lazy"
-				class="h-56 w-full object-cover object-top transition-all duration-500 sm:h-full sm:scale-110 sm:group-hover:scale-105 sm:group-hover:brightness-110"
-			/>
-			<div
-				class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 transition-opacity duration-500 sm:group-hover:opacity-100"
-			>
-			</div>
-		</div>
-	</div>
+	<a
+		href={projectUrl}
+		target="_blank"
+		rel="noopener noreferrer"
+		class="relative block overflow-hidden"
+		aria-label={`${title} — ${i18n.SQUINT}`}
+	>
+		<img
+			src={imgUrl}
+			alt={alt}
+			width="1280"
+			height="720"
+			decoding="async"
+			loading="lazy"
+			class="aspect-video w-full object-cover object-top opacity-90 transition-all duration-700 group-hover:scale-105 group-hover:opacity-100"
+		/>
 
-	<div class="flex w-full flex-col gap-3 md:max-w-lg">
-		<h3
-			class="bg-gradient-to-r from-slate-200 to-slate-400 bg-clip-text text-2xl font-bold text-transparent transition-all duration-300 sm:group-hover:from-accent sm:group-hover:to-accent/80"
+		<span
+			class="absolute right-4 top-4 flex size-9 translate-y-1 items-center justify-center rounded-full bg-accent text-accent-ink opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100"
 		>
-			{title}
-		</h3>
+			<RightArrow class="size-4 -rotate-45" />
+		</span>
+	</a>
 
-		<ul class="mb-2 flex flex-row flex-wrap gap-x-2 gap-y-2">
+	<div class="flex flex-1 flex-col gap-3 p-6">
+		<ul class="flex flex-wrap gap-2">
 			{
 				tags.map((tag) => (
-					<li>
-						<span
-							class={`flex gap-x-2 rounded-full border border-primary/20 bg-gradient-to-br from-primary/10 to-accent/10 px-3 py-1.5 text-xs font-semibold shadow-sm transition-all duration-300 group-hover:border-accent/30 group-hover:shadow-md group-hover:shadow-accent/10 ${tag.class}`}
-						>
-							<tag.icon
-								class={`size-4 transition-transform duration-300 group-hover:scale-110 ${tag.iconColor}`}
-							/>
-							{tag.name}
-						</span>
+					<li class="inline-flex items-center gap-1.5 rounded-full border border-line px-2.5 py-1 font-mono text-xs text-secondary">
+						<tag.icon class="size-3" />
+						{tag.name}
 					</li>
 				))
 			}
 		</ul>
 
-		<p class="mt-2 h-full text-pretty leading-relaxed text-primary">
-			{description}
-		</p>
+		<h3 class="font-display text-2xl text-bone">
+			<a
+				href={projectUrl}
+				target="_blank"
+				rel="noopener noreferrer"
+				class="transition-colors hover:text-accent"
+			>
+				{title}
+			</a>
+		</h3>
 
-		<footer class="mt-4 flex h-fit w-full items-end justify-start gap-x-4">
-			<LinkButton href={projectUrl}>
-				<Send class="size-6 transition-transform duration-300 group-hover:translate-x-1" />
+		<p class="line-clamp-3 text-sm leading-relaxed text-primary">{description}</p>
+
+		<footer class="mt-auto flex items-center justify-between gap-4 border-t border-line pt-4">
+			<a
+				href={projectUrl}
+				target="_blank"
+				rel="noopener noreferrer"
+				class="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-accent"
+			>
 				{i18n.SQUINT}
-			</LinkButton>
+				<RightArrow class="size-3.5 transition-transform group-hover:translate-x-0.5" />
+			</a>
 
-			<LinkButton href={gitCodeUrl}>
-				<GitHub class="size-6 transition-transform duration-300 group-hover:scale-110" />
-				{i18n.CODE}
-			</LinkButton>
+			<a
+				href={gitCodeUrl}
+				target="_blank"
+				rel="noopener noreferrer"
+				aria-label={`${title} — GitHub`}
+				class="text-secondary transition-colors hover:text-bone"
+			>
+				<GitHub class="size-4" />
+			</a>
 		</footer>
 	</div>
 </article>

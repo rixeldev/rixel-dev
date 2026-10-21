@@ -1,119 +1,109 @@
 ---
 import Badge from "@/components/Badge.astro"
-import Divider from "@/components/Divider.astro"
-import SocialPill from "@/components/SocialPill.astro"
+import ActionLink from "@/components/ui/ActionLink.astro"
 import Binoculars from "@/icons/Binoculars.astro"
 import Chat from "@/icons/Chat.astro"
 import Check from "@/icons/Check.astro"
 import GitHub from "@/icons/GitHub.astro"
 import LinkedIn from "@/icons/LinkedIn.astro"
-import { getActiveLocale, getI18N } from "@/locales/index"
-import PhotographyCard from "../PhotographyCard.astro"
+import { getActiveLocale, getI18N, resolveLocalizedHref } from "@/locales/index"
 
 const locale = getActiveLocale(Astro)
 const i18n = getI18N({ currentLocale: locale })
+
+const socials = [
+	{ href: "https://www.linkedin.com/in/rixeldev/", label: "LinkedIn", icon: LinkedIn },
+	{ href: "https://github.com/rixeldev", label: "GitHub", icon: GitHub },
+	{ href: "https://www.rixel.dev/archives/web-cv.pdf", label: i18n.WATCH_CV, icon: Binoculars },
+	{ href: "#contact", label: i18n.CONTACT, icon: Chat },
+]
 ---
 
-<div class="flex w-full max-w-4xl flex-col sm:w-11/12 md:w-8/12">
-	<div class="flex w-full flex-row items-center gap-4">
-		<a
-			id="img-container"
-			href="https://rixel.dev/portfolio"
-			rel="noopener noreferrer"
-			class="group relative size-20 overflow-hidden rounded-full shadow-lg shadow-black/60 ring-2 ring-accent/20 transition-all duration-300 ease-in-out sm:size-36 sm:hover:scale-105 sm:hover:shadow-xl sm:hover:shadow-accent/20 sm:hover:ring-accent/40"
+<div class="grid w-full min-w-0 items-center gap-12 lg:grid-cols-12 lg:gap-16">
+	<div class="flex min-w-0 flex-col gap-7 lg:col-span-7">
+		<p class="font-mono text-xs uppercase tracking-widest text-secondary">
+			{i18n.PORTFOLIO}
+			<span class="text-accent">/</span>
+			{i18n.ABOUT_ME}
+		</p>
+
+		<h1
+			class="display-balance font-display text-5xl font-semibold leading-none tracking-tight text-bone sm:text-6xl lg:text-7xl"
 		>
-			<img
-				src="https://rixel.dev/images/main-pic.webp"
-				class="scale-105 object-cover transition duration-300 ease-in-out active:group-hover:scale-100 sm:group-hover:scale-100"
-				height="1200"
-				width="630"
-				alt="Rikelvi Capellán portfolio picture"
-			/>
-			<div
-				class="absolute inset-0 bg-gradient-to-br from-accent/10 via-transparent to-primary/10 opacity-0 transition-opacity duration-300 sm:group-hover:opacity-100"
-			>
-			</div>
+			Rikelvi <span class="text-accent">Capellán</span>
+		</h1>
+
+		<p class="font-mono text-sm uppercase tracking-widest text-accent">
+			{i18n.ABOUT_TEXT_1}
+		</p>
+
+		<p class="max-w-2xl text-pretty text-base leading-relaxed text-primary sm:text-lg">
+			{i18n.ABOUT_TEXT_2}
+			<strong class="font-semibold text-bone">{i18n.ABOUT_TEXT_3}</strong>
+			{i18n.ABOUT_TEXT_6}
+			<strong class="font-semibold text-bone">{i18n.ABOUT_TEXT_4}</strong>
+			{i18n.FOOTER_TXT_2}
+			<strong class="font-semibold text-bone">{i18n.ABOUT_TEXT_5}</strong>
+			{i18n.ABOUT_TEXT_6}
+			<strong class="font-semibold text-bone">{i18n.ABOUT_TEXT_7}</strong>
+			{i18n.ABOUT_TEXT_8}
+		</p>
+
+		<a
+			href="https://www.linkedin.com/in/rixeldev/"
+			target="_blank"
+			rel="noopener noreferrer"
+			class="group/badge w-fit"
+		>
+			<Badge class="border-accent/30 bg-accent/10">
+				<Check class="mr-2 size-4 text-accent transition-transform group-hover/badge:scale-110" />
+				<span class="font-mono text-xs uppercase tracking-wider text-accent">{i18n.AVAILABLE}</span>
+			</Badge>
 		</a>
 
-		<div class="flex flex-col items-start gap-2">
-			<h1
-				class="bg-gradient-to-r from-slate-200 to-slate-400 bg-clip-text text-3xl font-bold text-transparent sm:text-4xl md:text-5xl"
-			>
-				Rikelvi Capellán
-			</h1>
-			<h3 class="text-md font-semibold text-slate-300 sm:text-xl">
-				{i18n.ABOUT_TEXT_1}
-			</h3>
+		<ul class="flex flex-wrap gap-2">
+			{
+				socials.map((social) => (
+					<li>
+						<a
+							href={social.href}
+							target="_blank"
+							rel="noopener noreferrer"
+							class="inline-flex items-center gap-2 rounded-full border border-line bg-bone/5 px-4 py-2 text-sm font-medium text-primary transition-colors hover:border-accent/40 hover:text-accent"
+						>
+							<social.icon class="size-4" />
+							{social.label}
+						</a>
+					</li>
+				))
+			}
+		</ul>
 
-			<a
-				href="https://www.linkedin.com/in/rixeldev/"
-				target="_blank"
-				rel="noopener noreferrer"
-				class="group/badge"
-			>
-				<Badge>
-					<Check
-						class="mr-2 h-5 w-5 text-accent transition-transform duration-300 group-hover/badge:scale-110"
-					/>
-					<h5 class="font-bold text-accent">{i18n.AVAILABLE}</h5>
-				</Badge>
-			</a>
+		<div class="flex flex-wrap gap-3 border-t border-line pt-6">
+			<ActionLink href={resolveLocalizedHref("/apps", locale)}>
+				{i18n.HOME_CTA_APPS}
+			</ActionLink>
+			<ActionLink href={resolveLocalizedHref("/articles", locale)} variant="ghost">
+				{i18n.ARTICLES}
+			</ActionLink>
 		</div>
 	</div>
 
-	<Divider />
-
-	<div class="flex w-full flex-col items-center">
+	<div class="relative mx-auto w-full max-w-sm lg:col-span-5 lg:max-w-none">
 		<div
-			class="relative w-full rounded-2xl bg-gradient-to-br from-primary/5 via-accent/5 to-primary/10 p-6 backdrop-blur-sm sm:p-8"
+			class="pointer-events-none absolute -inset-5 rounded-5xl bg-accent/10 blur-3xl"
+			aria-hidden="true"
 		>
-			<h3 class="text-md font-semibold leading-relaxed text-primary sm:text-balance sm:text-xl">
-				{i18n.ABOUT_TEXT_2}
-				<strong class="font-bold text-accent">{i18n.ABOUT_TEXT_3}</strong>
-				{i18n.ABOUT_TEXT_6}
-				<strong class="font-bold text-accent">{i18n.ABOUT_TEXT_4}</strong>
-				{i18n.FOOTER_TXT_2}
-				<strong class="font-bold text-accent">{i18n.ABOUT_TEXT_5}</strong>
-				{i18n.ABOUT_TEXT_6}
-				<strong class="font-bold text-accent">{i18n.ABOUT_TEXT_7}</strong>
-				{i18n.ABOUT_TEXT_8}
-			</h3>
 		</div>
 
-		<nav class="mb-2 mt-8 flex w-full flex-wrap gap-3">
-			<SocialPill
-				target="_blank"
-				rel="noopener noreferrer"
-				href="https://www.linkedin.com/in/rixeldev/"
-			>
-				<LinkedIn class="size-6" />
-				LinkedIn
-			</SocialPill>
-
-			<SocialPill target="_blank" rel="noopener noreferrer" href="https://github.com/rixeldev">
-				<GitHub class="size-5" />
-				GitHub
-			</SocialPill>
-
-			<SocialPill
-				target="_blank"
-				rel="noopener noreferrer"
-				href="https://www.rixel.dev/archives/web-cv.pdf"
-			>
-				<Binoculars class="size-6" />
-				{i18n.WATCH_CV}
-			</SocialPill>
-
-			<SocialPill href="#contact">
-				<Chat class="size-5" />
-				{i18n.CONTACT}
-			</SocialPill>
-		</nav>
-
-		<Divider />
-	</div>
-
-	<div class="flex w-full flex-col items-center">
-		<PhotographyCard />
+		<div class="relative overflow-hidden rounded-4xl border border-line bg-ink-panel p-2">
+			<img
+				src="/images/main-pic.webp"
+				width="630"
+				height="1200"
+				alt="Rikelvi Capellán portfolio portrait"
+				class="aspect-portrait w-full rounded-3xl object-cover object-center"
+			/>
+		</div>
 	</div>
 </div>

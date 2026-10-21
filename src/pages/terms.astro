@@ -1,6 +1,14 @@
 ---
+import MainTitle from "@/components/MainTitle.astro"
+import SectionContainer from "@/components/SectionContainer.astro"
+import ActionLink from "@/components/ui/ActionLink.astro"
 import Layout from "@/layouts/Layout.astro"
-import { getActiveLocale, getI18N, resolveLocalizedPath } from "@/locales/index"
+import {
+	getActiveLocale,
+	getI18N,
+	resolveLocalizedHref,
+	resolveLocalizedPath,
+} from "@/locales/index"
 
 const locale = getActiveLocale(Astro)
 const i18n = getI18N({ currentLocale: locale })
@@ -11,7 +19,28 @@ const i18n = getI18N({ currentLocale: locale })
 	description={i18n.TERMS_PAGE_DESCRIPTION}
 	canonical={new URL(resolveLocalizedPath("/terms/", locale), "https://rixel.dev").toString()}
 >
-	<section class="section flex min-h-[40vh] items-center justify-center px-4 py-24 sm:px-6 lg:px-8">
-		<p class="text-center text-lg text-slate-200">{i18n.TERMS_UNAVAILABLE}</p>
-	</section>
+	<SectionContainer class="pb-28 pt-36">
+		<div class="flex w-full max-w-2xl flex-col gap-6">
+			<MainTitle eyebrow="Legal" title={i18n.TERMS} />
+
+			<p class="text-pretty text-base leading-relaxed text-primary">
+				{i18n.TERMS_PAGE_DESCRIPTION}
+			</p>
+
+			<p
+				class="rounded-3xl border border-line bg-ink-panel px-5 py-6 text-center text-base text-bone"
+			>
+				{i18n.TERMS_UNAVAILABLE}
+			</p>
+
+			<div class="flex flex-wrap gap-3">
+				<ActionLink href={resolveLocalizedHref("/privacy", locale)} variant="ghost">
+					{i18n.PRIVACY}
+				</ActionLink>
+				<ActionLink href={resolveLocalizedHref("/#contact", locale)}>
+					{i18n.CONTACT}
+				</ActionLink>
+			</div>
+		</div>
+	</SectionContainer>
 </Layout>

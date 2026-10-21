@@ -11,13 +11,11 @@ const i18n = getI18N({ currentLocale: locale })
 	description={i18n.PRIVACY_PAGE_DESCRIPTION}
 	canonical={new URL(resolveLocalizedPath("/privacy/", locale), "https://rixel.dev").toString()}
 >
-	<article class="flex w-full flex-col items-center py-20">
-		<div class="flex w-full flex-col items-center sm:w-11/12 md:w-8/12">
-			<section
-				class="fade-up-anim mb-6 w-full max-w-4xl rounded-xl bg-primary/5 px-5 py-4 shadow-slate-950"
-			>
+	<article class="mx-auto flex w-full max-w-4xl flex-col items-center px-4 pb-24 pt-32 sm:px-6">
+		<div class="flex w-full flex-col items-center">
+			<section class="mb-6 w-full max-w-4xl rounded-3xl border border-line bg-ink-panel px-5 py-5">
 				<p class="text-2xl font-bold text-accent">{i18n.PRIVACY}</p>
-				<p class="mb-2 text-sm font-semibold text-slate-600">
+				<p class="mb-2 text-sm font-semibold text-secondary">
 					{i18n.LAST_UPDATED}
 				</p>
 				<p class="text-primary">
@@ -25,23 +23,21 @@ const i18n = getI18N({ currentLocale: locale })
 				</p>
 			</section>
 
-			<h2 class="mb-2 font-semibold italic text-slate-600">
+			<h2 class="mb-2 font-semibold italic text-secondary">
 				{i18n.FOR_APPS}
 			</h2>
-			<section
-				class="fade-up-anim mb-6 w-full max-w-4xl rounded-xl bg-primary/5 px-5 py-4 shadow-slate-950"
-			>
-				<p class="text-xl font-bold text-slate-200">
+			<section class="mb-6 w-full max-w-4xl rounded-3xl border border-line bg-ink-panel px-5 py-5">
+				<p class="text-xl font-bold text-bone">
 					1. {i18n.INFORMATION_WE_COLLETC}
 				</p>
-				<p class="mt-2 font-semibold text-slate-300">
+				<p class="mt-2 font-semibold text-primary">
 					1.1 {i18n.LOGIN_INFORMATION}
 				</p>
 				<p class="text-primary">
 					{i18n.PRIVACY_APP_P_2}
 				</p>
 
-				<p class="mt-2 font-semibold text-slate-300">
+				<p class="mt-2 font-semibold text-primary">
 					1.2 {i18n.APP_INFORMATION}
 				</p>
 				<p class="text-primary">
@@ -49,27 +45,25 @@ const i18n = getI18N({ currentLocale: locale })
 				</p>
 			</section>
 
-			<section
-				class="fade-up-anim mb-6 w-full max-w-4xl rounded-xl bg-primary/5 px-5 py-4 shadow-slate-950"
-			>
-				<p class="text-xl font-bold text-slate-200">
+			<section class="mb-6 w-full max-w-4xl rounded-3xl border border-line bg-ink-panel px-5 py-5">
+				<p class="text-xl font-bold text-bone">
 					2. {i18n.USE_OF_INFORMATION}
 				</p>
-				<p class="mt-2 font-semibold text-slate-300">
+				<p class="mt-2 font-semibold text-primary">
 					2.1 {i18n.PERSONALIZATION_IMPROVEMENT}
 				</p>
 				<p class="text-primary">
 					{i18n.PRIVACY_APP_P_4}
 				</p>
 
-				<p class="mt-2 font-semibold text-slate-300">
+				<p class="mt-2 font-semibold text-primary">
 					2.2 {i18n.COMMUNICATION}
 				</p>
 				<p class="text-primary">
 					{i18n.PRIVACY_APP_P_5}
 				</p>
 
-				<p class="mt-2 font-semibold text-slate-300">
+				<p class="mt-2 font-semibold text-primary">
 					2.3 {i18n.ANALYSIS_AND_STATISTICS}
 				</p>
 				<p class="text-primary">
@@ -77,20 +71,18 @@ const i18n = getI18N({ currentLocale: locale })
 				</p>
 			</section>
 
-			<section
-				class="fade-up-anim mb-6 w-full max-w-4xl rounded-xl bg-primary/5 px-5 py-4 shadow-slate-950"
-			>
-				<p class="text-xl font-bold text-slate-200">
+			<section class="mb-6 w-full max-w-4xl rounded-3xl border border-line bg-ink-panel px-5 py-5">
+				<p class="text-xl font-bold text-bone">
 					3. {i18n.SHARING_INFORMATION}
 				</p>
-				<p class="mt-2 font-semibold text-slate-300">
+				<p class="mt-2 font-semibold text-primary">
 					3.1 {i18n.TRUSTED_THIRD_PARTIES}
 				</p>
 				<p class="text-primary">
 					{i18n.PRIVACY_APP_P_7}
 				</p>
 
-				<p class="mt-2 font-semibold text-slate-300">
+				<p class="mt-2 font-semibold text-primary">
 					3.2 {i18n.LEGAL_COMPLIANCE}
 				</p>
 				<p class="text-primary">
@@ -98,10 +90,8 @@ const i18n = getI18N({ currentLocale: locale })
 				</p>
 			</section>
 
-			<section
-				class="fade-up-anim mb-6 w-full max-w-4xl rounded-xl bg-primary/5 px-5 py-4 shadow-slate-950"
-			>
-				<p class="text-xl font-bold text-slate-200">
+			<section class="mb-6 w-full max-w-4xl rounded-3xl border border-line bg-ink-panel px-5 py-5">
+				<p class="text-xl font-bold text-bone">
 					4. {i18n.DATA_SECURITY}
 				</p>
 				<p class="text-primary">
@@ -109,10 +99,8 @@ const i18n = getI18N({ currentLocale: locale })
 				</p>
 			</section>
 
-			<section
-				class="fade-up-anim mb-6 w-full max-w-4xl rounded-xl bg-primary/5 px-5 py-4 shadow-slate-950"
-			>
-				<p class="text-xl font-bold text-slate-200">
+			<section class="mb-6 w-full max-w-4xl rounded-3xl border border-line bg-ink-panel px-5 py-5">
+				<p class="text-xl font-bold text-bone">
 					5. {i18n.YOUR_RIGHTS}
 				</p>
 				<p class="text-primary">
@@ -120,10 +108,8 @@ const i18n = getI18N({ currentLocale: locale })
 				</p>
 			</section>
 
-			<section
-				class="fade-up-anim mb-6 w-full max-w-4xl rounded-xl bg-primary/5 px-5 py-4 shadow-slate-950"
-			>
-				<p class="text-xl font-bold text-slate-200">
+			<section class="mb-6 w-full max-w-4xl rounded-3xl border border-line bg-ink-panel px-5 py-5">
+				<p class="text-xl font-bold text-bone">
 					6. {i18n.CHANGES_POLICY}
 				</p>
 				<p class="text-primary">
@@ -131,23 +117,21 @@ const i18n = getI18N({ currentLocale: locale })
 				</p>
 			</section>
 
-			<h2 class="mb-2 font-semibold italic text-slate-600">
+			<h2 class="mb-2 font-semibold italic text-secondary">
 				{i18n.FOR_GAMES}
 			</h2>
-			<section
-				class="fade-up-anim mb-6 w-full max-w-4xl rounded-xl bg-primary/5 px-5 py-4 shadow-slate-950"
-			>
-				<p class="text-xl font-bold text-slate-200">
+			<section class="mb-6 w-full max-w-4xl rounded-3xl border border-line bg-ink-panel px-5 py-5">
+				<p class="text-xl font-bold text-bone">
 					1. {i18n.INFORMATION_WE_COLLETC}
 				</p>
-				<p class="mt-2 font-semibold text-slate-300">
+				<p class="mt-2 font-semibold text-primary">
 					1.1 {i18n.LOGIN_INFORMATION}
 				</p>
 				<p class="text-primary">
 					{i18n.PRIVACY_GAMES_P_1}
 				</p>
 
-				<p class="mt-2 font-semibold text-slate-300">
+				<p class="mt-2 font-semibold text-primary">
 					1.2 {i18n.GAME_INFORMATION}
 				</p>
 				<p class="text-primary">
@@ -155,27 +139,25 @@ const i18n = getI18N({ currentLocale: locale })
 				</p>
 			</section>
 
-			<section
-				class="fade-up-anim mb-6 w-full max-w-4xl rounded-xl bg-primary/5 px-5 py-4 shadow-slate-950"
-			>
-				<p class="text-xl font-bold text-slate-200">
+			<section class="mb-6 w-full max-w-4xl rounded-3xl border border-line bg-ink-panel px-5 py-5">
+				<p class="text-xl font-bold text-bone">
 					2. {i18n.USE_OF_INFORMATION}
 				</p>
-				<p class="mt-2 font-semibold text-slate-300">
+				<p class="mt-2 font-semibold text-primary">
 					2.1 {i18n.PERSONALIZATION_IMPROVEMENT}
 				</p>
 				<p class="text-primary">
 					{i18n.PRIVACY_GAMES_P_3}
 				</p>
 
-				<p class="mt-2 font-semibold text-slate-300">
+				<p class="mt-2 font-semibold text-primary">
 					2.2 {i18n.COMMUNICATION}
 				</p>
 				<p class="text-primary">
 					{i18n.PRIVACY_GAMES_P_4}
 				</p>
 
-				<p class="mt-2 font-semibold text-slate-300">
+				<p class="mt-2 font-semibold text-primary">
 					2.3 {i18n.ANALYSIS_AND_STATISTICS}
 				</p>
 				<p class="text-primary">
@@ -183,20 +165,18 @@ const i18n = getI18N({ currentLocale: locale })
 				</p>
 			</section>
 
-			<section
-				class="fade-up-anim mb-6 w-full max-w-4xl rounded-xl bg-primary/5 px-5 py-4 shadow-slate-950"
-			>
-				<p class="text-xl font-bold text-slate-200">
+			<section class="mb-6 w-full max-w-4xl rounded-3xl border border-line bg-ink-panel px-5 py-5">
+				<p class="text-xl font-bold text-bone">
 					3. {i18n.SHARING_INFORMATION}
 				</p>
-				<p class="mt-2 font-semibold text-slate-300">
+				<p class="mt-2 font-semibold text-primary">
 					3.1 {i18n.TRUSTED_THIRD_PARTIES}
 				</p>
 				<p class="text-primary">
 					{i18n.PRIVACY_GAMES_P_6}
 				</p>
 
-				<p class="mt-2 font-semibold text-slate-300">
+				<p class="mt-2 font-semibold text-primary">
 					3.2 {i18n.LEGAL_COMPLIANCE}
 				</p>
 				<p class="text-primary">
@@ -204,10 +184,8 @@ const i18n = getI18N({ currentLocale: locale })
 				</p>
 			</section>
 
-			<section
-				class="fade-up-anim mb-6 w-full max-w-4xl rounded-xl bg-primary/5 px-5 py-4 shadow-slate-950"
-			>
-				<p class="text-xl font-bold text-slate-200">
+			<section class="mb-6 w-full max-w-4xl rounded-3xl border border-line bg-ink-panel px-5 py-5">
+				<p class="text-xl font-bold text-bone">
 					4. {i18n.DATA_SECURITY}
 				</p>
 				<p class="text-primary">
@@ -215,10 +193,8 @@ const i18n = getI18N({ currentLocale: locale })
 				</p>
 			</section>
 
-			<section
-				class="fade-up-anim mb-6 w-full max-w-4xl rounded-xl bg-primary/5 px-5 py-4 shadow-slate-950"
-			>
-				<p class="text-xl font-bold text-slate-200">
+			<section class="mb-6 w-full max-w-4xl rounded-3xl border border-line bg-ink-panel px-5 py-5">
+				<p class="text-xl font-bold text-bone">
 					5. {i18n.YOUR_RIGHTS}
 				</p>
 				<p class="text-primary">
@@ -226,10 +202,8 @@ const i18n = getI18N({ currentLocale: locale })
 				</p>
 			</section>
 
-			<section
-				class="fade-up-anim mb-6 w-full max-w-4xl rounded-xl bg-primary/5 px-5 py-4 shadow-slate-950"
-			>
-				<p class="text-xl font-bold text-slate-200">
+			<section class="mb-6 w-full max-w-4xl rounded-3xl border border-line bg-ink-panel px-5 py-5">
+				<p class="text-xl font-bold text-bone">
 					6. {i18n.CHANGES_POLICY}
 				</p>
 				<p class="text-primary">

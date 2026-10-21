@@ -1,12 +1,13 @@
 ---
-import UpArrow from '@/icons/UpArrow.astro'
+import UpArrow from "@/icons/UpArrow.astro"
 ---
 
 <a
-	id='go-top-btn'
-	class='bg-glass group fixed bottom-24 right-5 z-30 flex size-12 cursor-pointer items-center justify-center rounded-2xl border border-accent/30 text-accent shadow-lg shadow-accent/20 backdrop-blur-md transition-all duration-300 hover:scale-110 hover:border-accent/50 hover:bg-accent/10 hover:shadow-xl hover:shadow-accent/30 active:scale-95'
+	id="go-top-btn"
+	class="group fixed bottom-20 right-5 z-30 flex size-11 cursor-pointer items-center justify-center rounded-full border border-line bg-ink-soft/80 text-bone shadow-lg shadow-black/40 backdrop-blur-md transition-colors duration-300 hover:border-accent/50 hover:text-accent"
+	aria-label="Back to top"
 >
-	<UpArrow class='size-6 transition-transform duration-300 md:rotate-45 md:group-hover:rotate-0' />
+	<UpArrow class="size-4 transition-transform duration-300 group-hover:-translate-y-0.5" />
 </a>
 
 <style>
@@ -27,12 +28,15 @@ import UpArrow from '@/icons/UpArrow.astro'
 </style>
 
 <script>
-	import { $ } from '@/libs/dom-selector'
+	import { $ } from "@/libs/dom-selector"
 
-	document.addEventListener('astro:page-load', () => {
-		const goToTopBtn = $('#go-top-btn') as HTMLAnchorElement
-		goToTopBtn.addEventListener('click', () => {
-			window.scrollTo(0, 0)
+	document.addEventListener("astro:page-load", () => {
+		const goToTopBtn = $("#go-top-btn") as HTMLAnchorElement
+		if (!goToTopBtn || goToTopBtn.dataset.topReady === "true") return
+		goToTopBtn.dataset.topReady = "true"
+
+		goToTopBtn.addEventListener("click", () => {
+			window.scrollTo({ top: 0, behavior: "smooth" })
 		})
 	})
 </script>

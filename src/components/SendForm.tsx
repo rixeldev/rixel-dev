@@ -41,17 +41,21 @@ export const SendForm = ({ locale = "en" }: SendFormProps) => {
 		<form
 			ref={formRef}
 			onSubmit={handleSubmit}
-			className="flex-1 rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 p-6 shadow-sm backdrop-blur-sm transition-all duration-300 sm:w-full sm:p-8"
+			className="flex-1 rounded-4xl border border-line bg-ink-panel p-6 sm:p-8"
 		>
-			<span className="text-sm font-light italic text-secondary/80">{i18n.CONTACT_TXT_6}</span>
+			<span className="font-mono text-xs uppercase tracking-wider text-secondary">
+				{i18n.CONTACT_TXT_6}
+			</span>
 
-			<div className="mt-4 flex flex-col gap-4">
+			<div className="mt-6 flex flex-col gap-4">
 				<label className="inline-flex flex-col gap-2">
-					<span className="text-sm font-medium text-primary">{i18n.NAME}*</span>
+					<span className="font-mono text-xs uppercase tracking-wider text-secondary">
+						{i18n.NAME}*
+					</span>
 					<input
 						required
 						autoComplete="name"
-						className="h-11 rounded-xl bg-slate-800/50 px-4 py-2 text-primary outline-none transition-all duration-300 placeholder:text-secondary/60 focus:bg-slate-800/80 focus:shadow-md focus:shadow-accent/10"
+						className="h-11 w-full rounded-xl border border-line bg-ink/60 px-4 py-2 text-sm text-bone outline-none transition-colors placeholder:text-secondary/70 focus:border-accent/60"
 						type="text"
 						name="user_name"
 						placeholder={i18n.CONTACT_NAME_PLACEHOLDER ?? "Jane Doe"}
@@ -59,11 +63,13 @@ export const SendForm = ({ locale = "en" }: SendFormProps) => {
 				</label>
 
 				<label className="inline-flex flex-col gap-2">
-					<span className="text-sm font-medium text-primary">{i18n.EMAIL}*</span>
+					<span className="font-mono text-xs uppercase tracking-wider text-secondary">
+						{i18n.EMAIL}*
+					</span>
 					<input
 						required
 						autoComplete="email"
-						className="h-11 rounded-xl bg-slate-800/50 px-4 py-2 text-primary outline-none transition-all duration-300 placeholder:text-secondary/60 focus:bg-slate-800/80 focus:shadow-md focus:shadow-accent/10"
+						className="h-11 w-full rounded-xl border border-line bg-ink/60 px-4 py-2 text-sm text-bone outline-none transition-colors placeholder:text-secondary/70 focus:border-accent/60"
 						type="email"
 						name="user_email"
 						placeholder={i18n.CONTACT_EMAIL_PLACEHOLDER ?? "your@email.com"}
@@ -71,10 +77,12 @@ export const SendForm = ({ locale = "en" }: SendFormProps) => {
 				</label>
 
 				<label className="inline-flex flex-col gap-2">
-					<span className="text-sm font-medium text-primary">{i18n.MESSAGE}*</span>
+					<span className="font-mono text-xs uppercase tracking-wider text-secondary">
+						{i18n.MESSAGE}*
+					</span>
 					<textarea
 						required
-						className="min-h-32 rounded-xl bg-slate-800/50 px-4 py-3 text-primary outline-none transition-all duration-300 placeholder:text-secondary/60 focus:bg-slate-800/80 focus:shadow-md focus:shadow-accent/10"
+						className="min-h-32 w-full rounded-xl border border-line bg-ink/60 px-4 py-3 text-sm text-bone outline-none transition-colors placeholder:text-secondary/70 focus:border-accent/60"
 						name="message"
 						placeholder={i18n.MESSAGE_PLACEHOLDER}
 					></textarea>
@@ -84,15 +92,15 @@ export const SendForm = ({ locale = "en" }: SendFormProps) => {
 			<button
 				type="submit"
 				{...(!sending ? {} : { disabled: true })}
-				className={`mt-6 flex w-full flex-row items-center justify-center gap-2 rounded-xl px-4 py-3 text-lg font-bold transition-all duration-300 ${
+				className={`mt-6 flex w-full flex-row items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition-colors duration-300 ${
 					!sending
-						? "cursor-pointer bg-gradient-to-r from-accent to-accent/90 text-white shadow-md shadow-accent/20 hover:scale-[1.02] hover:shadow-lg hover:shadow-accent/30 active:scale-[0.98]"
-						: "cursor-not-allowed bg-gradient-to-r from-main/50 to-main/40 text-secondary shadow-sm"
+						? "cursor-pointer bg-accent text-accent-ink hover:bg-accent-soft active:scale-95"
+						: "cursor-not-allowed border border-line bg-ink/60 text-secondary"
 				}`}
 			>
 				{!sending ? (
 					<svg
-						className="size-5"
+						className="size-4"
 						width="800px"
 						height="800px"
 						viewBox="0 0 24 24"
@@ -107,7 +115,7 @@ export const SendForm = ({ locale = "en" }: SendFormProps) => {
 						<path d="M21 3l-6.5 18a.55 .55 0 0 1 -1 0l-3.5 -7l-7 -3.5a.55 .55 0 0 1 0 -1l18 -6.5"></path>
 					</svg>
 				) : (
-					<Loading classes="size-5" />
+					<Loading classes="size-4" />
 				)}
 				{i18n.SEND}
 			</button>

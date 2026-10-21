@@ -1,41 +1,30 @@
 ---
-import Divider from "@/components/Divider.astro"
+import MainTitle from "@/components/MainTitle.astro"
 import ProjectsCard from "@/components/ProjectsCard.astro"
-import Code from "@/icons/Code.astro"
-import { type Project } from "@/interfaces/project"
 import { getActiveLocale, getI18N } from "@/locales/index.ts"
 import { projectsService } from "@/services/projects"
-import MainTitle from "../MainTitle.astro"
-import ProjectsTecnologies from "./ProjectsTecnologies.astro"
 
 const locale = getActiveLocale(Astro)
 const i18n = getI18N({ currentLocale: locale })
-const allProjects: Project[] = projectsService(locale).slice(0, 4)
+const allProjects = projectsService(locale)
 ---
 
-<div class="flex w-full max-w-4xl flex-col sm:w-11/12 md:w-8/12">
-	<MainTitle eyebrow={i18n.PORTFOLIO}>
-		<Code class="size-8" />
-		{i18n.PROJECTS}
-	</MainTitle>
+<div class="flex w-full flex-col gap-10">
+	<MainTitle eyebrow={i18n.PORTFOLIO} title={i18n.PROJECTS} />
 
-	<div class="flex flex-col gap-y-16">
+	<div class="grid gap-4 md:grid-cols-2">
 		{
-			allProjects.map(({ title, description, imgUrl, projectUrl, tags, gitCodeUrl, alt }) => (
+			allProjects.map((project) => (
 				<ProjectsCard
-					title={title}
-					description={description}
-					imgUrl={imgUrl}
-					projectUrl={projectUrl}
-					tags={tags}
-					gitCodeUrl={gitCodeUrl}
-					alt={alt}
+					title={project.title}
+					description={project.description}
+					imgUrl={project.imgUrl}
+					projectUrl={project.projectUrl}
+					tags={project.tags}
+					gitCodeUrl={project.gitCodeUrl}
+					alt={project.alt}
 				/>
 			))
 		}
 	</div>
-
-	<Divider />
-
-	<ProjectsTecnologies />
 </div>
