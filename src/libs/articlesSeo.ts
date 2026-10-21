@@ -3,6 +3,11 @@ import type { CollectionEntry } from "astro:content"
 
 const SITE_URL = "https://rixel.dev"
 
+export const resolveCoverUrl = (cover: string): string => {
+	if (cover.startsWith("http://") || cover.startsWith("https://")) return cover
+	return `${SITE_URL}${cover.startsWith("/") ? cover : `/${cover}`}`
+}
+
 const MONTH_MAP: Record<string, string> = {
 	Jan: "01",
 	Feb: "02",
@@ -113,31 +118,31 @@ export const buildArticleJsonLd = ({
 		"@context": "https://schema.org",
 		"@type": "BlogPosting",
 		"@id": `${canonical}#article`,
-		headline: title,
+		"headline": title,
 		description,
-		image: cover,
-		url: canonical,
-		mainEntityOfPage: canonical,
-		inLanguage: lang,
-		keywords: tags.join(", "),
-		wordCount: readingMinutes * 200,
-		timeRequired: `PT${readingMinutes}M`,
-		datePublished: formatArticleIsoDate(timestamp),
-		dateModified: formatArticleIsoDate(timestamp),
-		author: {
+		"image": resolveCoverUrl(cover),
+		"url": canonical,
+		"mainEntityOfPage": canonical,
+		"inLanguage": lang,
+		"keywords": tags.join(", "),
+		"wordCount": readingMinutes * 200,
+		"timeRequired": `PT${readingMinutes}M`,
+		"datePublished": formatArticleIsoDate(timestamp),
+		"dateModified": formatArticleIsoDate(timestamp),
+		"author": {
 			"@type": "Person",
-			name: author,
-			url: SITE_URL,
-			sameAs: [
+			"name": author,
+			"url": SITE_URL,
+			"sameAs": [
 				"https://github.com/rixeldev",
 				"https://www.linkedin.com/in/rixeldev",
 				"https://x.com/rixel_dev",
 			],
 		},
-		publisher: {
+		"publisher": {
 			"@type": "Organization",
-			name: "RixelDev",
-			url: SITE_URL,
+			"name": "RixelDev",
+			"url": SITE_URL,
 		},
 	}
 }
@@ -145,11 +150,11 @@ export const buildArticleJsonLd = ({
 export const buildBreadcrumbJsonLd = (items: { name: string; item: string }[]) => ({
 	"@context": "https://schema.org",
 	"@type": "BreadcrumbList",
-	itemListElement: items.map((entry, index) => ({
+	"itemListElement": items.map((entry, index) => ({
 		"@type": "ListItem",
-		position: index + 1,
-		name: entry.name,
-		item: entry.item,
+		"position": index + 1,
+		"name": entry.name,
+		"item": entry.item,
 	})),
 })
 
@@ -174,9 +179,9 @@ export const buildArticlesIndexJsonLd = ({
 			{
 				"@type": "Organization",
 				"@id": `${SITE_URL}/#organization`,
-				name: "RixelDev",
-				url: SITE_URL,
-				sameAs: [
+				"name": "RixelDev",
+				"url": SITE_URL,
+				"sameAs": [
 					"https://github.com/rixeldev",
 					"https://www.linkedin.com/in/rixeldev",
 					"https://x.com/rixel_dev",
@@ -185,45 +190,45 @@ export const buildArticlesIndexJsonLd = ({
 			{
 				"@type": "WebSite",
 				"@id": `${SITE_URL}/#website`,
-				url: SITE_URL,
-				name: "Rixel",
-				publisher: { "@id": `${SITE_URL}/#organization` },
+				"url": SITE_URL,
+				"name": "Rixel",
+				"publisher": { "@id": `${SITE_URL}/#organization` },
 			},
 			{
 				"@type": "BreadcrumbList",
 				"@id": `${canonical}#breadcrumb`,
-				itemListElement: [
+				"itemListElement": [
 					{
 						"@type": "ListItem",
-						position: 1,
-						name: locale === "es" ? "Inicio" : "Home",
-						item: SITE_URL,
+						"position": 1,
+						"name": locale === "es" ? "Inicio" : "Home",
+						"item": SITE_URL,
 					},
 					{
 						"@type": "ListItem",
-						position: 2,
-						name: locale === "es" ? "Artículos" : "Articles",
-						item: canonical,
+						"position": 2,
+						"name": locale === "es" ? "Artículos" : "Articles",
+						"item": canonical,
 					},
 				],
 			},
 			{
 				"@type": "CollectionPage",
 				"@id": `${canonical}#webpage`,
-				url: canonical,
-				name: title,
+				"url": canonical,
+				"name": title,
 				description,
-				isPartOf: { "@id": `${SITE_URL}/#website` },
+				"isPartOf": { "@id": `${SITE_URL}/#website` },
 				inLanguage,
-				breadcrumb: { "@id": `${canonical}#breadcrumb` },
-				mainEntity: {
+				"breadcrumb": { "@id": `${canonical}#breadcrumb` },
+				"mainEntity": {
 					"@type": "ItemList",
-					numberOfItems: articles.length,
-					itemListElement: articles.map((article, index) => ({
+					"numberOfItems": articles.length,
+					"itemListElement": articles.map((article, index) => ({
 						"@type": "ListItem",
-						position: index + 1,
-						url: `${SITE_URL}${resolveLocalizedPath(`/articles/${article.data.pageTitle}/`, locale)}`,
-						name: article.data.title,
+						"position": index + 1,
+						"url": `${SITE_URL}${resolveLocalizedPath(`/articles/${article.data.pageTitle}/`, locale)}`,
+						"name": article.data.title,
 					})),
 				},
 			},
@@ -233,19 +238,19 @@ export const buildArticlesIndexJsonLd = ({
 				return {
 					"@type": "BlogPosting",
 					"@id": `${articleUrl}#article`,
-					headline: article.data.title,
-					description: article.data.description,
-					image: article.data.cover,
-					author: {
+					"headline": article.data.title,
+					"description": article.data.description,
+					"image": resolveCoverUrl(article.data.cover),
+					"author": {
 						"@type": "Person",
-						name: article.data.author,
+						"name": article.data.author,
 					},
-					datePublished: formatArticleIsoDate(article.data.timestamp),
-					inLanguage: article.data.lang,
-					keywords: article.data.tags.join(", "),
-					url: articleUrl,
-					mainEntityOfPage: articleUrl,
-					publisher: { "@id": `${SITE_URL}/#organization` },
+					"datePublished": formatArticleIsoDate(article.data.timestamp),
+					"inLanguage": article.data.lang,
+					"keywords": article.data.tags.join(", "),
+					"url": articleUrl,
+					"mainEntityOfPage": articleUrl,
+					"publisher": { "@id": `${SITE_URL}/#organization` },
 				}
 			}),
 		],
