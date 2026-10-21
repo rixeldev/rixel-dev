@@ -1,0 +1,506 @@
+---
+import AppCard from "@/components/apps/AppCard.astro"
+import MainTitle from "@/components/MainTitle.astro"
+import SectionContainer from "@/components/SectionContainer.astro"
+import ActionLink from "@/components/ui/ActionLink.astro"
+import GooglePlay from "@/icons/GooglePlay.astro"
+import RightArrow from "@/icons/RightArrow.astro"
+import Layout from "@/layouts/Layout.astro"
+import { buildBreadcrumbJsonLd } from "@/libs/articlesSeo"
+import { buildMobileApplicationJsonLd, SITE_URL } from "@/libs/structuredData"
+import {
+	getActiveLocale,
+	getI18N,
+	resolveLocalizedHref,
+	resolveLocalizedPath,
+} from "@/locales/index"
+import { appsService, getAppBySlug } from "@/services/apps"
+
+const locale = getActiveLocale(Astro)
+const i18n = getI18N({ currentLocale: locale })
+const app = getAppBySlug(Astro.params.slug ?? "", locale)
+
+if (!app) {
+	Astro.response.status = 404
+	return Astro.rewrite("/404")
+}
+
+const apps = appsService(locale)
+const related = apps.find((candidate) => candidate.slug !== app.slug)
+const relatedHref = related ? resolveLocalizedHref(`/apps/${related.slug}`, locale) : "/apps"
+const appsHref = resolveLocalizedHref("/apps", locale)
+const canonical = new URL(resolveLocalizedPath(`/apps/${app.slug}/`, locale), SITE_URL).toString()
+const shareImage = new URL(app.featureGraphic.src, SITE_URL).toString()
+
+const jsonLd = [
+	buildMobileApplicationJsonLd({
+		name: app.name,
+		description: app.intro,
+		url: canonical,
+		icon: new URL(app.icon, SITE_URL).toString(),
+		screenshots: [app.featureGraphic, ...app.screenshots].map((screenshot) =>
+			new URL(screenshot.src, SITE_URL).toString()
+		),
+		operatingSystem: app.slug === "setuno" ? "Android, Web" : "Android",
+		applicationCategory: app.category,
+		inLanguage: locale === "es" ? ["es", "en"] : ["en", "es"],
+		version: app.version,
+		playUrl: app.playUrl,
+		tagline: app.tagline,
+		highlights: app.highlights,
+		stack: app.stack,
+		price: app.price,
+	}),
+	buildBreadcrumbJsonLd([
+		{ name: i18n.HOME, item: SITE_URL },
+		{ name: i18n.APPS, item: new URL(appsHref, SITE_URL).toString() },
+		{ name: app.name, item: canonical },
+	]),
+]
+
+const isPortrait = (shot: { width: number; height: number }) => shot.height > shot.width
+const floatingShot = app.screenshots[0]
+const floatingIsPortrait = floatingShot ? isPortrait(floatingShot) : true
+---
+
+<Layout
+	title={`${app.name} — Rixel`}
+	description={app.intro}
+	canonical={canonical}
+	image={shareImage}
+	imageWidth={app.featureGraphic.width}
+	imageHeight={app.featureGraphic.height}
+	keywords={`${app.name}, ${app.category}, Android app, Google Play, RixelDev, ${app.highlights.join(", ")}, ${app.stack.join(", ")}`}
+	jsonLd={jsonLd}
+>
+	<SectionContainer class="pb-14 pt-32 sm:pt-36">
+		<div class="flex w-full flex-col gap-10">
+			<nav aria-label="Breadcrumb">
+				<ol
+					class="flex flex-wrap items-center gap-2 font-mono text-xs uppercase tracking-wider text-secondary"
+				>
+					<li>
+						<a href={resolveLocalizedHref("/", locale)} class="transition-colors hover:text-accent">
+							{i18n.HOME}
+						</a>
+					</li>
+					<li aria-hidden="true">/</li>
+					<li>
+						<a href={appsHref} class="transition-colors hover:text-accent">{i18n.APPS}</a>
+					</li>
+					<li aria-hidden="true">/</li>
+					<li>
+						<span class="text-bone" aria-current="page">{app.name}</span>
+					</li>
+				</ol>
+			</nav>
+
+			<div class="grid items-center gap-14 lg:grid-cols-12 lg:gap-10">
+				<div class="flex min-w-0 flex-col gap-7 lg:col-span-6">
+					<div class="flex flex-wrap items-center gap-3">
+						<span
+							class:list={[
+								"inline-flex w-fit items-center gap-2 rounded-full border px-3.5 py-1.5 font-mono text-xs uppercase tracking-widest",
+								app.brand.chip,
+							]}
+						>
+							{app.category}
+						</span>
+
+						<span class="font-mono text-xs uppercase tracking-widest text-secondary">
+							{i18n.APPS_AVAILABLE} · v{app.version}
+						</span>
+					</div>
+
+					<h1
+						class="display-balance font-display text-5xl font-semibold leading-none tracking-tight text-bone sm:text-6xl lg:text-7xl"
+					>
+						{app.name}
+					</h1>
+
+					<p class="max-w-2xl text-pretty text-lg leading-relaxed text-primary sm:text-xl">
+						{app.tagline}
+					</p>
+
+					<p class="max-w-xl text-pretty text-sm leading-relaxed text-secondary sm:text-base">
+						{app.intro}
+					</p>
+
+					<div class="flex flex-wrap items-center gap-3">
+						<ActionLink
+							href={app.playUrl}
+							external
+							size="lg"
+							ariaLabel={`${i18n.APPS_DOWNLOAD} — ${app.name}`}
+						>
+							<GooglePlay class="size-5" />
+							{i18n.APPS_DOWNLOAD}
+						</ActionLink>
+
+						<ActionLink href={appsHref} variant="ghost" size="lg">
+							{i18n.APPS_ALL}
+							<RightArrow
+								class="size-4 transition-transform duration-300 group-hover:translate-x-0.5"
+							/>
+						</ActionLink>
+					</div>
+
+					<p class="font-mono text-xs uppercase tracking-wider text-secondary">
+						{i18n.APPS_PLAY_NOTE}
+					</p>
+
+					<ul class="flex flex-wrap gap-2 border-t border-line pt-6">
+						{
+							app.highlights.map((highlight) => (
+								<li class="rounded-full border border-line bg-bone/5 px-3 py-1 font-mono text-xs text-secondary">
+									{highlight}
+								</li>
+							))
+						}
+					</ul>
+				</div>
+
+				<div class="relative lg:col-span-6">
+					<div
+						class:list={[
+							"pointer-events-none absolute -inset-10 rounded-5xl opacity-20 blur-3xl",
+							app.brand.glow,
+						]}
+						aria-hidden="true"
+					>
+					</div>
+
+					<figure
+						class="relative overflow-hidden rounded-4xl border border-line bg-ink-panel p-2 shadow-2xl shadow-black/50"
+					>
+						<img
+							src={app.featureGraphic.src}
+							width={app.featureGraphic.width}
+							height={app.featureGraphic.height}
+							alt={app.featureGraphic.alt}
+							fetchpriority="high"
+							decoding="async"
+							class="w-full rounded-3xl"
+						/>
+					</figure>
+
+					{
+						floatingShot && (
+							<figure
+								class:list={[
+									"absolute -bottom-8 -left-4 hidden overflow-hidden rounded-2xl border border-line bg-ink-panel p-1.5 shadow-2xl shadow-black/60 sm:block",
+									floatingIsPortrait ? "w-28 rotate-[-6deg]" : "w-52 rotate-[-3deg]",
+								]}
+							>
+								<img
+									src={floatingShot.src}
+									width={floatingShot.width}
+									height={floatingShot.height}
+									alt={floatingShot.alt}
+									loading="lazy"
+									decoding="async"
+									class:list={[
+										"w-full rounded-xl",
+										floatingIsPortrait ? "h-44 object-cover object-top" : "h-auto",
+									]}
+								/>
+							</figure>
+						)
+					}
+				</div>
+			</div>
+		</div>
+	</SectionContainer>
+
+	<SectionContainer class="border-t border-line sm:py-24">
+		<div class="grid w-full gap-10 lg:grid-cols-12 lg:gap-12">
+			<div class="lg:col-span-5">
+				<MainTitle eyebrow={app.category} title={i18n.APPS_ABOUT} />
+			</div>
+
+			<div class="flex flex-col gap-6 lg:col-span-7">
+				{
+					app.description.map((paragraph) => (
+						<p class="text-pretty text-base leading-relaxed text-primary">{paragraph}</p>
+					))
+				}
+
+				<div class="flex flex-col gap-3 rounded-3xl border border-line bg-ink-panel p-6">
+					<p class="font-mono text-xs uppercase tracking-widest text-secondary">
+						{i18n.APPS_HIGHLIGHTS}
+					</p>
+
+					<ul class="flex flex-col gap-2.5">
+						{
+							app.highlights.map((highlight) => (
+								<li class="flex items-center gap-3 text-sm text-bone">
+									<span class:list={["size-1.5 rounded-full", app.brand.glow]} aria-hidden="true" />
+									{highlight}
+								</li>
+							))
+						}
+					</ul>
+				</div>
+			</div>
+		</div>
+	</SectionContainer>
+
+	<SectionContainer class="border-t border-line sm:py-24">
+		<div class="flex w-full flex-col gap-10">
+			<div class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+				<MainTitle eyebrow={app.name} title={i18n.APPS_SCREENS} />
+
+				<p class="font-mono text-xs uppercase tracking-widest text-secondary">
+					{i18n.APPS_DRAG_HINT}
+				</p>
+			</div>
+
+			<div
+				class="screenshot-strip"
+				role="list"
+				data-drag-scroll
+				tabindex="0"
+				aria-label={i18n.APPS_SCREENS}
+			>
+				{
+					app.screenshots.map((screenshot) => (
+						<figure
+							class:list={[
+								"overflow-hidden rounded-3xl border border-line bg-ink-panel p-2",
+								isPortrait(screenshot) ? "shot-tall" : "shot-wide",
+							]}
+							role="listitem"
+						>
+							<img
+								src={screenshot.src}
+								width={screenshot.width}
+								height={screenshot.height}
+								alt={screenshot.alt}
+								loading="lazy"
+								decoding="async"
+								draggable="false"
+								class="h-auto w-full select-none rounded-2xl"
+							/>
+						</figure>
+					))
+				}
+			</div>
+		</div>
+	</SectionContainer>
+
+	<SectionContainer class="border-t border-line sm:py-24">
+		<div class="flex w-full flex-col gap-10">
+			<MainTitle eyebrow={app.name} title={i18n.APPS_FEATURES} />
+
+			<div class="grid gap-4 md:grid-cols-2">
+				{
+					app.features.map((feature) => (
+						<article class="flex flex-col gap-4 rounded-3xl border border-line bg-ink-panel p-6 transition-colors duration-300 hover:border-accent/30 sm:p-7">
+							<span class="h-px w-10 bg-accent/70" aria-hidden="true" />
+
+							<h3 class="font-display text-2xl font-semibold leading-tight text-bone sm:text-3xl">
+								{feature.title}
+							</h3>
+
+							<p class="text-pretty text-sm leading-relaxed text-primary">{feature.description}</p>
+						</article>
+					))
+				}
+			</div>
+		</div>
+	</SectionContainer>
+
+	<SectionContainer class="border-t border-line sm:py-24">
+		<div class="flex w-full flex-col gap-10">
+			<MainTitle eyebrow={app.name} title={i18n.APPS_HOW} />
+
+			<ol class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+				{
+					app.steps.map((step) => (
+						<li class="flex flex-col gap-3 border-t border-line pt-5">
+							<span class="size-2 rounded-full bg-accent/70" aria-hidden="true" />
+
+							<h3 class="font-display text-xl font-semibold leading-tight text-bone sm:text-2xl">
+								{step.title}
+							</h3>
+
+							<p class="text-pretty text-sm leading-relaxed text-secondary">{step.description}</p>
+						</li>
+					))
+				}
+			</ol>
+		</div>
+	</SectionContainer>
+
+	<SectionContainer class="border-t border-line sm:py-24">
+		<div class="flex w-full flex-col gap-10">
+			<MainTitle eyebrow={app.name} title={i18n.APPS_DETAILS} />
+
+			<div class="grid gap-10 lg:grid-cols-12 lg:gap-12">
+				<div class="lg:col-span-7">
+					<dl class="border-y border-line">
+						{
+							app.facts.map((fact) => (
+								<div class="grid grid-cols-2 gap-4 border-b border-line py-4 last:border-b-0">
+									<dt class="font-mono text-xs uppercase tracking-wider text-secondary">
+										{fact.label}
+									</dt>
+									<dd class="text-sm text-bone">{fact.value}</dd>
+								</div>
+							))
+						}
+					</dl>
+				</div>
+
+				<div class="flex flex-col gap-8 lg:col-span-5">
+					<div class="flex flex-col gap-3">
+						<p class="font-mono text-xs uppercase tracking-widest text-secondary">
+							{i18n.APPS_STACK}
+						</p>
+
+						<ul class="flex flex-wrap gap-2">
+							{
+								app.stack.map((technology) => (
+									<li class="rounded-full border border-line bg-bone/5 px-3 py-1 font-mono text-xs text-secondary">
+										{technology}
+									</li>
+								))
+							}
+						</ul>
+					</div>
+
+					<div class="flex flex-col gap-5 rounded-4xl border border-line bg-ink-panel p-6 sm:p-7">
+						<div class="flex items-center gap-4">
+							<img
+								src={app.icon}
+								alt={`${app.name} icon`}
+								width="112"
+								height="112"
+								loading="lazy"
+								decoding="async"
+								class="size-14 rounded-2xl border border-line object-cover"
+							/>
+
+							<div class="flex min-w-0 flex-col">
+								<span class="font-display text-2xl font-semibold leading-none text-bone">
+									{app.name}
+								</span>
+								<span class="font-mono text-xs uppercase tracking-wider text-secondary">
+									{i18n.APPS_FREE} · {app.version}
+								</span>
+							</div>
+						</div>
+
+						<p class="text-pretty text-sm leading-relaxed text-primary">{app.tagline}</p>
+
+						<ActionLink
+							href={app.playUrl}
+							external
+							class="w-full"
+							ariaLabel={`${i18n.APPS_DOWNLOAD} — ${app.name}`}
+						>
+							<GooglePlay class="size-5" />
+							{i18n.APPS_DOWNLOAD}
+						</ActionLink>
+
+						<p class="font-mono text-xs uppercase tracking-wider text-secondary">
+							{i18n.APPS_PLAY_NOTE}
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</SectionContainer>
+
+	{
+		related && (
+			<SectionContainer class="border-t border-line sm:py-24">
+				<div class="flex w-full flex-col gap-10">
+					<div class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+						<MainTitle eyebrow={i18n.APPS_RELATED} title={related.name} />
+
+						<a
+							href={relatedHref}
+							class="group mb-2 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-secondary transition-colors hover:text-accent"
+						>
+							{i18n.APPS_VIEW}
+							<RightArrow class="size-4 transition-transform group-hover:translate-x-0.5" />
+						</a>
+					</div>
+
+					<div class="max-w-2xl">
+						<AppCard app={related} compact />
+					</div>
+				</div>
+			</SectionContainer>
+		)
+	}
+</Layout>
+
+<script>
+	const setupDragScroll = () => {
+		const strips = document.querySelectorAll<HTMLElement>("[data-drag-scroll]")
+
+		strips.forEach((strip) => {
+			if (strip.dataset.dragReady === "true") return
+			strip.dataset.dragReady = "true"
+
+			let isDragging = false
+			let startX = 0
+			let startScroll = 0
+			let moved = false
+
+			const onPointerDown = (event: PointerEvent) => {
+				if (event.pointerType !== "mouse" || event.button !== 0) return
+				isDragging = true
+				moved = false
+				startX = event.clientX
+				startScroll = strip.scrollLeft
+				strip.classList.add("is-dragging")
+				strip.setPointerCapture(event.pointerId)
+			}
+
+			const onPointerMove = (event: PointerEvent) => {
+				if (!isDragging) return
+				const delta = event.clientX - startX
+				if (Math.abs(delta) > 4) moved = true
+				strip.scrollLeft = startScroll - delta
+			}
+
+			const stopDragging = (event: PointerEvent) => {
+				if (!isDragging) return
+				isDragging = false
+				strip.classList.remove("is-dragging")
+				if (strip.hasPointerCapture(event.pointerId)) {
+					strip.releasePointerCapture(event.pointerId)
+				}
+			}
+
+			strip.addEventListener("pointerdown", onPointerDown)
+			strip.addEventListener("pointermove", onPointerMove)
+			strip.addEventListener("pointerup", stopDragging)
+			strip.addEventListener("pointercancel", stopDragging)
+			strip.addEventListener("dragstart", (event) => event.preventDefault())
+
+			strip.addEventListener(
+				"click",
+				(event) => {
+					if (moved) {
+						event.preventDefault()
+						event.stopPropagation()
+						moved = false
+					}
+				},
+				true
+			)
+		})
+	}
+
+	if (document.readyState === "loading") {
+		document.addEventListener("DOMContentLoaded", setupDragScroll, { once: true })
+	} else {
+		setupDragScroll()
+	}
+
+	document.addEventListener("astro:page-load", setupDragScroll)
+</script>

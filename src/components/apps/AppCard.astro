@@ -1,0 +1,112 @@
+---
+import RightArrow from "@/icons/RightArrow.astro"
+import { getActiveLocale, getI18N, resolveLocalizedHref } from "@/locales/index"
+import type { AppInfo } from "@/services/apps"
+
+interface Props {
+	app: AppInfo
+	compact?: boolean
+}
+
+const { app, compact = false } = Astro.props as Props
+const locale = getActiveLocale(Astro)
+const i18n = getI18N({ currentLocale: locale })
+const href = resolveLocalizedHref(`/apps/${app.slug}`, locale)
+---
+
+<a
+	href={href}
+	class="group relative flex flex-col overflow-hidden rounded-4xl border border-line bg-ink-panel transition-all duration-500 hover:border-accent/30 hover:shadow-2xl hover:shadow-black/40"
+	aria-label={`${app.name} — ${i18n.APPS_VIEW}`}
+>
+	<div
+		class:list={[
+			"pointer-events-none absolute -right-20 -top-20 size-64 rounded-full opacity-20 blur-3xl transition-opacity duration-500 group-hover:opacity-35",
+			app.brand.glow,
+		]}
+		aria-hidden="true"
+	>
+	</div>
+
+	<div class="relative overflow-hidden border-b border-line">
+		<img
+			src={app.featureGraphic.src}
+			alt={app.featureGraphic.alt}
+			width={app.featureGraphic.width}
+			height={app.featureGraphic.height}
+			loading="lazy"
+			decoding="async"
+			class="w-full transition-transform duration-700 group-hover:scale-105"
+		/>
+	</div>
+
+	<div class="relative flex flex-1 flex-col p-6 sm:p-7">
+		<div class="flex items-start justify-between gap-4">
+			<div class="flex min-w-0 items-center gap-4">
+				<img
+					src={app.icon}
+					alt={`${app.name} icon`}
+					width="112"
+					height="112"
+					loading="lazy"
+					decoding="async"
+					class="size-14 shrink-0 rounded-2xl border border-line object-cover shadow-lg shadow-black/30 sm:size-16"
+				/>
+
+				<div class="flex min-w-0 flex-col gap-1">
+					<span class="font-mono text-xs uppercase tracking-widest text-accent">
+						{app.category}
+					</span>
+					<h3
+						class:list={[
+							"truncate font-display font-semibold text-bone",
+							compact ? "text-2xl" : "text-3xl",
+						]}
+					>
+						{app.name}
+					</h3>
+				</div>
+			</div>
+
+			<span
+				class="hidden shrink-0 rounded-full border border-line px-3 py-1 font-mono text-xs uppercase tracking-wider text-secondary sm:inline-flex"
+			>
+				{i18n.APPS_ANDROID}
+			</span>
+		</div>
+
+		<p
+			class:list={[
+				"relative mt-5 text-pretty text-primary",
+				compact ? "text-sm" : "max-w-lg text-base",
+			]}
+		>
+			{app.tagline}
+		</p>
+
+		<ul class="relative mt-6 flex flex-wrap gap-2">
+			{
+				app.highlights
+					.slice(0, compact ? 2 : 3)
+					.map((highlight) => (
+						<li class="rounded-full border border-line bg-bone/5 px-3 py-1 font-mono text-xs text-secondary">
+							{highlight}
+						</li>
+					))
+			}
+		</ul>
+
+		<div class="relative mt-8 flex items-center justify-between gap-4 border-t border-line pt-5">
+			<span class="font-mono text-xs uppercase tracking-widest text-secondary">
+				{i18n.APPS_FREE} · {i18n.APPS_BADGE}
+			</span>
+
+			<span
+				class="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-bone transition-colors group-hover:text-accent"
+			>
+				{i18n.APPS_VIEW}
+				<RightArrow class="size-3.5 transition-transform group-hover:translate-x-1" />
+			</span>
+		</div>
+	</div>
+</a>
