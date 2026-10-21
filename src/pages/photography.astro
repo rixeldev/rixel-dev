@@ -1,8 +1,6 @@
 ---
-import LazyImage from "@/components/LazyImage.astro"
 import MainTitle from "@/components/MainTitle.astro"
 import SectionContainer from "@/components/SectionContainer.astro"
-import Loading from "@/icons/Loading.astro"
 import { getActiveLocale, getI18N, resolveLocalizedPath } from "@/locales/index"
 import { getImages } from "@/services/images"
 import "photoswipe/style.css"
@@ -43,24 +41,24 @@ const images = getImages().sort(() => Math.random() - 0.5)
 			{
 				images.map((image, index) => (
 					<a
-						href={`https://www.rixel.dev/${image.src}`}
+						href={`/${image.src}`}
 						data-pswp-width={image.width}
 						data-pswp-height={image.height}
 						target="_blank"
 						class="group relative mb-4 block cursor-zoom-in break-inside-avoid overflow-hidden rounded-2xl border border-line bg-ink-panel"
 						aria-label={`${i18n.PHOTOGRAPHY_IMAGE_ALT_PREFIX} ${index + 1}`}
 					>
-						<LazyImage
-							src={`https://www.rixel.dev/${image.src}`}
+						<img
+							src={`/${image.src}`}
 							alt={`${i18n.PHOTOGRAPHY_IMAGE_ALT_PREFIX} ${index + 1}`}
 							width={image.width}
 							height={image.height}
-							className="w-full opacity-0 transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-110"
+							loading="lazy"
+							decoding="async"
+							class="w-full rounded-2xl transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-110"
 						/>
 
-						<div class="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-
-						<Loading class="absolute inset-0 -z-10 m-auto size-6 text-secondary" />
+						<div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 					</a>
 				))
 			}
@@ -77,9 +75,20 @@ const images = getImages().sort(() => Math.random() - 0.5)
 
 <script>
 	import PhotoSwipeLightbox from "photoswipe/lightbox"
+	import "photoswipe/style.css"
 
-	document.addEventListener("DOMContentLoaded", () => {
-		const lightbox = new PhotoSwipeLightbox({
+	let lightbox: PhotoSwipeLightbox | null = null
+
+	const setupGallery = () => {
+		const gallery = document.querySelector("#gallery")
+		if (!gallery) return
+
+		if (lightbox) {
+			lightbox.destroy()
+			lightbox = null
+		}
+
+		lightbox = new PhotoSwipeLightbox({
 			gallery: "#gallery",
 			children: "a",
 			showAnimationDuration: 200,
@@ -88,6 +97,23 @@ const images = getImages().sort(() => Math.random() - 0.5)
 			showHideAnimationType: "zoom",
 			pswpModule: () => import("photoswipe"),
 		})
+
 		lightbox.init()
+	}
+
+	if (document.readyState === "loading") {
+		document.addEventListener("DOMContentLoaded", setupGallery, { once: true })
+	} else {
+		setupGallery()
+	}
+
+	document.addEventListener("astro:page-load", setupGallery)
+
+	document.addEventListener("astro:before-swap", () => {
+		if (lightbox) {
+			lightbox.destroy()
+			lightbox = null
+		}
 	})
 </script>
+
