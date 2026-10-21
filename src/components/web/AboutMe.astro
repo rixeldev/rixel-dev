@@ -1,63 +1,80 @@
 ---
 import MainTitle from "@/components/MainTitle.astro"
-import User from "@/icons/User.astro"
-import { getActiveLocale, getI18N } from "@/locales/index"
+import ActionLink from "@/components/ui/ActionLink.astro"
+import { getActiveLocale, getI18N, resolveLocalizedHref } from "@/locales/index"
 
 const locale = getActiveLocale(Astro)
 const i18n = getI18N({ currentLocale: locale })
 ---
 
-<div class="fade-up-anim flex w-full min-w-0 max-w-6xl flex-col sm:w-11/12">
-	<MainTitle>
-		<User class="size-7 text-accent" />
-		{i18n.ABOUT_ME}
-	</MainTitle>
+<div class="grid w-full min-w-0 items-center gap-12 lg:grid-cols-12 lg:gap-16">
+	<div class="relative order-2 mx-auto w-full max-w-sm lg:order-1 lg:col-span-5 lg:max-w-none">
+		<div
+			class="pointer-events-none absolute -inset-4 rounded-5xl bg-accent/10 blur-2xl"
+			aria-hidden="true"
+		>
+		</div>
 
-	<div
-		class="flex w-full flex-col-reverse items-center gap-8 overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-slate-800/30 via-slate-900/40 to-slate-950/60 p-6 shadow-xl shadow-black/20 backdrop-blur-md sm:p-8 lg:flex-row lg:items-center lg:gap-12"
-	>
-		<div class="flex flex-1 flex-col gap-5 text-pretty font-ubuntu text-base leading-relaxed sm:text-lg">
-			<p class="text-primary">
+		<div class="relative overflow-hidden rounded-4xl border border-line bg-ink-panel p-2">
+			<img
+				src="/images/about-image.webp"
+				width="720"
+				height="1280"
+				alt="Rikelvi Capellán"
+				loading="lazy"
+				decoding="async"
+				class="aspect-portrait w-full rounded-3xl object-cover object-center"
+			/>
+		</div>
+
+		<div
+			class="absolute -bottom-5 right-4 flex items-center gap-4 rounded-2xl border border-line bg-ink-soft/95 px-4 py-3 backdrop-blur-xl lg:-right-5"
+		>
+			<span class="font-display text-3xl text-accent">RD</span>
+			<span class="font-mono text-xs uppercase leading-relaxed tracking-wider text-secondary">
+				{i18n.HOME_LOCATION}
+			</span>
+		</div>
+	</div>
+
+	<div class="order-1 flex min-w-0 flex-col gap-6 lg:order-2 lg:col-span-7">
+		<MainTitle eyebrow={i18n.ABOUT_ME} title={i18n.HOME_ABOUT_TITLE} />
+
+		<div class="flex max-w-2xl flex-col gap-4 text-pretty text-base leading-relaxed text-primary">
+			<p>
 				{i18n.ABOUT_ME_TEXT_1}
-				<strong class="font-semibold text-accent">RixelDev</strong>
+				<strong class="font-semibold text-bone">RixelDev</strong>
 				{i18n.ABOUT_ME_TEXT_2}
 			</p>
 
-			<p class="text-primary">
+			<p>
 				{i18n.ABOUT_ME_TEXT_3}
-				<strong class="font-semibold text-accent">{i18n.ABOUT_ME_TEXT_4}</strong>, <strong
-					class="font-semibold text-accent">{i18n.ABOUT_ME_TEXT_5}</strong
-				>
+				<strong class="font-semibold text-bone">{i18n.ABOUT_ME_TEXT_4}</strong>,
+				<strong class="font-semibold text-bone">{i18n.ABOUT_ME_TEXT_5}</strong>
 				{i18n.ABOUT_ME_TEXT_6}
 			</p>
 
-			<p class="text-primary">
+			<p>
 				{i18n.ABOUT_ME_TEXT_7}
-				'<strong class="font-semibold text-accent">STOP!</strong>'
+				<strong class="font-semibold text-bone">STOP!</strong>
 				{i18n.ABOUT_ME_TEXT_8}
-				<strong class="font-semibold text-accent">{i18n.ABOUT_ME_TEXT_9}</strong>. {i18n.ABOUT_ME_TEXT_10}
-				<strong class="font-semibold text-accent">{i18n.ABOUT_ME_TEXT_11}</strong>, <strong
-					class="font-semibold text-accent">{i18n.ABOUT_ME_TEXT_12}</strong
-				>
+				<strong class="font-semibold text-bone">{i18n.ABOUT_ME_TEXT_9}</strong>. {
+					i18n.ABOUT_ME_TEXT_10
+				}
+				<strong class="font-semibold text-bone">{i18n.ABOUT_ME_TEXT_11}</strong>,
+				<strong class="font-semibold text-bone">{i18n.ABOUT_ME_TEXT_12}</strong>
 				{i18n.ABOUT_ME_TEXT_13}
-				<strong class="font-semibold text-accent">{i18n.ABOUT_ME_TEXT_14}</strong>
+				<strong class="font-semibold text-bone">{i18n.ABOUT_ME_TEXT_14}</strong>
 				{i18n.ABOUT_ME_TEXT_15}
 			</p>
 		</div>
 
-		<div class="relative shrink-0 max-lg:overflow-hidden max-lg:px-1 lg:px-0">
-			<div
-				class="pointer-events-none absolute inset-0 rounded-3xl bg-gradient-to-br from-accent/20 to-main/20 opacity-50 blur-xl lg:-inset-3"
-				aria-hidden="true"
-			>
-			</div>
-			<img
-				src="https://rixel.dev/images/about-image.webp"
-				width="720"
-				height="1280"
-				class="relative aspect-square w-44 rounded-2xl border border-white/10 object-cover object-center shadow-2xl shadow-black/40 transition-transform duration-500 sm:w-52 md:w-60 lg:w-64 sm:hover:scale-[1.02]"
-				alt="About Rixel's image, Rikelvi Capellán"
-			/>
+		<div class="flex flex-wrap items-center gap-4">
+			<ActionLink href={resolveLocalizedHref("/portfolio", locale)} variant="ghost">
+				{i18n.PORTFOLIO}
+			</ActionLink>
+
+			<span class="font-display text-2xl font-semibold text-bone">Rikelvi Capellán</span>
 		</div>
 	</div>
 </div>

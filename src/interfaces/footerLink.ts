@@ -2,4 +2,5 @@
 export interface FooterLink {
 	href: string
 	icon: any
+	label: string
 }

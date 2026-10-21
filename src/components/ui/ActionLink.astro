@@ -1,0 +1,45 @@
+---
+interface Props {
+	href: string
+	variant?: "solid" | "ghost" | "line"
+	size?: "md" | "lg"
+	external?: boolean
+	class?: string
+	ariaLabel?: string
+}
+
+const {
+	href,
+	variant = "solid",
+	size = "md",
+	external = false,
+	class: className,
+	ariaLabel,
+} = Astro.props as Props
+
+const variants = {
+	solid: "bg-accent text-accent-ink hover:bg-accent-soft hover:shadow-glow active:scale-95",
+	ghost:
+		"border border-line bg-bone/5 text-bone backdrop-blur-sm hover:border-accent/40 hover:bg-accent/10 hover:text-accent active:scale-95",
+	line: "text-secondary hover:text-accent",
+}
+
+const sizes = {
+	md: "px-5 py-2.5 text-sm",
+	lg: "px-7 py-3.5 text-base",
+}
+---
+
+<a
+	href={href}
+	aria-label={ariaLabel}
+	class:list={[
+		"group inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-all duration-300",
+		variants[variant],
+		sizes[size],
+		className,
+	]}
+	{...external ? { target: "_blank", rel: "noopener noreferrer" } : {}}
+>
+	<slot />
+</a>

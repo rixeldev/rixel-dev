@@ -1,0 +1,57 @@
+---
+import RightArrow from "@/icons/RightArrow.astro"
+import { getActiveLocale, getI18N, resolveLocalizedHref } from "@/locales/index"
+
+const locale = getActiveLocale(Astro)
+const i18n = getI18N({ currentLocale: locale })
+
+const frames = [
+	"/portraits/87.webp",
+	"/portraits/34.webp",
+	"/portraits/21.webp",
+	"/portraits/50.webp",
+]
+---
+
+<a
+	href={resolveLocalizedHref("/photography", locale)}
+	class="group relative flex h-full min-h-80 w-full flex-col justify-end overflow-hidden rounded-3xl border border-line bg-ink-panel transition-colors duration-300 hover:border-accent/30"
+>
+	<div class="absolute inset-0 grid grid-cols-2 grid-rows-2 gap-0.5" aria-hidden="true">
+		{
+			frames.map((src, index) => (
+				<img
+					src={src}
+					alt=""
+					width="640"
+					height="640"
+					loading="lazy"
+					decoding="async"
+					class="size-full object-cover opacity-70 transition-all duration-700 group-hover:scale-105 group-hover:opacity-85"
+					style={`transition-delay: ${index * 60}ms`}
+				/>
+			))
+		}
+	</div>
+
+	<div
+		class="absolute inset-0 bg-gradient-to-t from-ink via-ink/50 to-transparent"
+		aria-hidden="true"
+	>
+	</div>
+
+	<div class="relative flex flex-col gap-2 p-6">
+		<span class="font-mono text-xs uppercase tracking-widest text-accent">
+			{i18n.PHOTOGRAPHY}
+		</span>
+		<p class="font-display text-3xl leading-tight text-bone">{i18n.HOME_PHOTO_TITLE}</p>
+		<p class="max-w-sm text-sm leading-relaxed text-primary">{i18n.HOME_PHOTO_TEXT}</p>
+
+		<span
+			class="mt-2 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-bone"
+		>
+			{i18n.HOME_PHOTO_CTA}
+			<RightArrow class="size-3.5 transition-transform group-hover:translate-x-0.5" />
+		</span>
+	</div>
+</a>

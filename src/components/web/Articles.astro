@@ -1,9 +1,7 @@
 ---
-import HomeArticleCard from "@/components/HomeArticleCard.astro"
 import MainTitle from "@/components/MainTitle.astro"
-import Book from "@/icons/Book.astro"
 import UpArrow from "@/icons/UpArrow.astro"
-import { sortArticlesByDate } from "@/libs/articlesSeo"
+import { estimateReadingTime, sortArticlesByDate } from "@/libs/articlesSeo"
 import { getActiveLocale, getI18N, resolveLocalizedHref } from "@/locales/index"
 import { getCollection } from "astro:content"
 
@@ -14,36 +12,46 @@ const articles = sortArticlesByDate(await getCollection("articles")).slice(0, 4)
 ---
 
 <div class="flex w-full min-w-0 flex-col">
-	<MainTitle eyebrow={i18n.ARTICLES_EYEBROW}>
-		<Book class="size-7 text-accent" />
-		{i18n.ARTICLES}
-	</MainTitle>
+	<MainTitle eyebrow={i18n.ARTICLES_EYEBROW} title={i18n.ARTICLES} />
 
-	<div class="grid w-full gap-3 sm:grid-cols-2">
+	<ul class="mt-8 flex flex-col border-t border-line">
 		{
 			articles.map((article) => {
-				const { data } = article
-				const { author, description, lang, pageTitle, timestamp, title } = data
+				const { data, body } = article
+				const minutes = estimateReadingTime(body)
 
 				return (
-					<HomeArticleCard
-						author={author}
-						description={description}
-						lang={lang}
-						pageTitle={pageTitle}
-						timestamp={timestamp}
-						title={title}
-					/>
+					<li class="border-b border-line">
+						<a
+							href={resolveLocalizedHref(`/articles/${data.pageTitle}`, locale)}
+							class="group grid grid-cols-1 items-baseline gap-2 py-5 sm:grid-cols-12 sm:gap-4"
+						>
+							<time
+								datetime={data.timestamp}
+								class="font-mono text-xs uppercase tracking-wider text-secondary sm:col-span-3"
+							>
+								{data.timestamp}
+							</time>
+
+							<h3 class="font-display text-xl leading-snug text-bone transition-colors duration-300 group-hover:text-accent sm:col-span-7 sm:text-2xl">
+								{data.title}
+							</h3>
+
+							<span class="font-mono text-xs text-secondary sm:col-span-2 sm:text-right">
+								{i18n.ARTICLE_READING_TIME.replace("{minutes}", String(minutes))}
+							</span>
+						</a>
+					</li>
 				)
 			})
 		}
-	</div>
+	</ul>
 
 	<a
 		href={resolveLocalizedHref("/articles", locale)}
-		class="group mt-6 inline-flex w-fit items-center gap-2 rounded-full border border-secondary/20 bg-secondary/5 px-5 py-2.5 text-sm font-medium text-secondary transition-all active:border-accent/30 active:text-accent sm:cursor-pointer sm:hover:border-accent/30 sm:hover:bg-accent/10 sm:hover:text-accent"
+		class="group mt-6 inline-flex w-fit items-center gap-2 font-mono text-xs uppercase tracking-widest text-secondary transition-colors hover:text-accent"
 	>
 		<span>{i18n.VIEW_ALL_ARTICLES}</span>
-		<UpArrow class="size-4 rotate-90 transition-transform group-hover:translate-x-0.5" />
+		<UpArrow class="size-3.5 rotate-90 transition-transform group-hover:translate-x-0.5" />
 	</a>
 </div>

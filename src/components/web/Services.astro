@@ -1,10 +1,11 @@
 ---
 import MainTitle from "@/components/MainTitle.astro"
+import ActionLink from "@/components/ui/ActionLink.astro"
 import Android from "@/icons/Android.astro"
 import Code from "@/icons/Code.astro"
 import Photography from "@/icons/Photography.astro"
 import World from "@/icons/World.astro"
-import { getActiveLocale, getI18N } from "@/locales/index"
+import { getActiveLocale, getI18N, resolveLocalizedHref } from "@/locales/index"
 
 const locale = getActiveLocale(Astro)
 const i18n = getI18N({ currentLocale: locale })
@@ -17,34 +18,35 @@ const services = [
 ]
 ---
 
-<div class="fade-up-anim flex w-full min-w-0 max-w-6xl flex-col sm:w-11/12">
-	<MainTitle eyebrow={i18n.SERVICES_EYEBROW}>
-		<Code class="size-7 text-accent" />
-		{i18n.SERVICES_TITLE}
-	</MainTitle>
+<div class="grid w-full min-w-0 gap-12 lg:grid-cols-12 lg:gap-16">
+	<div class="flex flex-col gap-7 self-start lg:sticky lg:top-28 lg:col-span-4">
+		<MainTitle eyebrow={i18n.SERVICES_EYEBROW} title={i18n.SERVICES_TITLE} />
 
-	<p class="-mt-4 mb-8 max-w-2xl text-pretty text-base leading-relaxed text-primary sm:text-lg">
-		{i18n.SERVICES_SUBTITLE}
-	</p>
+		<p class="max-w-md text-pretty leading-relaxed text-primary">
+			{i18n.SERVICES_SUBTITLE}
+		</p>
 
-	<ul class="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+		<ActionLink href={resolveLocalizedHref("/#contact", locale)} variant="ghost" class="self-start">
+			{i18n.HOME_CTA_CONTACT}
+		</ActionLink>
+	</div>
+
+	<ul class="flex min-w-0 flex-col border-t border-line lg:col-span-8">
 		{
 			services.map((service) => (
-				<li class="group relative flex h-full flex-col gap-4 overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-slate-800/30 via-slate-900/40 to-slate-950/60 p-6 shadow-lg shadow-black/20 backdrop-blur-md transition-all duration-300 ease-out hover:-translate-y-1 hover:border-accent/30 hover:shadow-xl hover:shadow-accent/10">
-					<div
-						class="pointer-events-none absolute -right-6 -top-6 size-24 rounded-full bg-accent/5 blur-2xl transition-opacity duration-300 group-hover:bg-accent/10"
-						aria-hidden="true"
-					/>
+				<li class="group border-b border-line">
+					<div class="flex items-start gap-4 py-6 transition-colors duration-300 sm:gap-6 sm:py-8">
+						<div class="flex min-w-0 flex-1 flex-col gap-2">
+							<div class="flex items-center justify-between gap-4">
+								<h3 class="font-display text-2xl text-bone transition-colors duration-300 group-hover:text-accent sm:text-3xl">
+									{service.title}
+								</h3>
+								<service.icon class="size-5 shrink-0 text-secondary transition-colors duration-300 group-hover:text-accent" />
+							</div>
 
-					<span class="relative inline-flex size-12 items-center justify-center rounded-2xl border border-accent/20 bg-accent/10 text-accent shadow-sm">
-						<service.icon class="size-6" />
-					</span>
-
-					<h3 class="relative text-lg font-bold text-slate-100 transition-colors duration-300 group-hover:text-accent">
-						{service.title}
-					</h3>
-
-					<p class="relative text-sm leading-relaxed text-primary/90">{service.description}</p>
+							<p class="max-w-xl text-sm leading-relaxed text-primary">{service.description}</p>
+						</div>
+					</div>
 				</li>
 			))
 		}

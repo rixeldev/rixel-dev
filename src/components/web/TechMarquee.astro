@@ -1,0 +1,45 @@
+---
+import Android from "@/icons/Android.astro"
+import AstroBrand from "@/icons/AstroBrand.astro"
+import Firebase from "@/icons/Firebase.astro"
+import Git from "@/icons/Git.astro"
+import Kotlin from "@/icons/Kotlin.astro"
+import NodeJS from "@/icons/NodeJS.astro"
+import React from "@/icons/React.astro"
+import ReactNative from "@/icons/ReactNative.astro"
+import Supabase from "@/icons/Supabase.astro"
+import TS from "@/icons/TS.astro"
+import Tailwind from "@/icons/Tailwind.astro"
+
+const stack = [
+	{ name: "Astro", icon: AstroBrand },
+	{ name: "React", icon: React },
+	{ name: "React Native", icon: ReactNative },
+	{ name: "TypeScript", icon: TS },
+	{ name: "Tailwind CSS", icon: Tailwind },
+	{ name: "Supabase", icon: Supabase },
+	{ name: "Node.js", icon: NodeJS },
+	{ name: "Kotlin", icon: Kotlin },
+	{ name: "Firebase", icon: Firebase },
+	{ name: "Android", icon: Android },
+	{ name: "Git", icon: Git },
+]
+---
+
+<div class="marquee border-y border-line bg-ink-soft/50 py-4" aria-hidden="true">
+	<div class="marquee-track animate-marquee items-center">
+		{
+			[0, 1].map((copy) => (
+				<ul class="flex shrink-0 items-center gap-8 pr-8" aria-hidden={copy === 1}>
+					{stack.map((item) => (
+						<li class="flex items-center gap-2.5 font-mono text-xs uppercase tracking-widest text-secondary">
+							<item.icon class="size-4" />
+							<span>{item.name}</span>
+							<span class="ml-4 size-1 rounded-full bg-accent/60" />
+						</li>
+					))}
+				</ul>
+			))
+		}
+	</div>
+</div>

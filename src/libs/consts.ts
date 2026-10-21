@@ -1,8 +1,8 @@
-import Chat from "@/icons/Chat.astro"
+import Android from "@/icons/Android.astro"
+import Book from "@/icons/Book.astro"
 import Discord from "@/icons/Discord.astro"
 import GitHub from "@/icons/GitHub.astro"
 import Instagram from "@/icons/Instagram.astro"
-import Binoculars from "@/icons/Binoculars.astro"
 import Photography from "@/icons/Photography.astro"
 import Timeline from "@/icons/Timeline.astro"
 import WhatsApp from "@/icons/WhatsApp.astro"
@@ -16,18 +16,22 @@ export const footerLinks = (): FooterLink[] => {
 		{
 			href: "https://github.com/rixeldev",
 			icon: GitHub,
+			label: "GitHub",
 		},
 		{
 			href: "https://instagram.com/rixel.dev",
 			icon: Instagram,
+			label: "Instagram",
 		},
 		{
 			href: "https://discord.gg/VDk8tprcH2",
 			icon: Discord,
+			label: "Discord",
 		},
 		{
 			href: "https://whatsapp.com/channel/0029Va8erNPAojYouLjOuG0Y",
 			icon: WhatsApp,
+			label: "WhatsApp",
 		},
 	]
 }
@@ -44,28 +48,28 @@ export const navItems = (currentLocale?: string): Header[] => {
 			icon: WWW,
 		},
 		{
+			title: i18n.APPS,
+			label: "apps",
+			href: "/apps",
+			icon: Android,
+		},
+		{
+			title: i18n.PORTFOLIO,
+			label: "portfolio",
+			href: "/portfolio",
+			icon: Timeline,
+		},
+		{
+			title: i18n.ARTICLES,
+			label: "articles",
+			href: "/articles",
+			icon: Book,
+		},
+		{
 			title: i18n.PHOTOGRAPHY,
 			label: "photography",
 			href: "/photography",
 			icon: Photography,
-		},
-		{
-			title: i18n.MY_PHOTOS,
-			label: "gallery",
-			href: "/gallery",
-			icon: Binoculars,
-		},
-		{
-			title: i18n.PORTFOLIO,
-			label: "about",
-			href: "/portfolio#about",
-			icon: Timeline,
-		},
-		{
-			title: i18n.CONTACT,
-			label: "contact",
-			href: "#contact",
-			icon: Chat,
 		},
 	]
 
@@ -76,4 +80,36 @@ export const navItems = (currentLocale?: string): Header[] => {
 		url: item.href,
 		basePath: item.href.startsWith("/") ? item.href.split("#")[0] : undefined,
 	}))
+}
+
+export const footerNavItems = (currentLocale?: string) => {
+	const locale = normalizeLocale(currentLocale)
+	const i18n = getI18N({ currentLocale: locale })
+
+	return [
+		{
+			title: i18n.FOOTER_GROUP_SITE,
+			links: [
+				{ label: i18n.HOME, href: "/" },
+				{ label: i18n.APPS, href: "/apps" },
+				{ label: i18n.PORTFOLIO, href: "/portfolio" },
+				{ label: i18n.ARTICLES, href: "/articles" },
+				{ label: i18n.PHOTOGRAPHY, href: "/photography" },
+			],
+		},
+		{
+			title: i18n.FOOTER_GROUP_CLIENTS,
+			links: [
+				{ label: i18n.GALLERY, href: "/gallery" },
+				{ label: i18n.CONTACT, href: "/#contact" },
+			],
+		},
+		{
+			title: i18n.FOOTER_GROUP_LEGAL,
+			links: [
+				{ label: i18n.PRIVACY, href: "/privacy" },
+				{ label: i18n.TERMS, href: "/terms" },
+			],
+		},
+	]
 }
