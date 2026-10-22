@@ -1,215 +1,29 @@
 ---
+import LegalPage from "@/components/legal/LegalPage.astro"
 import Layout from "@/layouts/Layout.astro"
+import { buildBreadcrumbJsonLd } from "@/libs/articlesSeo"
+import { SITE_URL } from "@/libs/structuredData"
 import { getActiveLocale, getI18N, resolveLocalizedPath } from "@/locales/index"
+import { getLegalDocument } from "@/services/legal"
 
 const locale = getActiveLocale(Astro)
 const i18n = getI18N({ currentLocale: locale })
+const document = getLegalDocument("privacy", locale)
+
+const canonical = new URL(resolveLocalizedPath("/privacy/"), SITE_URL).toString()
+const jsonLd = buildBreadcrumbJsonLd([
+	{ name: i18n.HOME, item: SITE_URL },
+	{ name: document.title, item: canonical },
+])
 ---
 
 <Layout
-	title={`${i18n.PRIVACY} - Rixel`}
-	description={i18n.PRIVACY_PAGE_DESCRIPTION}
-	canonical={new URL(resolveLocalizedPath("/privacy/", locale), "https://rixel.dev").toString()}
+	title={`${document.title} - Rixel`}
+	description={document.description}
+	canonical={canonical}
+	keywords={`privacy policy, data protection, account deletion, Stop Trivia, Setuno, RixelDev, Rikelvi Capellán`}
+	jsonLd={jsonLd}
+	contact={false}
 >
-	<article class="mx-auto flex w-full max-w-4xl flex-col items-center px-4 pb-24 pt-32 sm:px-6">
-		<div class="flex w-full flex-col items-center">
-			<section class="mb-6 w-full max-w-4xl rounded-3xl border border-line bg-ink-panel px-5 py-5">
-				<p class="text-2xl font-bold text-accent">{i18n.PRIVACY}</p>
-				<p class="mb-2 text-sm font-semibold text-secondary">
-					{i18n.LAST_UPDATED}
-				</p>
-				<p class="text-primary">
-					{i18n.PRIVACY_APP_P_1}
-				</p>
-			</section>
-
-			<h2 class="mb-2 font-semibold italic text-secondary">
-				{i18n.FOR_APPS}
-			</h2>
-			<section class="mb-6 w-full max-w-4xl rounded-3xl border border-line bg-ink-panel px-5 py-5">
-				<p class="text-xl font-bold text-bone">
-					1. {i18n.INFORMATION_WE_COLLETC}
-				</p>
-				<p class="mt-2 font-semibold text-primary">
-					1.1 {i18n.LOGIN_INFORMATION}
-				</p>
-				<p class="text-primary">
-					{i18n.PRIVACY_APP_P_2}
-				</p>
-
-				<p class="mt-2 font-semibold text-primary">
-					1.2 {i18n.APP_INFORMATION}
-				</p>
-				<p class="text-primary">
-					{i18n.PRIVACY_APP_P_3}
-				</p>
-			</section>
-
-			<section class="mb-6 w-full max-w-4xl rounded-3xl border border-line bg-ink-panel px-5 py-5">
-				<p class="text-xl font-bold text-bone">
-					2. {i18n.USE_OF_INFORMATION}
-				</p>
-				<p class="mt-2 font-semibold text-primary">
-					2.1 {i18n.PERSONALIZATION_IMPROVEMENT}
-				</p>
-				<p class="text-primary">
-					{i18n.PRIVACY_APP_P_4}
-				</p>
-
-				<p class="mt-2 font-semibold text-primary">
-					2.2 {i18n.COMMUNICATION}
-				</p>
-				<p class="text-primary">
-					{i18n.PRIVACY_APP_P_5}
-				</p>
-
-				<p class="mt-2 font-semibold text-primary">
-					2.3 {i18n.ANALYSIS_AND_STATISTICS}
-				</p>
-				<p class="text-primary">
-					{i18n.PRIVACY_APP_P_6}
-				</p>
-			</section>
-
-			<section class="mb-6 w-full max-w-4xl rounded-3xl border border-line bg-ink-panel px-5 py-5">
-				<p class="text-xl font-bold text-bone">
-					3. {i18n.SHARING_INFORMATION}
-				</p>
-				<p class="mt-2 font-semibold text-primary">
-					3.1 {i18n.TRUSTED_THIRD_PARTIES}
-				</p>
-				<p class="text-primary">
-					{i18n.PRIVACY_APP_P_7}
-				</p>
-
-				<p class="mt-2 font-semibold text-primary">
-					3.2 {i18n.LEGAL_COMPLIANCE}
-				</p>
-				<p class="text-primary">
-					{i18n.PRIVACY_APP_P_8}
-				</p>
-			</section>
-
-			<section class="mb-6 w-full max-w-4xl rounded-3xl border border-line bg-ink-panel px-5 py-5">
-				<p class="text-xl font-bold text-bone">
-					4. {i18n.DATA_SECURITY}
-				</p>
-				<p class="text-primary">
-					{i18n.PRIVACY_APP_P_9}
-				</p>
-			</section>
-
-			<section class="mb-6 w-full max-w-4xl rounded-3xl border border-line bg-ink-panel px-5 py-5">
-				<p class="text-xl font-bold text-bone">
-					5. {i18n.YOUR_RIGHTS}
-				</p>
-				<p class="text-primary">
-					{i18n.PRIVACY_APP_P_10}
-				</p>
-			</section>
-
-			<section class="mb-6 w-full max-w-4xl rounded-3xl border border-line bg-ink-panel px-5 py-5">
-				<p class="text-xl font-bold text-bone">
-					6. {i18n.CHANGES_POLICY}
-				</p>
-				<p class="text-primary">
-					{i18n.PRIVACY_APP_P_11}
-				</p>
-			</section>
-
-			<h2 class="mb-2 font-semibold italic text-secondary">
-				{i18n.FOR_GAMES}
-			</h2>
-			<section class="mb-6 w-full max-w-4xl rounded-3xl border border-line bg-ink-panel px-5 py-5">
-				<p class="text-xl font-bold text-bone">
-					1. {i18n.INFORMATION_WE_COLLETC}
-				</p>
-				<p class="mt-2 font-semibold text-primary">
-					1.1 {i18n.LOGIN_INFORMATION}
-				</p>
-				<p class="text-primary">
-					{i18n.PRIVACY_GAMES_P_1}
-				</p>
-
-				<p class="mt-2 font-semibold text-primary">
-					1.2 {i18n.GAME_INFORMATION}
-				</p>
-				<p class="text-primary">
-					{i18n.PRIVACY_GAMES_P_2}
-				</p>
-			</section>
-
-			<section class="mb-6 w-full max-w-4xl rounded-3xl border border-line bg-ink-panel px-5 py-5">
-				<p class="text-xl font-bold text-bone">
-					2. {i18n.USE_OF_INFORMATION}
-				</p>
-				<p class="mt-2 font-semibold text-primary">
-					2.1 {i18n.PERSONALIZATION_IMPROVEMENT}
-				</p>
-				<p class="text-primary">
-					{i18n.PRIVACY_GAMES_P_3}
-				</p>
-
-				<p class="mt-2 font-semibold text-primary">
-					2.2 {i18n.COMMUNICATION}
-				</p>
-				<p class="text-primary">
-					{i18n.PRIVACY_GAMES_P_4}
-				</p>
-
-				<p class="mt-2 font-semibold text-primary">
-					2.3 {i18n.ANALYSIS_AND_STATISTICS}
-				</p>
-				<p class="text-primary">
-					{i18n.PRIVACY_GAMES_P_5}
-				</p>
-			</section>
-
-			<section class="mb-6 w-full max-w-4xl rounded-3xl border border-line bg-ink-panel px-5 py-5">
-				<p class="text-xl font-bold text-bone">
-					3. {i18n.SHARING_INFORMATION}
-				</p>
-				<p class="mt-2 font-semibold text-primary">
-					3.1 {i18n.TRUSTED_THIRD_PARTIES}
-				</p>
-				<p class="text-primary">
-					{i18n.PRIVACY_GAMES_P_6}
-				</p>
-
-				<p class="mt-2 font-semibold text-primary">
-					3.2 {i18n.LEGAL_COMPLIANCE}
-				</p>
-				<p class="text-primary">
-					{i18n.PRIVACY_GAMES_P_7}
-				</p>
-			</section>
-
-			<section class="mb-6 w-full max-w-4xl rounded-3xl border border-line bg-ink-panel px-5 py-5">
-				<p class="text-xl font-bold text-bone">
-					4. {i18n.DATA_SECURITY}
-				</p>
-				<p class="text-primary">
-					{i18n.PRIVACY_GAMES_P_8}
-				</p>
-			</section>
-
-			<section class="mb-6 w-full max-w-4xl rounded-3xl border border-line bg-ink-panel px-5 py-5">
-				<p class="text-xl font-bold text-bone">
-					5. {i18n.YOUR_RIGHTS}
-				</p>
-				<p class="text-primary">
-					{i18n.PRIVACY_GAMES_P_9}
-				</p>
-			</section>
-
-			<section class="mb-6 w-full max-w-4xl rounded-3xl border border-line bg-ink-panel px-5 py-5">
-				<p class="text-xl font-bold text-bone">
-					6. {i18n.CHANGES_POLICY}
-				</p>
-				<p class="text-primary">
-					{i18n.PRIVACY_GAMES_P_10}
-				</p>
-			</section>
-		</div>
-	</article>
+	<LegalPage document={document} locale={locale} />
 </Layout>

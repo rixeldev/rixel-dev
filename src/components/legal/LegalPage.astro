@@ -1,0 +1,336 @@
+---
+import ActionLink from "@/components/ui/ActionLink.astro"
+import type { LegalDocument } from "@/interfaces/legal"
+import { getI18N, resolveLocalizedHref } from "@/locales/index"
+import { LEGAL_CONTACT_EMAIL } from "@/services/legal"
+
+interface Props {
+	document: LegalDocument
+	locale: string
+}
+
+const { document, locale } = Astro.props
+
+const i18n = getI18N({ currentLocale: locale })
+const isPrivacy = document.id === "privacy"
+const relatedHref = resolveLocalizedHref(isPrivacy ? "/terms" : "/privacy", locale)
+const relatedLabel = isPrivacy ? i18n.TERMS : i18n.PRIVACY
+const contactHref = `mailto:${LEGAL_CONTACT_EMAIL}`
+
+const escapeHtml = (value: string): string =>
+	value
+		.replaceAll("&", "&amp;")
+		.replaceAll("<", "&lt;")
+		.replaceAll(">", "&gt;")
+		.replaceAll('"', "&quot;")
+
+/** Renders the small inline syntax used in the legal copy: links, bold and code. */
+const renderInline = (value: string): string =>
+	escapeHtml(value)
+		.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_match, label: string, href: string) => {
+			const external = /^(?:https?:)?\/\//i.test(href)
+			const target = external ? ' target="_blank" rel="noopener noreferrer"' : ""
+			return `<a href="${href}"${target} class="font-medium text-accent underline decoration-accent/30 underline-offset-4 transition-colors hover:decoration-accent">${label}</a>`
+		})
+		.replace(/\*\*([^*]+)\*\*/g, '<strong class="font-semibold text-bone">$1</strong>')
+		.replace(
+			/`([^`]+)`/g,
+			'<code class="rounded bg-bone/10 px-1.5 py-0.5 font-mono text-accent-soft">$1</code>'
+		)
+---
+
+<article class="relative mx-auto w-full max-w-6xl px-4 pb-24 pt-32 sm:px-6 sm:pt-36 lg:px-8">
+	<nav aria-label="Breadcrumb">
+		<ol
+			class="flex flex-wrap items-center gap-2 font-mono text-xs uppercase tracking-wider text-secondary"
+		>
+			<li>
+				<a href={resolveLocalizedHref("/", locale)} class="transition-colors hover:text-accent">
+					{i18n.HOME}
+				</a>
+			</li>
+			<li aria-hidden="true">/</li>
+			<li>
+				<span class="text-bone" aria-current="page">{document.title}</span>
+			</li>
+		</ol>
+	</nav>
+
+	<header class="mt-8 flex flex-col gap-6">
+		<div class="flex items-center gap-3 font-mono text-xs uppercase tracking-widest text-secondary">
+			<span class="size-1.5 rounded-full bg-accent" aria-hidden="true"></span>
+			<span>{i18n.LEGAL_EYEBROW}</span>
+		</div>
+
+		<h1
+			class="display-balance max-w-3xl font-display text-4xl font-semibold leading-none tracking-tight text-bone sm:text-5xl lg:text-6xl"
+		>
+			{document.title}
+		</h1>
+
+		{
+			document.intro.map((paragraph) => (
+				<p
+					class="max-w-2xl text-pretty text-base leading-relaxed text-primary"
+					set:html={renderInline(paragraph)}
+				/>
+			))
+		}
+
+		<dl class="flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-xs text-secondary">
+			<div class="flex items-center gap-2">
+				<dt>{i18n.LEGAL_UPDATED}</dt>
+				<dd class="text-bone">{document.updated}</dd>
+			</div>
+			<div class="flex items-center gap-2">
+				<dt>{i18n.LEGAL_EFFECTIVE}</dt>
+				<dd class="text-bone">{document.effective}</dd>
+			</div>
+		</dl>
+
+		<div class="flex flex-wrap gap-3">
+			<ActionLink href={contactHref}>{i18n.LEGAL_EMAIL_US}</ActionLink>
+			<ActionLink href={relatedHref} variant="ghost">{relatedLabel}</ActionLink>
+			{
+				isPrivacy && (
+					<ActionLink href="#account-deletion" variant="line">
+						{i18n.LEGAL_DELETE_DATA}
+					</ActionLink>
+				)
+			}
+		</div>
+	</header>
+
+	<section
+		aria-labelledby="legal-summary"
+		class="mt-10 rounded-3xl border border-accent/25 bg-accent/5 px-5 py-6 sm:px-7 sm:py-7"
+	>
+		<h2 id="legal-summary" class="font-mono text-xs uppercase tracking-widest text-accent">
+			{i18n.LEGAL_SUMMARY_TITLE}
+		</h2>
+		<ul class="mt-4 grid gap-3 sm:grid-cols-2">
+			{
+				document.summary.map((item) => (
+					<li class="flex gap-3 text-sm leading-relaxed text-primary">
+						<span class="mt-1.5 size-1.5 shrink-0 rounded-full bg-accent" aria-hidden="true" />
+						<span set:html={renderInline(item)} />
+					</li>
+				))
+			}
+		</ul>
+	</section>
+
+	<details class="group mt-6 rounded-3xl border border-line bg-ink-panel px-5 py-4 lg:hidden">
+		<summary
+			class="flex cursor-pointer list-none items-center justify-between gap-4 font-mono text-xs uppercase tracking-widest text-secondary transition-colors hover:text-accent"
+		>
+			{i18n.LEGAL_ON_THIS_PAGE}
+			<span
+				class="text-base transition-transform duration-300 group-open:rotate-45"
+				aria-hidden="true">+</span
+			>
+		</summary>
+		<nav aria-label={i18n.LEGAL_ON_THIS_PAGE} class="mt-3">
+			<ul class="flex flex-col gap-1 text-sm">
+				{
+					document.sections.map((section) => (
+						<li>
+							<a
+								href={`#${section.id}`}
+								class="block rounded-lg px-2 py-1.5 text-primary transition-colors hover:bg-bone/5 hover:text-accent"
+							>
+								{section.title}
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		</nav>
+	</details>
+
+	<div class="mt-10 grid gap-10 lg:grid-cols-12 lg:gap-12">
+		<aside class="hidden lg:col-span-4 lg:block">
+			<div class="sticky top-28 flex flex-col gap-5">
+				<nav
+					aria-label={i18n.LEGAL_ON_THIS_PAGE}
+					class="rounded-3xl border border-line bg-ink-panel px-5 py-6"
+				>
+					<h2 class="font-mono text-xs uppercase tracking-widest text-secondary">
+						{i18n.LEGAL_ON_THIS_PAGE}
+					</h2>
+					<ul class="mt-4 flex max-h-96 flex-col gap-1 overflow-y-auto pr-1 text-sm">
+						{
+							document.sections.map((section) => (
+								<li>
+									<a
+										href={`#${section.id}`}
+										class="block rounded-lg px-2 py-1.5 text-primary transition-colors hover:bg-bone/5 hover:text-accent"
+									>
+										{section.title}
+									</a>
+								</li>
+							))
+						}
+					</ul>
+				</nav>
+
+				<div class="rounded-3xl border border-line bg-ink-panel px-5 py-5">
+					<h2 class="font-display text-lg leading-tight text-bone">
+						{i18n.LEGAL_CONTACT_TITLE}
+					</h2>
+					<p class="mt-2 text-sm leading-relaxed text-secondary">
+						{i18n.LEGAL_CONTACT_TEXT}
+					</p>
+					<a
+						href={contactHref}
+						class="link-underline mt-3 inline-block text-sm font-medium text-accent"
+					>
+						{LEGAL_CONTACT_EMAIL}
+					</a>
+				</div>
+			</div>
+		</aside>
+
+		<div class="flex min-w-0 flex-col gap-6 lg:col-span-8">
+			{
+				document.sections.map((section) => (
+					<section
+						id={section.id}
+						class="scroll-mt-28 rounded-3xl border border-line bg-ink-panel px-5 py-6 sm:px-7 sm:py-8"
+					>
+						<h2 class="display-balance font-display text-2xl font-semibold leading-tight tracking-tight text-bone sm:text-3xl">
+							{section.title}
+						</h2>
+
+						<div class="mt-4 flex flex-col gap-4">
+							{section.blocks.map((block) => {
+								if (block.kind === "paragraph") {
+									return (
+										<p
+											class="text-pretty leading-relaxed text-primary"
+											set:html={renderInline(block.text)}
+										/>
+									)
+								}
+
+								if (block.kind === "list") {
+									if (block.ordered) {
+										return (
+											<ol class="flex flex-col gap-2.5">
+												{block.items.map((item, index) => (
+													<li class="flex gap-3 text-sm leading-relaxed text-primary sm:text-base">
+														<span class="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full border border-accent/30 bg-accent/10 font-mono text-xs text-accent">
+															{index + 1}
+														</span>
+														<span class="pt-0.5" set:html={renderInline(item)} />
+													</li>
+												))}
+											</ol>
+										)
+									}
+
+									return (
+										<ul class="flex flex-col gap-2.5">
+											{block.items.map((item) => (
+												<li class="flex gap-3 text-sm leading-relaxed text-primary sm:text-base">
+													<span
+														class="mt-2 size-1.5 shrink-0 rounded-full bg-accent/70"
+														aria-hidden="true"
+													/>
+													<span set:html={renderInline(item)} />
+												</li>
+											))}
+										</ul>
+									)
+								}
+
+								if (block.kind === "callout") {
+									const isWarning = block.tone === "warning"
+									return (
+										<div
+											class:list={[
+												"rounded-2xl border px-4 py-4 sm:px-5",
+												isWarning
+													? "border-warning/30 bg-warning/5"
+													: "border-accent/25 bg-accent/5",
+											]}
+										>
+											{block.title ? (
+												<p
+													class:list={["font-semibold", isWarning ? "text-warning" : "text-accent"]}
+													set:html={renderInline(block.title)}
+												/>
+											) : null}
+											{block.text ? (
+												<p
+													class:list={[
+														"text-sm leading-relaxed text-primary",
+														block.title ? "mt-2" : "",
+													]}
+													set:html={renderInline(block.text)}
+												/>
+											) : null}
+											{block.items && block.items.length > 0 ? (
+												<ul class="mt-3 flex flex-col gap-2">
+													{block.items.map((item) => (
+														<li class="flex gap-3 text-sm leading-relaxed text-primary">
+															<span
+																class:list={[
+																	"mt-1.5 size-1.5 shrink-0 rounded-full",
+																	isWarning ? "bg-warning" : "bg-accent",
+																]}
+																aria-hidden="true"
+															/>
+															<span set:html={renderInline(item)} />
+														</li>
+													))}
+												</ul>
+											) : null}
+										</div>
+									)
+								}
+
+								return (
+									<div class="w-full overflow-x-auto">
+										<table class="w-full border-collapse text-left text-xs sm:text-sm">
+											<thead>
+												<tr>
+													{block.head.map((cell) => (
+														<th
+															scope="col"
+															class="border-b border-line pb-3 pr-4 align-bottom font-mono text-xs uppercase tracking-wider text-secondary"
+															set:html={renderInline(cell)}
+														/>
+													))}
+												</tr>
+											</thead>
+											<tbody>
+												{block.rows.map((row) => (
+													<tr class="border-b border-line/60 last:border-0">
+														{row.map((cell) => (
+															<td
+																class="py-3 pr-4 align-top leading-relaxed text-primary"
+																set:html={renderInline(cell)}
+															/>
+														))}
+													</tr>
+												))}
+											</tbody>
+										</table>
+									</div>
+								)
+							})}
+						</div>
+					</section>
+				))
+			}
+
+			<a
+				href="#main"
+				class="self-start font-mono text-xs uppercase tracking-widest text-secondary transition-colors hover:text-accent"
+			>
+				{i18n.LEGAL_BACK_TO_TOP}
+			</a>
+		</div>
+	</div>
+</article>

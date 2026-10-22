@@ -109,6 +109,7 @@ export const footerNavItems = (currentLocale?: string) => {
 			links: [
 				{ label: i18n.PRIVACY, href: "/privacy" },
 				{ label: i18n.TERMS, href: "/terms" },
+				{ label: i18n.LEGAL_DELETE_DATA, href: "/privacy#account-deletion" },
 			],
 		},
 	]

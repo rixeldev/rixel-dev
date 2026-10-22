@@ -1,46 +1,29 @@
 ---
-import MainTitle from "@/components/MainTitle.astro"
-import SectionContainer from "@/components/SectionContainer.astro"
-import ActionLink from "@/components/ui/ActionLink.astro"
+import LegalPage from "@/components/legal/LegalPage.astro"
 import Layout from "@/layouts/Layout.astro"
-import {
-	getActiveLocale,
-	getI18N,
-	resolveLocalizedHref,
-	resolveLocalizedPath,
-} from "@/locales/index"
+import { buildBreadcrumbJsonLd } from "@/libs/articlesSeo"
+import { SITE_URL } from "@/libs/structuredData"
+import { getActiveLocale, getI18N, resolveLocalizedPath } from "@/locales/index"
+import { getLegalDocument } from "@/services/legal"
 
 const locale = getActiveLocale(Astro)
 const i18n = getI18N({ currentLocale: locale })
+const document = getLegalDocument("terms", locale)
+
+const canonical = new URL(resolveLocalizedPath("/terms/"), SITE_URL).toString()
+const jsonLd = buildBreadcrumbJsonLd([
+	{ name: i18n.HOME, item: SITE_URL },
+	{ name: document.title, item: canonical },
+])
 ---
 
 <Layout
-	title={`${i18n.TERMS} - Rixel`}
-	description={i18n.TERMS_PAGE_DESCRIPTION}
-	canonical={new URL(resolveLocalizedPath("/terms/", locale), "https://rixel.dev").toString()}
+	title={`${document.title} - Rixel`}
+	description={document.description}
+	canonical={canonical}
+	keywords={`terms and conditions, terms of service, Stop Trivia, Setuno, RixelDev, Rikelvi Capellán`}
+	jsonLd={jsonLd}
+	contact={false}
 >
-	<SectionContainer class="pb-28 pt-36">
-		<div class="flex w-full max-w-2xl flex-col gap-6">
-			<MainTitle eyebrow="Legal" title={i18n.TERMS} />
-
-			<p class="text-pretty text-base leading-relaxed text-primary">
-				{i18n.TERMS_PAGE_DESCRIPTION}
-			</p>
-
-			<p
-				class="rounded-3xl border border-line bg-ink-panel px-5 py-6 text-center text-base text-bone"
-			>
-				{i18n.TERMS_UNAVAILABLE}
-			</p>
-
-			<div class="flex flex-wrap gap-3">
-				<ActionLink href={resolveLocalizedHref("/privacy", locale)} variant="ghost">
-					{i18n.PRIVACY}
-				</ActionLink>
-				<ActionLink href={resolveLocalizedHref("/#contact", locale)}>
-					{i18n.CONTACT}
-				</ActionLink>
-			</div>
-		</div>
-	</SectionContainer>
+	<LegalPage document={document} locale={locale} />
 </Layout>
