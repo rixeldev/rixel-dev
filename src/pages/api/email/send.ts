@@ -1,4 +1,4 @@
-import { Resend } from 'resend'
+import { Resend } from "resend"
 
 interface RequestBody {
 	user_name: string
@@ -12,9 +12,9 @@ export async function POST({ request }: { request: Request }) {
 	const { user_name, user_email, message }: RequestBody = await request.json()
 
 	const { data, error } = await resend.emails.send({
-		from: 'contact@rixel.dev',
-		to: ['rikelvicapellan15@gmail.com'],
-		subject: 'Message from website',
+		from: "contact@rixel.dev",
+		to: ["rixeldev0@gmail.com"],
+		subject: "Message from website",
 		html: `
 			<!doctype html>
 			<html lang="en">

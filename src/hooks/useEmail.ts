@@ -34,7 +34,8 @@ export function useEmail() {
 			user_email === "thewhitzip@gmail.com" ||
 			user_email === "rikelvicapellan15@gmail.com" ||
 			user_email === "rrgnetflix@gmail.com" ||
-			user_email === "rilisservices@gmail.com"
+			user_email === "rilisservices@gmail.com" ||
+			user_email === "rixeldev0@gmail.com"
 		) {
 			window.toast({
 				dismissible: true,

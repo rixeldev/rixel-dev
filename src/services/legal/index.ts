@@ -11,7 +11,7 @@ import { privacyCopy } from "@/services/legal/privacy"
 import { termsCopy } from "@/services/legal/terms"
 
 /** Public address used in the legal documents and by the contact form. */
-export const LEGAL_CONTACT_EMAIL = "rikelvicapellan15@gmail.com"
+export const LEGAL_CONTACT_EMAIL = "rixeldev0@gmail.com"
 
 const pick = (text: LocalizedText, locale: Locale): string => text[locale]
 
