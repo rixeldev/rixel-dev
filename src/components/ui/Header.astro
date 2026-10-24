@@ -64,7 +64,7 @@ const contactHref = pathname === "/" ? "#contact" : resolveLocalizedHref("/#cont
 		<nav
 			id="main-navigation"
 			data-menu
-			aria-label="Main navigation"
+			aria-label={i18n.MAIN_NAVIGATION}
 			class="absolute inset-x-3 top-full z-40 mt-2 hidden flex-col gap-1 rounded-3xl border border-line bg-ink-soft/95 p-3 shadow-2xl shadow-black/60 backdrop-blur-xl md:static md:mt-0 md:flex md:w-auto md:flex-row md:items-center md:gap-1 md:rounded-none md:border-0 md:bg-transparent md:p-0 md:shadow-none md:backdrop-blur-none"
 		>
 			{
@@ -230,11 +230,18 @@ const contactHref = pathname === "/" ? "#contact" : resolveLocalizedHref("/#cont
 
 		localeRoot.dataset.localeReady = "true"
 		let isOpen = false
+		const localeOptions = Array.from(options)
 
-		const setOpenState = (open: boolean) => {
+		const setOpenState = (open: boolean, restoreFocus = false) => {
 			isOpen = open
 			localeRoot.dataset.open = open ? "true" : "false"
 			toggleButton.setAttribute("aria-expanded", open ? "true" : "false")
+
+			if (open) {
+				localeOptions[0]?.focus()
+			} else if (restoreFocus) {
+				toggleButton.focus()
+			}
 		}
 
 		toggleButton.addEventListener("click", (event) => {
@@ -260,8 +267,32 @@ const contactHref = pathname === "/" ? "#contact" : resolveLocalizedHref("/#cont
 			})
 		})
 
-		window.addEventListener("keydown", (event) => {
-			if (event.key === "Escape" && isOpen) setOpenState(false)
+		localeRoot.addEventListener("keydown", (event) => {
+			if (!isOpen) return
+
+			if (event.key === "Escape") {
+				event.preventDefault()
+				event.stopPropagation()
+				setOpenState(false, true)
+				return
+			}
+
+			const current = localeOptions.indexOf(document.activeElement as HTMLButtonElement)
+			const last = localeOptions.length - 1
+
+			if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+				event.preventDefault()
+				const step = event.key === "ArrowDown" ? 1 : -1
+				const next =
+					current === -1 ? 0 : (current + step + localeOptions.length) % localeOptions.length
+				localeOptions[next]?.focus()
+			} else if (event.key === "Home") {
+				event.preventDefault()
+				localeOptions[0]?.focus()
+			} else if (event.key === "End") {
+				event.preventDefault()
+				localeOptions[last]?.focus()
+			}
 		})
 	}
 
@@ -269,6 +300,7 @@ const contactHref = pathname === "/" ? "#contact" : resolveLocalizedHref("/#cont
 		const menuButton = document.querySelector<HTMLButtonElement>("[data-menu-toggle]")
 		const menu = document.querySelector<HTMLElement>("[data-menu]")
 		const headerBar = getHeaderBar()
+		const header = menuButton?.closest("header")
 		if (!menuButton || !menu || !headerBar || menuButton.dataset.menuReady === "true") return
 
 		menuButton.dataset.menuReady = "true"
@@ -279,7 +311,7 @@ const contactHref = pathname === "/" ? "#contact" : resolveLocalizedHref("/#cont
 		const closeLabel = menuButton.dataset.closeLabel ?? "Close"
 		let isMenuOpen = false
 
-		const setMenuState = (open: boolean) => {
+		const setMenuState = (open: boolean, restoreFocus = false) => {
 			isMenuOpen = open
 			menuButton.setAttribute("aria-expanded", open ? "true" : "false")
 			menuButton.setAttribute("aria-label", open ? closeLabel : openLabel)
@@ -288,6 +320,12 @@ const contactHref = pathname === "/" ? "#contact" : resolveLocalizedHref("/#cont
 			menu.classList.toggle("flex", open)
 			openIcon?.classList.toggle("hidden", open)
 			closeIcon?.classList.toggle("hidden", !open)
+
+			if (open) {
+				menu.querySelector<HTMLAnchorElement>("a")?.focus()
+			} else if (restoreFocus) {
+				menuButton.focus()
+			}
 		}
 
 		const syncMenuWithViewport = () => {
@@ -328,6 +366,12 @@ const contactHref = pathname === "/" ? "#contact" : resolveLocalizedHref("/#cont
 
 		menu.querySelectorAll("a").forEach((link) => {
 			link.addEventListener("click", () => setMenuState(false))
+		})
+
+		header?.addEventListener("keydown", (event) => {
+			if (event.key !== "Escape" || !isMenuOpen) return
+			event.preventDefault()
+			setMenuState(false, true)
 		})
 	}
 
