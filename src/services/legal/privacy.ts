@@ -7,8 +7,8 @@ export const privacyCopy: LegalDocumentCopy = {
 		en: "What data RixelDev collects across rixel.dev, Stop Trivia and Setuno, why we collect it, who we share it with, how long we keep it and how to delete your account.",
 		es: "Qué datos recopila RixelDev en rixel.dev, Stop Trivia y Setuno, por qué los recopilamos, con quién los compartimos, cuánto tiempo los conservamos y cómo borrar tu cuenta.",
 	},
-	updated: { en: "October 21, 2026", es: "21 de octubre de 2026" },
-	effective: { en: "October 21, 2026", es: "21 de octubre de 2026" },
+	updated: { en: "October 24, 2026", es: "24 de octubre de 2026" },
+	effective: { en: "October 24, 2026", es: "24 de octubre de 2026" },
 	intro: [
 		{
 			en: "This policy explains how personal data is handled on this website, in the client photo galleries and in our Android apps. It is written to be read, not to hide behind legal language: if something is unclear, write to us and we will explain it.",
@@ -21,8 +21,8 @@ export const privacyCopy: LegalDocumentCopy = {
 			es: "Recopilamos solo lo que los productos necesitan: tu cuenta, el contenido que creas, datos técnicos y, en Stop Trivia, identificadores publicitarios.",
 		},
 		{
-			en: "We do not sell your data, and rixel.dev runs no advertising or analytics cookies.",
-			es: "No vendemos tus datos y rixel.dev no usa cookies publicitarias ni de analítica.",
+			en: "We do not sell your data, and rixel.dev runs no advertising cookies. Its traffic analytics are cookieless and aggregate-only.",
+			es: "No vendemos tus datos y rixel.dev no usa cookies publicitarias. Su analítica de tráfico es sin cookies y solo agregada.",
 		},
 		{
 			en: "You can delete your account and its data at any time, from the app or by email, and we complete the request within 30 days.",
@@ -249,8 +249,8 @@ export const privacyCopy: LegalDocumentCopy = {
 				{
 					kind: "paragraph",
 					text: {
-						en: "rixel.dev uses as few cookies as possible. We run no advertising cookies and no third-party analytics on this website.",
-						es: "rixel.dev usa las mínimas cookies posibles. No usamos cookies publicitarias ni analítica de terceros en este sitio.",
+						en: "rixel.dev uses as few cookies as possible: no advertising cookies and no cross-site tracking. We measure traffic and performance with Vercel Web Analytics and Speed Insights, which are cookieless — they do not store identifiers on your device — and only report aggregate page views and Core Web Vitals.",
+						es: "rixel.dev usa las mínimas cookies posibles: no usamos cookies publicitarias ni seguimiento entre sitios. Medimos el tráfico y el rendimiento con Vercel Web Analytics y Speed Insights, que no usan cookies —no guardan identificadores en tu dispositivo— y solo reportan visitas y Core Web Vitals agregados.",
 					},
 				},
 				{
@@ -393,8 +393,8 @@ export const privacyCopy: LegalDocumentCopy = {
 						[
 							{ en: "Vercel", es: "Vercel" },
 							{
-								en: "Website hosting and aggregate performance metrics",
-								es: "Alojamiento del sitio y métricas agregadas de rendimiento",
+								en: "Website hosting, cookieless traffic analytics and aggregate performance metrics",
+								es: "Alojamiento del sitio, analítica sin cookies y métricas agregadas de rendimiento",
 							},
 							{
 								en: "Request data and Core Web Vitals measurements",
