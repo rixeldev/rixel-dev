@@ -2,12 +2,14 @@
 import ArticleTile from "@/components/ArticleTile.astro"
 import MainTitle from "@/components/MainTitle.astro"
 import SectionContainer from "@/components/SectionContainer.astro"
+import type { Preload } from "@/interfaces/preload"
 import {
 	buildArticlesIndexJsonLd,
 	estimateReadingTime,
 	resolveCoverUrl,
 	sortArticlesByDate,
 } from "@/libs/articlesSeo"
+import { imageMimeType, isLocalAsset } from "@/libs/images"
 import {
 	getActiveLocale,
 	getI18N,
@@ -32,6 +34,11 @@ const pageDescription = i18n.ARTICLES_INDEX_SEO_DESCRIPTION
 const featuredImage = articles[0]?.data.cover
 	? resolveCoverUrl(articles[0].data.cover)
 	: "https://rixel.dev/images/embedded-img.avif"
+const firstCover = orderedArticles[0]?.data.cover
+const preloads: Preload[] =
+	firstCover && isLocalAsset(firstCover)
+		? [{ as: "image", href: firstCover, type: imageMimeType(firstCover), rel: "preload" }]
+		: []
 const jsonLd = buildArticlesIndexJsonLd({
 	articles,
 	locale,
@@ -59,6 +66,7 @@ const topTags = [...tagFrequency.entries()]
 	image={featuredImage}
 	keywords={i18n.ARTICLES_INDEX_KEYWORDS}
 	jsonLd={jsonLd}
+	preload={preloads}
 >
 	<SectionContainer class="pt-32 sm:pt-36">
 		<div class="flex w-full flex-col gap-10">

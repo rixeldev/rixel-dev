@@ -4,6 +4,7 @@ import Badge from "@/components/Badge.astro"
 import MainTitle from "@/components/MainTitle.astro"
 import SectionContainer from "@/components/SectionContainer.astro"
 import RightArrow from "@/icons/RightArrow.astro"
+import type { Preload } from "@/interfaces/preload"
 import Layout from "@/layouts/Layout.astro"
 import {
 	buildArticleJsonLd,
@@ -15,6 +16,7 @@ import {
 	resolveCoverUrl,
 	sortArticlesByDate,
 } from "@/libs/articlesSeo"
+import { imageMimeType, isLocalAsset } from "@/libs/images"
 import {
 	getI18N,
 	normalizeLocale,
@@ -71,6 +73,10 @@ const jsonLd = [
 		{ name: title, item: canonical },
 	]),
 ]
+
+const preloads: Preload[] = isLocalAsset(cover)
+	? [{ as: "image", href: cover, type: imageMimeType(cover), rel: "preload" }]
+	: []
 ---
 
 <Layout
@@ -90,6 +96,7 @@ const jsonLd = [
 	alternates={alternates}
 	jsonLd={jsonLd}
 	locale={locale}
+	preload={preloads}
 >
 	<SectionContainer class="pt-32 sm:pt-36">
 		<article class="flex w-full max-w-3xl flex-col">
@@ -149,6 +156,8 @@ const jsonLd = [
 				alt={`Rixel's article ${title}`}
 				width="1280"
 				height="720"
+				fetchpriority="high"
+				decoding="async"
 				class="mt-10 aspect-video w-full rounded-3xl border border-line object-cover"
 			/>
 

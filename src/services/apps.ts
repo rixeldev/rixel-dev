@@ -45,6 +45,9 @@ interface AppRecord {
 		ring: string
 	}
 	featureGraphic: AppPromoCopy
+	/** Dedicated social preview image: WebP is not supported by every platform. */
+	ogImage?: string
+	ogImageEs?: string
 	screenshots: AppScreenshotCopy[]
 	stack: string[]
 	copy: {
@@ -107,6 +110,7 @@ export interface AppInfo {
 	packageId: string
 	icon: string
 	featureGraphic: AppPromo
+	ogImage: string
 	screenshots: AppScreenshot[]
 	version: string
 	price: string
@@ -131,8 +135,8 @@ const appRecords: AppRecord[] = [
 			ring: "ring-teal-400/30",
 		},
 		featureGraphic: {
-			src: "/apps/stop-trivia/en/banner.png",
-			srcEs: "/apps/stop-trivia/es/banner-es.png",
+			src: "/apps/stop-trivia/en/banner.webp",
+			srcEs: "/apps/stop-trivia/es/banner-es.webp",
 			width: 1798,
 			height: 875,
 			alt: {
@@ -140,10 +144,12 @@ const appRecords: AppRecord[] = [
 				es: "Arte promocional de Stop Trivia con la colección de juegos y la insignia de Google Play",
 			},
 		},
+		ogImage: "/apps/stop-trivia/en/banner-og.jpg",
+		ogImageEs: "/apps/stop-trivia/es/banner-es-og.jpg",
 		screenshots: [
 			{
-				src: "/apps/stop-trivia/en/1.png",
-				srcEs: "/apps/stop-trivia/es/1-es.png",
+				src: "/apps/stop-trivia/en/1.webp",
+				srcEs: "/apps/stop-trivia/es/1-es.webp",
 				width: 1672,
 				height: 941,
 				alt: {
@@ -152,8 +158,8 @@ const appRecords: AppRecord[] = [
 				},
 			},
 			{
-				src: "/apps/stop-trivia/en/2.png",
-				srcEs: "/apps/stop-trivia/es/2-es.png",
+				src: "/apps/stop-trivia/en/2.webp",
+				srcEs: "/apps/stop-trivia/es/2-es.webp",
 				width: 1672,
 				height: 941,
 				alt: {
@@ -162,8 +168,8 @@ const appRecords: AppRecord[] = [
 				},
 			},
 			{
-				src: "/apps/stop-trivia/en/3.png",
-				srcEs: "/apps/stop-trivia/es/3-es.png",
+				src: "/apps/stop-trivia/en/3.webp",
+				srcEs: "/apps/stop-trivia/es/3-es.webp",
 				width: 1672,
 				height: 941,
 				alt: {
@@ -172,8 +178,8 @@ const appRecords: AppRecord[] = [
 				},
 			},
 			{
-				src: "/apps/stop-trivia/en/4.png",
-				srcEs: "/apps/stop-trivia/es/4-es.png",
+				src: "/apps/stop-trivia/en/4.webp",
+				srcEs: "/apps/stop-trivia/es/4-es.webp",
 				width: 1672,
 				height: 941,
 				alt: {
@@ -182,8 +188,8 @@ const appRecords: AppRecord[] = [
 				},
 			},
 			{
-				src: "/apps/stop-trivia/en/5.png",
-				srcEs: "/apps/stop-trivia/es/5-es.png",
+				src: "/apps/stop-trivia/en/5.webp",
+				srcEs: "/apps/stop-trivia/es/5-es.webp",
 				width: 1672,
 				height: 941,
 				alt: {
@@ -192,8 +198,8 @@ const appRecords: AppRecord[] = [
 				},
 			},
 			{
-				src: "/apps/stop-trivia/en/6.png",
-				srcEs: "/apps/stop-trivia/es/6-es.png",
+				src: "/apps/stop-trivia/en/6.webp",
+				srcEs: "/apps/stop-trivia/es/6-es.webp",
 				width: 1672,
 				height: 941,
 				alt: {
@@ -369,8 +375,8 @@ const appRecords: AppRecord[] = [
 			ring: "ring-orange-400/30",
 		},
 		featureGraphic: {
-			src: "/apps/setuno/en/feature-graphic-1024x500.png",
-			srcEs: "/apps/setuno/es/feature-graphic-1024x500.png",
+			src: "/apps/setuno/en/feature-graphic-1024x500.webp",
+			srcEs: "/apps/setuno/es/feature-graphic-1024x500.webp",
 			width: 1024,
 			height: 500,
 			alt: {
@@ -378,10 +384,12 @@ const appRecords: AppRecord[] = [
 				es: "Gráfico de Setuno con el panel de banda, los acordes rápidos y el icono de la app",
 			},
 		},
+		ogImage: "/apps/setuno/en/feature-graphic-og.jpg",
+		ogImageEs: "/apps/setuno/es/feature-graphic-og.jpg",
 		screenshots: [
 			{
-				src: "/apps/setuno/en/screenshot-1-home-1080x1920.png",
-				srcEs: "/apps/setuno/es/screenshot-1-home-1080x1920.png",
+				src: "/apps/setuno/en/screenshot-1-home-1080x1920.webp",
+				srcEs: "/apps/setuno/es/screenshot-1-home-1080x1920.webp",
 				width: 1080,
 				height: 1920,
 				alt: {
@@ -390,8 +398,8 @@ const appRecords: AppRecord[] = [
 				},
 			},
 			{
-				src: "/apps/setuno/en/screenshot-2-songs-1080x1920.png",
-				srcEs: "/apps/setuno/es/screenshot-2-songs-1080x1920.png",
+				src: "/apps/setuno/en/screenshot-2-songs-1080x1920.webp",
+				srcEs: "/apps/setuno/es/screenshot-2-songs-1080x1920.webp",
 				width: 1080,
 				height: 1920,
 				alt: {
@@ -400,8 +408,8 @@ const appRecords: AppRecord[] = [
 				},
 			},
 			{
-				src: "/apps/setuno/en/screenshot-3-song-1080x1920.png",
-				srcEs: "/apps/setuno/es/screenshot-3-song-1080x1920.png",
+				src: "/apps/setuno/en/screenshot-3-song-1080x1920.webp",
+				srcEs: "/apps/setuno/es/screenshot-3-song-1080x1920.webp",
 				width: 1080,
 				height: 1920,
 				alt: {
@@ -410,8 +418,8 @@ const appRecords: AppRecord[] = [
 				},
 			},
 			{
-				src: "/apps/setuno/en/screenshot-4-edit-1080x1920.png",
-				srcEs: "/apps/setuno/es/screenshot-4-edit-1080x1920.png",
+				src: "/apps/setuno/en/screenshot-4-edit-1080x1920.webp",
+				srcEs: "/apps/setuno/es/screenshot-4-edit-1080x1920.webp",
 				width: 1080,
 				height: 1920,
 				alt: {
@@ -420,8 +428,8 @@ const appRecords: AppRecord[] = [
 				},
 			},
 			{
-				src: "/apps/setuno/en/screenshot-5-dual-1080x1920.png",
-				srcEs: "/apps/setuno/es/screenshot-5-dual-1080x1920.png",
+				src: "/apps/setuno/en/screenshot-5-dual-1080x1920.webp",
+				srcEs: "/apps/setuno/es/screenshot-5-dual-1080x1920.webp",
 				width: 1080,
 				height: 1920,
 				alt: {
@@ -620,6 +628,10 @@ const resolveApp = (record: AppRecord, locale: Locale): AppInfo => {
 		packageId: record.packageId,
 		icon: record.icon,
 		featureGraphic: resolveAsset(record.featureGraphic, locale),
+		ogImage:
+			locale === "es" && record.ogImageEs
+				? record.ogImageEs
+				: (record.ogImage ?? record.featureGraphic.src),
 		screenshots: record.screenshots.map((screenshot) => ({
 			src: locale === "es" && screenshot.srcEs ? screenshot.srcEs : screenshot.src,
 			width: screenshot.width,

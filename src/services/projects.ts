@@ -99,7 +99,7 @@ export const projectsService = (currentLocale?: string): Project[] => {
 			id: "stop-trivia",
 			title: "Stop Trivia",
 			description: i18n.STOPT_TRIVIA_DESCRIPTION,
-			imgUrl: cover("/apps/stop-trivia/en/banner.png", "/apps/stop-trivia/es/banner-es.png"),
+			imgUrl: cover("/apps/stop-trivia/en/banner.webp", "/apps/stop-trivia/es/banner-es.webp"),
 			projectUrl:
 				"https://play.google.com/store/apps/details?id=com.rilisentertainment.stoptriviaonline",
 			tags: [TAGS.REACT_NATIVE, TAGS.FIREBASE, TAGS.ANDROID],
@@ -111,8 +111,8 @@ export const projectsService = (currentLocale?: string): Project[] => {
 			title: "Setuno",
 			description: i18n.SETUNO_DESCRIPTION,
 			imgUrl: cover(
-				"/apps/setuno/en/feature-graphic-1024x500.png",
-				"/apps/setuno/es/feature-graphic-1024x500.png"
+				"/apps/setuno/en/feature-graphic-1024x500.webp",
+				"/apps/setuno/es/feature-graphic-1024x500.webp"
 			),
 			projectUrl: "https://play.google.com/store/apps/details?id=com.rixeldev.setuno",
 			tags: [TAGS.REACT_NATIVE, TAGS.FIREBASE, TAGS.ANDROID],

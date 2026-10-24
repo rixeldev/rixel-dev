@@ -3,6 +3,7 @@ import AppCard from "@/components/apps/AppCard.astro"
 import SectionContainer from "@/components/SectionContainer.astro"
 import ActionLink from "@/components/ui/ActionLink.astro"
 import RightArrow from "@/icons/RightArrow.astro"
+import type { Preload } from "@/interfaces/preload"
 import Layout from "@/layouts/Layout.astro"
 import { buildAppsIndexJsonLd, SITE_URL } from "@/libs/structuredData"
 import {
@@ -17,6 +18,17 @@ const locale = getActiveLocale(Astro)
 const i18n = getI18N({ currentLocale: locale })
 const apps = appsService(locale)
 const canonical = new URL(resolveLocalizedPath("/apps/", locale), SITE_URL).toString()
+const featuredApp = apps[0]
+const preloads: Preload[] = featuredApp
+	? [
+			{
+				as: "image",
+				href: featuredApp.featureGraphic.src,
+				type: "image/webp",
+				rel: "preload",
+			},
+		]
+	: []
 
 const appLinks = apps.map((app) => ({
 	name: app.name,
@@ -39,11 +51,12 @@ const jsonLd = buildAppsIndexJsonLd({
 	title={i18n.APPS_PAGE_TITLE}
 	description={i18n.APPS_PAGE_DESCRIPTION}
 	canonical={canonical}
-	image={new URL(apps[0]?.featureGraphic.src ?? "/images/embedded-img.avif", SITE_URL).toString()}
-	imageWidth={apps[0]?.featureGraphic.width ?? 1280}
-	imageHeight={apps[0]?.featureGraphic.height ?? 720}
+	image={new URL(featuredApp?.ogImage ?? "/images/embedded-img.avif", SITE_URL).toString()}
+	imageWidth={featuredApp?.featureGraphic.width ?? 1280}
+	imageHeight={featuredApp?.featureGraphic.height ?? 720}
 	keywords="RixelDev apps, Stop Trivia, Setuno, Android apps, Google Play, React Native"
 	jsonLd={jsonLd}
+	preload={preloads}
 >
 	<SectionContainer class="pb-0 pt-32 sm:pt-36">
 		<div class="flex w-full flex-col gap-10">

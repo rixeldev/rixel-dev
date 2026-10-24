@@ -18,6 +18,10 @@ export default defineConfig({
 			prefixDefaultLocale: false,
 		},
 	},
+	prefetch: {
+		prefetchAll: true,
+		defaultStrategy: "hover",
+	},
 	output: "server",
 	adapter: vercel({
 		webAnalytics: {
