@@ -5,6 +5,7 @@ import SectionContainer from "@/components/SectionContainer.astro"
 import ActionLink from "@/components/ui/ActionLink.astro"
 import GooglePlay from "@/icons/GooglePlay.astro"
 import RightArrow from "@/icons/RightArrow.astro"
+import World from "@/icons/World.astro"
 import type { Preload } from "@/interfaces/preload"
 import Layout from "@/layouts/Layout.astro"
 import { buildBreadcrumbJsonLd } from "@/libs/articlesSeo"
@@ -55,6 +56,7 @@ const jsonLd = [
 		inLanguage: locale === "es" ? ["es", "en"] : ["en", "es"],
 		version: app.version,
 		playUrl: app.playUrl,
+		webUrl: app.webUrl,
 		tagline: app.tagline,
 		highlights: app.highlights,
 		stack: app.stack,
@@ -146,6 +148,21 @@ const floatingIsPortrait = floatingShot ? isPortrait(floatingShot) : true
 							<GooglePlay class="size-5" />
 							{i18n.APPS_DOWNLOAD}
 						</ActionLink>
+
+						{
+							app.webUrl && (
+								<ActionLink
+									href={app.webUrl}
+									external
+									size="lg"
+									variant="ghost"
+									ariaLabel={`${i18n.APPS_OPEN_WEB} — ${app.name}`}
+								>
+									<World class="size-5" />
+									{i18n.APPS_OPEN_WEB}
+								</ActionLink>
+							)
+						}
 
 						<ActionLink href={appsHref} variant="ghost" size="lg">
 							{i18n.APPS_ALL}
@@ -416,6 +433,21 @@ const floatingIsPortrait = floatingShot ? isPortrait(floatingShot) : true
 						<p class="font-mono text-xs uppercase tracking-wider text-secondary">
 							{i18n.APPS_PLAY_NOTE}
 						</p>
+
+						{
+							app.webUrl && (
+								<ActionLink
+									href={app.webUrl}
+									external
+									variant="ghost"
+									class="w-full"
+									ariaLabel={`${i18n.APPS_OPEN_WEB} — ${app.name}`}
+								>
+									<World class="size-5" />
+									{i18n.APPS_OPEN_WEB}
+								</ActionLink>
+							)
+						}
 					</div>
 				</div>
 			</div>

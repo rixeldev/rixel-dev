@@ -48,6 +48,8 @@ interface AppRecord {
 	/** Dedicated social preview image: WebP is not supported by every platform. */
 	ogImage?: string
 	ogImageEs?: string
+	/** Installable web version, when the app ships one. */
+	webUrl?: string
 	screenshots: AppScreenshotCopy[]
 	stack: string[]
 	copy: {
@@ -107,6 +109,7 @@ export interface AppInfo {
 	facts: AppFact[]
 	stack: string[]
 	playUrl: string
+	webUrl?: string
 	packageId: string
 	icon: string
 	featureGraphic: AppPromo
@@ -366,6 +369,7 @@ const appRecords: AppRecord[] = [
 		slug: "setuno",
 		name: "Setuno",
 		playUrl: SETUNO_PLAY_URL,
+		webUrl: "https://setuno.vercel.app",
 		packageId: "com.rixeldev.setuno",
 		icon: "/apps/setuno/icon.png",
 		brand: {
@@ -625,6 +629,7 @@ const resolveApp = (record: AppRecord, locale: Locale): AppInfo => {
 		})),
 		stack: record.stack,
 		playUrl: record.playUrl,
+		webUrl: record.webUrl,
 		packageId: record.packageId,
 		icon: record.icon,
 		featureGraphic: resolveAsset(record.featureGraphic, locale),

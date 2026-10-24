@@ -18,6 +18,7 @@ interface MobileApplicationInput {
 	inLanguage: string[]
 	version: string
 	playUrl: string
+	webUrl?: string
 	tagline?: string
 	highlights?: string[]
 	stack?: string[]
@@ -35,6 +36,7 @@ export const buildMobileApplicationJsonLd = ({
 	inLanguage,
 	version,
 	playUrl,
+	webUrl,
 	tagline,
 	highlights = [],
 	stack = [],
@@ -54,7 +56,7 @@ export const buildMobileApplicationJsonLd = ({
 	inLanguage,
 	"softwareVersion": version,
 	"installUrl": playUrl,
-	"sameAs": playUrl,
+	"sameAs": webUrl ? [playUrl, webUrl] : playUrl,
 	"downloadUrl": playUrl,
 	"softwareRequirements": "Android 7.0 or later",
 	"isAccessibleForFree": price === undefined || price.toLowerCase() === "free",
