@@ -1,6 +1,6 @@
 # → Rixel's Web | Blog | Portfolio ←
 
-<a href="https://github.com/rixeldev/rixel-dev">
+<a href="https://github.com/rixeldev/rixeldev">
   <img src="https://rixel.dev/images/embedded-img.avif" />
 </a>
 
@@ -13,10 +13,10 @@ This repository have the Rixel's web, blog and portfolio made with [Astro](https
 ## 🤝 You can use this repository by following the next steps →
 
 1. Clone the repository:
-   `git clone https://github.com/rixeldev/rixel-dev.git`
+   `git clone https://github.com/rixeldev/rixeldev.git`
 
 2. Go to the folder project:
-   `cd rixel-dev`
+   `cd rixeldev`
 
 3. Install the dependencies:
    `pnpm install`
